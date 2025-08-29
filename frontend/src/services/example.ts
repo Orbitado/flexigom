@@ -9,13 +9,13 @@ export class CategoryService {
 
   static async getCategory(id: number): Promise<Category> {
     const response = await api.get<StrapiResponse<Category>>(
-      `/categories/${id}`
+      `/categories/${id}`,
     );
     return response.data.data;
   }
 
   static async createCategory(
-    categoryData: Partial<Category["attributes"]>
+    categoryData: Partial<Category["attributes"]>,
   ): Promise<Category> {
     const response = await api.post<StrapiResponse<Category>>("/categories", {
       data: categoryData,
@@ -25,13 +25,13 @@ export class CategoryService {
 
   static async updateCategory(
     id: number,
-    categoryData: Partial<Category["attributes"]>
+    categoryData: Partial<Category["attributes"]>,
   ): Promise<Category> {
     const response = await api.put<StrapiResponse<Category>>(
       `/categories/${id}`,
       {
         data: categoryData,
-      }
+      },
     );
     return response.data.data;
   }

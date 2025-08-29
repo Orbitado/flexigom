@@ -21,7 +21,7 @@ api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (import.meta.env.VITE_NODE_ENV === "development") {
       console.log(
-        `🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`
+        `🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`,
       );
     }
 
@@ -30,7 +30,7 @@ api.interceptors.request.use(
   (error: AxiosError) => {
     console.error("❌ Request Error:", error);
     return Promise.reject(error);
-  }
+  },
 );
 
 api.interceptors.response.use(
@@ -38,7 +38,7 @@ api.interceptors.response.use(
     if (import.meta.env.VITE_NODE_ENV === "development") {
       console.log(
         `✅ API Response: ${response.status} ${response.config.url}`,
-        response.data
+        response.data,
       );
     }
 
@@ -84,7 +84,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export const getStrapiUrl = (path: string = ""): string => {
