@@ -1,0 +1,90 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Product"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": false
+    }
+  },
+  "attributes": {
+    "categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "mappedBy": "products"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "price": {
+      "type": "decimal",
+      "required": true
+    },
+    "discount_price": {
+      "type": "decimal"
+    },
+    "stock": {
+      "type": "integer",
+      "required": true
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ]
+    },
+    "specifications": {
+      "type": "blocks"
+    },
+    "composition": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "MemoryFoam",
+        "Innerspring",
+        "Hybrid",
+        "Latex",
+        "Foam"
+      ]
+    },
+    "measurement": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "single",
+        "twin",
+        "queen",
+        "king"
+      ]
+    },
+    "brand": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "flexigom",
+        "premium",
+        "comfort"
+      ]
+    }
+  }
+}
