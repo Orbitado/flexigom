@@ -416,11 +416,6 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   options: {
     draftAndPublish: true;
   };
-  pluginOptions: {
-    i18n: {
-      localized: false;
-    };
-  };
   attributes: {
     brand: Schema.Attribute.Enumeration<['flexigom', 'premium', 'comfort']> &
       Schema.Attribute.Required;
@@ -430,8 +425,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     >;
     composition: Schema.Attribute.Enumeration<
       ['MemoryFoam', 'Innerspring', 'Hybrid', 'Latex', 'Foam']
-    > &
-      Schema.Attribute.Required;
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -446,8 +440,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     measurement: Schema.Attribute.Enumeration<
       ['single', 'twin', 'queen', 'king']
-    > &
-      Schema.Attribute.Required;
+    >;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     price: Schema.Attribute.Decimal & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;

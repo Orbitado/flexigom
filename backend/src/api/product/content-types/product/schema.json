@@ -9,11 +9,7 @@
   "options": {
     "draftAndPublish": true
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": false
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "categories": {
       "type": "relation",
@@ -58,7 +54,7 @@
     },
     "composition": {
       "type": "enumeration",
-      "required": true,
+      "required": false,
       "enum": [
         "MemoryFoam",
         "Innerspring",
@@ -69,7 +65,7 @@
     },
     "measurement": {
       "type": "enumeration",
-      "required": true,
+      "required": false,
       "enum": [
         "single",
         "twin",

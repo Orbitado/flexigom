@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "tsc": "tsc --noEmit",
+    "pre-commit": "pnpm lint && pnpm tsc && pnpm format",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -21,6 +23,7 @@
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-router": "^7.8.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.12"
   },

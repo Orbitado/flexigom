@@ -1,16 +1,12 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-import { Button } from "@/components/ui/button";
+import { RouterProvider } from "react-router";
+import { AppProviders } from "@/app/providers/app-providers";
+import { router } from "@/app/router/routes";
 
 function App() {
-  const queryClient = new QueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col justify-center items-center min-h-svh">
-        <Button>Click me</Button>
-      </div>
-    </QueryClientProvider>
+    <AppProviders>
+      <RouterProvider router={router} />
+    </AppProviders>
   );
 }
 
