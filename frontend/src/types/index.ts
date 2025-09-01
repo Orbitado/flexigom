@@ -12,7 +12,7 @@ export interface StrapiResponse<T> {
 
 export interface StrapiEntity {
   id: number;
-  attributes: Record<string, unknown>;
+  documentId: string;
   createdAt: string;
   updatedAt: string;
   publishedAt?: string;
@@ -77,30 +77,23 @@ export interface ApiRequestOptions {
 }
 
 export interface Category extends StrapiEntity {
-  attributes: {
-    name: string;
-    slug: string;
-    description?: string;
-    image?: {
-      data: StrapiMedia | null;
-    };
-    products?: {
-      data: Product[];
-    };
-  };
+  slug: string;
+  name: string;
+  description: string;
+  products: Product[];
 }
 
 export interface Product extends StrapiEntity {
-  attributes: {
-    name: string;
-    slug: string;
-    description?: string;
-    price: number;
-    image?: {
-      data: StrapiMedia | null;
-    };
-    category?: {
-      data: Category | null;
-    };
-  };
+  categories: Category[];
+  slug: string;
+  name: string;
+  description: string;
+  price: number;
+  discount_price: number;
+  stock: number;
+  images: StrapiMedia[];
+  specifications: Record<string, unknown>;
+  composition: string;
+  measurement: string;
+  brand: string;
 }
