@@ -1,9 +1,11 @@
-import { HeroSection } from "../sections/hero-section";
+import { HeroSection } from "@/features/home/sections/hero-section";
+import { ContactAdvisor } from "@/components/contact-advisor";
 
-export default function HomePage() {
+export function HomePage() {
   return (
-    <div className="space-y-6">
+    <>
       <HeroSection />
-    </div>
+      <ContactAdvisor />
+    </>
   );
 }
