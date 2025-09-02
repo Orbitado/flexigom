@@ -10,6 +10,7 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
+    ignores: ["src/components/ui/**"],
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
