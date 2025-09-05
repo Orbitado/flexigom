@@ -71,3 +71,23 @@ export interface SectionTitleProps {
   titleClassName?: string;
   subtitleClassName?: string;
 }
+
+export interface TestimonialItem {
+  id: string;
+  rating: number;
+  testimonial: string;
+  customerName: string;
+  customerLocation: string;
+  customerSince: string;
+}
+
+export interface TestimonialsContent {
+  title: string;
+  subtitle?: string;
+  testimonials: TestimonialItem[];
+}
+
+export interface TestimonialsSectionProps {
+  content?: Partial<TestimonialsContent>;
+  className?: string;
+}
