@@ -45,3 +45,29 @@ export interface HeroSectionProps {
   showPaymentSection?: boolean;
   className?: string;
 }
+
+export interface WhyChooseItem {
+  id: string;
+  icon: string;
+  title: string;
+  description: string;
+}
+
+export interface WhyChooseFlexigomContent {
+  title: string;
+  subtitle?: string;
+  items: WhyChooseItem[];
+}
+
+export interface WhyChooseFlexigomSectionProps {
+  content?: Partial<WhyChooseFlexigomContent>;
+  className?: string;
+}
+
+export interface SectionTitleProps {
+  title: string;
+  subtitle?: string;
+  className?: string;
+  titleClassName?: string;
+  subtitleClassName?: string;
+}
