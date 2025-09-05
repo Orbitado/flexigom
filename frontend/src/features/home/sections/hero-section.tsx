@@ -84,7 +84,7 @@ export function HeroSection({
 
           {/* Hero Image */}
           <div className="relative">
-            <div className="shadow-2xl rounded-2xl aspect-[4/3] overflow-hidden">
+            <div className="shadow-2xl rounded-2xl aspect-[16/9] md:aspect-[4/3] overflow-hidden">
               <img
                 src={heroImage.src}
                 alt={heroImage.alt}
@@ -93,7 +93,7 @@ export function HeroSection({
             </div>
 
             {/* Floating badge */}
-            <div className="-bottom-6 -left-6 absolute bg-red-600 shadow-lg p-6 rounded-2xl text-white">
+            <div className="-bottom-6 md:-bottom-6 sm:-left-4 lg:-left-6 absolute bg-red-600 shadow-lg p-6 rounded-2xl text-white">
               <p className="font-bold text-2xl">{heroImage.badge.primary}</p>
               <p className="text-base">{heroImage.badge.secondary}</p>
             </div>
