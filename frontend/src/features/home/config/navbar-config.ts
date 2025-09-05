@@ -11,33 +11,36 @@ export const navbarConfig: NavbarConfig = {
       href: "/",
     },
     {
-      label: "Productos",
+      label: "Catálogo",
       items: [
         {
           label: "Todos los Productos",
           href: "/products",
-          description: "Explora nuestro catálogo completo de llantas y rines",
+          description:
+            "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
         },
         {
-          label: "Llantas",
-          href: "/products?category=llantas",
-          description: "Llantas para todo tipo de vehículos",
+          label: "Colchones",
+          href: "/products?category=colchones",
+          description:
+            "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
         },
         {
-          label: "Rines",
-          href: "/products?category=rines",
-          description: "Rines deportivos y estándar",
+          label: "Colchones",
+          href: "/products?category=colchones",
+          description: "Colchones para todo tipo de habitaciones",
         },
         {
-          label: "Servicios",
-          href: "/products?category=servicios",
-          description: "Instalación y mantenimiento profesional",
+          label: "Sommiers",
+          href: "/products?category=sommiers",
+          description: "Sommiers para todo tipo de habitaciones",
+        },
+        {
+          label: "Ropa de Cama",
+          href: "/products?category=ropa-de-cama",
+          description: "Ropa de cama para todo tipo de habitaciones",
         },
       ],
-    },
-    {
-      label: "Servicios",
-      href: "/servicios",
     },
     {
       label: "Nosotros",
