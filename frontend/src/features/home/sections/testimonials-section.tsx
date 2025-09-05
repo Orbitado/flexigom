@@ -1,12 +1,51 @@
 import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
+import { useState, useEffect } from "react";
 import { SectionTitle } from "../components/section-title";
 import { testimonialsConfig } from "../config/testimonials-config";
 import type { TestimonialsSectionProps, TestimonialItem } from "../types";
 import { Separator } from "@/components/ui/separator";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 interface TestimonialCardProps {
   testimonial: TestimonialItem;
+}
+
+interface DotIndicatorsProps {
+  totalSlides: number;
+  currentSlide: number;
+  onDotClick: (index: number) => void;
+}
+
+function DotIndicators({
+  totalSlides,
+  currentSlide,
+  onDotClick,
+}: DotIndicatorsProps) {
+  return (
+    <div className="flex justify-center gap-2 mt-8">
+      {Array.from({ length: totalSlides }).map((_, index) => (
+        <button
+          key={index}
+          className={cn(
+            "rounded-full w-2 h-2 transition-all duration-300 cursor-pointer",
+            currentSlide === index
+              ? "bg-red-600 w-8"
+              : "bg-gray-300 hover:bg-gray-400",
+          )}
+          onClick={() => onDotClick(index)}
+          aria-label={`Go to testimonial ${index + 1}`}
+        />
+      ))}
+    </div>
+  );
 }
 
 function TestimonialCard({ testimonial }: TestimonialCardProps) {
@@ -45,6 +84,24 @@ export function TestimonialsSection({
   className,
 }: TestimonialsSectionProps = {}) {
   const sectionContent = { ...testimonialsConfig, ...content };
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+  }, [api]);
+
+  const scrollToSlide = (index: number) => {
+    api?.scrollTo(index);
+  };
 
   return (
     <section className={cn("bg-gray-50 py-12 md:py-16", className)}>
@@ -56,11 +113,37 @@ export function TestimonialsSection({
           className="mb-12 md:mb-16"
         />
 
-        {/* Testimonials Grid */}
-        <div className="gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {sectionContent.testimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial.id} testimonial={testimonial} />
-          ))}
+        {/* Testimonials Carousel */}
+        <div className="relative">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: false,
+            }}
+            orientation="horizontal"
+            className="mx-auto w-full max-w-sm md:max-w-xl xl:max-w-6xl"
+            setApi={setApi}
+          >
+            <CarouselContent className="-ml-1">
+              {sectionContent.testimonials.map((testimonial) => (
+                <CarouselItem
+                  key={testimonial.id}
+                  className="pl-1 basis-full md:basis-1/2 xl:basis-1/3"
+                >
+                  <TestimonialCard testimonial={testimonial} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden md:flex" />
+            <CarouselNext className="hidden md:flex" />
+          </Carousel>
+
+          {/* Dot Indicators */}
+          <DotIndicators
+            totalSlides={count}
+            currentSlide={current - 1}
+            onDotClick={scrollToSlide}
+          />
         </div>
       </div>
     </section>
