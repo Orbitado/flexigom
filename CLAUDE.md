@@ -9,19 +9,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Architecture
 
 - **Monorepo structure**: `frontend/` (React) and `backend/` (Strapi CMS)
-- **Frontend**: React 19 + TypeScript + Vite + TailwindCSS + shadcn/ui + TanStack Query + React Router 7
+- **Frontend**: React 19 + TypeScript + Vite + TailwindCSS 4 + shadcn/ui + TanStack Query + React Router 7
 - **Backend**: Strapi 5.23.1 + PostgreSQL + REST API
 - **Package Manager**: pnpm
 
 ## Development Commands
 
 ### Frontend (`cd frontend/`)
-- `pnpm dev` - Start development server
-- `pnpm build` - Build for production (runs typecheck + vite build)
+- `pnpm dev` - Start development server (Vite)
+- `pnpm build` - Build for production (runs `tsc -b && vite build`)
 - `pnpm preview` - Preview production build
 - `pnpm lint` - Run ESLint
 - `pnpm lint:fix` - Fix ESLint errors automatically  
-- `pnpm tsc` - Run TypeScript type checking
+- `pnpm tsc` - Run TypeScript type checking (`tsc --noEmit`)
 - `pnpm format` - Format code with Prettier
 - `pnpm pre-commit` - Run lint + typecheck + format
 
@@ -129,3 +129,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Verify database is running: `pnpm db:logs`
 - Check environment variables are set correctly
 - Run `pnpm tsc` to catch TypeScript errors early
+
+### About this project
+
+Flexigom is an MVP for bed, mattress and pillow shop with a Strapi CMS backend and React frontend. The project focuses on fast product iteration and reliable checkout flow.
