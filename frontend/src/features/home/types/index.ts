@@ -110,3 +110,71 @@ export interface HelpSectionProps {
   content?: Partial<HelpSectionContent>;
   className?: string;
 }
+
+export interface FooterLink {
+  label: string;
+  href: string;
+}
+
+export interface FooterLinkGroup {
+  title: string;
+  links: FooterLink[];
+}
+
+export interface FooterAddress {
+  street: string;
+  city: string;
+  province: string;
+  country: string;
+}
+
+export interface FooterOperatingHours {
+  weekdays: string;
+  saturday: string;
+  sunday: string;
+}
+
+export interface FooterContact {
+  title: string;
+  address: FooterAddress;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  operatingHours: FooterOperatingHours;
+}
+
+export interface FooterSocial {
+  facebook?: string;
+  instagram?: string;
+  whatsapp?: string;
+}
+
+export interface FooterCompanyInfo {
+  name: string;
+  description: string;
+}
+
+export interface FooterCopyright {
+  year: number;
+  text: string;
+}
+
+export interface FooterNavigation {
+  company: FooterLinkGroup;
+  products: FooterLinkGroup;
+  help: FooterLinkGroup;
+  legal: FooterLinkGroup;
+}
+
+export interface FooterConfig {
+  companyInfo: FooterCompanyInfo;
+  navigation: FooterNavigation;
+  contact: FooterContact;
+  social: FooterSocial;
+  copyright: FooterCopyright;
+}
+
+export interface FooterSectionProps {
+  config?: Partial<FooterConfig>;
+  className?: string;
+}
