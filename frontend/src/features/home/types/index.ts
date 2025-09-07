@@ -178,3 +178,23 @@ export interface FooterSectionProps {
   config?: Partial<FooterConfig>;
   className?: string;
 }
+
+export interface CategoryItem {
+  id: string;
+  name: string;
+  description: string;
+  contractId: string;
+  image?: string;
+  href: string;
+}
+
+export interface CategoriesContent {
+  title: string;
+  subtitle?: string;
+  categories: CategoryItem[];
+}
+
+export interface CategoriesSectionProps {
+  content?: Partial<CategoriesContent>;
+  className?: string;
+}
