@@ -91,3 +91,22 @@ export interface TestimonialsSectionProps {
   content?: Partial<TestimonialsContent>;
   className?: string;
 }
+
+export interface HelpContactButton {
+  text: string;
+  href: string;
+  icon?: React.ReactNode;
+  variant?: "primary" | "secondary";
+}
+
+export interface HelpSectionContent {
+  title: string;
+  subtitle: string;
+  buttons: HelpContactButton[];
+  operatingHours?: string;
+}
+
+export interface HelpSectionProps {
+  content?: Partial<HelpSectionContent>;
+  className?: string;
+}
