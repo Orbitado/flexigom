@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { SectionTitle } from "../components/section-title";
 import { CategoryCard } from "../components/category-card";
-import { categoriesConfig } from "../config/categories-config";
+import { useCategories } from "../hooks/use-categories";
 import type { CategoriesSectionProps, CategoryItem } from "../types";
 import {
   Carousel,
@@ -47,10 +47,17 @@ export function CategoriesSection({
   content,
   className,
 }: CategoriesSectionProps = {}) {
-  const sectionContent = { ...categoriesConfig, ...content };
+  const { data: categories, isLoading, error } = useCategories();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
+
+  const sectionContent = {
+    title: "Nuestras Categorías",
+    subtitle: "Explora nuestra amplia gama de productos para el descanso",
+    categories: categories || [],
+    ...content,
+  };
 
   const shouldShowCarousel = sectionContent.categories.length > 3;
 
@@ -113,6 +120,48 @@ export function CategoriesSection({
       </div>
     );
   };
+
+  if (error) {
+    return (
+      <section className={cn("bg-white py-12 md:py-16", className)}>
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <SectionTitle
+            title="Nuestras Categorías"
+            subtitle="No pudimos cargar las categorías en este momento"
+            className="mb-12 md:mb-16"
+          />
+          <div className="text-gray-500 text-center">
+            <p>
+              Ocurrió un error al cargar las categorías. Por favor, inténtalo
+              nuevamente.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <section className={cn("bg-white py-12 md:py-16", className)}>
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <SectionTitle
+            title="Nuestras Categorías"
+            subtitle="Explora nuestra amplia gama de productos para el descanso"
+            className="mb-12 md:mb-16"
+          />
+          <div className="gap-6 md:gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto max-w-6xl">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="bg-gray-200 rounded-lg h-48 animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={cn("bg-white py-12 md:py-16", className)}>

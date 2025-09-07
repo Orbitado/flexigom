@@ -39,7 +39,7 @@ export const categoryService = {
 
   async getCategoryById(contractId: string): Promise<CategoryItem | null> {
     const response = await api.get<GetCategoriesResponse>(
-      `/categories?filters[id][$eq]=${contractId}`,
+      `/categories?filters[documentId][$eq]=${contractId}`,
     );
 
     if (response.data.data.length === 0) {
