@@ -10,12 +10,12 @@ export function useCategories() {
   });
 }
 
-export function useCategoryById(contractId: string) {
+export function useCategoryById(documentId: string) {
   return useQuery({
-    queryKey: ["categories", contractId],
-    queryFn: () => categoryService.getCategoryById(contractId),
+    queryKey: ["categories", documentId],
+    queryFn: () => categoryService.getCategoryById(documentId),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    enabled: !!contractId,
+    enabled: !!documentId,
   });
 }

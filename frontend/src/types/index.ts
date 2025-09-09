@@ -20,6 +20,7 @@ export interface StrapiEntity {
 
 export interface StrapiMedia {
   id: number;
+  documentId: string;
   name: string;
   alternativeText?: string;
   caption?: string;
@@ -41,6 +42,7 @@ export interface StrapiMedia {
   provider_metadata?: unknown;
   createdAt: string;
   updatedAt: string;
+  publishedAt?: string;
 }
 
 export interface StrapiMediaFormat {
@@ -77,10 +79,11 @@ export interface ApiRequestOptions {
 }
 
 export interface Category extends StrapiEntity {
+  image?: StrapiMedia;
   slug: string;
   name: string;
   description: string;
-  products: Product[];
+  products?: Product[];
 }
 
 export interface Product extends StrapiEntity {

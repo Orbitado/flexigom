@@ -1,6 +1,5 @@
-import { cn } from "@/lib/utils";
+import { cn, getImageUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ImageIcon } from "lucide-react";
 import type { CategoryItem } from "../types";
 
 interface CategoryCardProps {
@@ -9,6 +8,8 @@ interface CategoryCardProps {
 }
 
 export function CategoryCard({ category, className }: CategoryCardProps) {
+  const imageUrl = getImageUrl(category.image?.url);
+
   return (
     <div
       className={cn(
@@ -17,14 +18,17 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
       )}
     >
       <div className="relative flex justify-center items-center bg-gray-200 aspect-[4/3] overflow-hidden">
-        {category.image ? (
+        {imageUrl ? (
           <img
-            src={category.image}
-            alt={category.name}
+            src={imageUrl}
+            alt={
+              category.image?.alternativeText || `Imagen de ${category.name}`
+            }
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
           />
         ) : (
-          <ImageIcon className="w-12 h-12 text-gray-400" />
+          <img src="/flexigom.png" alt={category.name} />
         )}
       </div>
 
@@ -40,7 +44,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
           asChild
           className="bg-red-600 hover:bg-red-700 w-full font-medium text-white"
         >
-          <a href={category.href}>Ver Productos</a>
+          <a href={category.slug}>Ver Productos</a>
         </Button>
       </div>
     </div>

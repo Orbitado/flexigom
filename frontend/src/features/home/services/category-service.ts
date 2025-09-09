@@ -1,58 +1,44 @@
 import api from "@/lib/api";
-import type { CategoryItem } from "../types";
-
-export interface StrapiCategory {
-  id: number;
-  documentId: string;
-  slug: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-}
-
-export interface GetCategoriesResponse {
-  data: StrapiCategory[];
-  meta: {
-    pagination: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
-  };
-}
+import type { CategoryItem } from "../types/index";
+import type { StrapiResponse } from "@/types";
 
 export const categoryService = {
+  /**
+   * Fetches all categories from the API
+   * @returns Promise<CategoryItem[]> - Array of category items
+   */
   async getCategories(): Promise<CategoryItem[]> {
-    const response = await api.get<GetCategoriesResponse>("/categories");
-
-    return response.data.data.map((category) => ({
-      id: category.documentId,
-      name: category.name,
-      description: category.description,
-      contractId: category.documentId,
-      href: `/productos/${category.documentId}`,
-    }));
-  },
-
-  async getCategoryById(contractId: string): Promise<CategoryItem | null> {
-    const response = await api.get<GetCategoriesResponse>(
-      `/categories?filters[documentId][$eq]=${contractId}`,
+    const response = await api.get<StrapiResponse<CategoryItem[]>>(
+      "/categories",
+      {
+        params: {
+          populate: "image",
+        },
+      },
     );
 
-    if (response.data.data.length === 0) {
+    return response.data.data;
+  },
+
+  /**
+   * Fetches a specific category by its document ID
+   * @param documentId - The document ID of the category to fetch
+   * @returns Promise<CategoryItem | null> - The category item or null if not found
+   */
+  async getCategoryById(documentId: string): Promise<CategoryItem | null> {
+    try {
+      const response = await api.get<StrapiResponse<CategoryItem>>(
+        `/categories/${documentId}`,
+        {
+          params: {
+            populate: "image",
+          },
+        },
+      );
+
+      return response.data.data;
+    } catch {
       return null;
     }
-
-    const category = response.data.data[0];
-    return {
-      id: category.documentId,
-      name: category.name,
-      description: category.description,
-      contractId: category.documentId,
-      href: `/productos/${category.documentId}`,
-    };
   },
 };

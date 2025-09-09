@@ -1,3 +1,5 @@
+import type { StrapiEntity, StrapiMedia } from "@/types";
+
 export interface TrustIndicator {
   icon: React.ReactNode;
   title: string;
@@ -179,13 +181,11 @@ export interface FooterSectionProps {
   className?: string;
 }
 
-export interface CategoryItem {
-  id: string;
+export interface CategoryItem extends StrapiEntity {
+  image?: StrapiMedia;
   name: string;
   description: string;
-  contractId: string;
-  image?: string;
-  href: string;
+  slug: string;
 }
 
 export interface CategoriesContent {
