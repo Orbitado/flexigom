@@ -10,7 +10,8 @@ const defaultContent: HelpSectionContent = {
   title: "¿Necesitas Ayuda con tu Compra?",
   subtitle:
     "Nuestros asesores especializados están listos para ayudarte a encontrar el producto perfecto para tu descanso",
-  operatingHours: "Horarios de atención: Lunes a Sábado 9:00 - 19:00hs",
+  operatingHours:
+    "Horarios de atención: Lunes a Viernes 8:30 - 13:00hs y 17:00 - 20:00hs, Sábados 9:00 - 13:00hs",
   buttons: [
     {
       text: "Llamar Ahora",

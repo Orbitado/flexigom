@@ -105,41 +105,41 @@ export function SupportPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-6xl">
       {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+      <div className="mb-12 text-center">
+        <h1 className="mb-4 font-bold text-gray-900 text-3xl md:text-4xl">
           Centro de Ayuda
         </h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p className="mx-auto max-w-3xl text-gray-600 text-xl">
           Estamos aquí para ayudarte. Encuentra respuestas a tus preguntas o
           contáctanos directamente.
         </p>
       </div>
 
       {/* Contact Options */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <div className="gap-6 grid grid-cols-1 md:grid-cols-3 mb-16">
         {/* Phone */}
         <Card className="border-2 border-gray-200 hover:border-red-200 transition-colors">
           <CardContent className="p-8 text-center">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Phone className="h-8 w-8 text-red-600" />
+            <div className="flex justify-center items-center bg-red-100 mx-auto mb-4 rounded-full w-16 h-16">
+              <Phone className="w-8 h-8 text-red-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Teléfono</h3>
-            <p className="text-2xl font-bold text-red-600 mb-2">
+            <h3 className="mb-2 font-bold text-gray-900 text-xl">Teléfono</h3>
+            <p className="mb-2 font-bold text-red-600 text-2xl">
               +54 11 1234-5678
             </p>
-            <p className="text-base text-gray-600 mb-4">
+            <p className="mb-4 text-gray-600 text-base">
               Lunes a Viernes: 9:00 - 18:00
             </p>
-            <p className="text-base text-gray-600 mb-6">
+            <p className="mb-6 text-gray-600 text-base">
               Sábados: 9:00 - 13:00
             </p>
             <Button
               size="lg"
-              className="w-full text-lg py-3 h-auto bg-red-600 hover:bg-red-700"
+              className="bg-red-600 hover:bg-red-700 py-3 w-full h-auto text-lg"
             >
-              <Phone className="h-5 w-5 mr-2" />
+              <Phone className="mr-2 w-5 h-5" />
               Llamar Ahora
             </Button>
           </CardContent>
@@ -148,23 +148,23 @@ export function SupportPage() {
         {/* Email */}
         <Card className="border-2 border-gray-200 hover:border-blue-200 transition-colors">
           <CardContent className="p-8 text-center">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Mail className="h-8 w-8 text-blue-600" />
+            <div className="flex justify-center items-center bg-blue-100 mx-auto mb-4 rounded-full w-16 h-16">
+              <Mail className="w-8 h-8 text-blue-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Email</h3>
-            <p className="text-lg font-semibold text-blue-600 mb-2">
+            <h3 className="mb-2 font-bold text-gray-900 text-xl">Email</h3>
+            <p className="mb-2 font-semibold text-blue-600 text-lg">
               info@flexigom.com
             </p>
-            <p className="text-base text-gray-600 mb-4">
+            <p className="mb-4 text-gray-600 text-base">
               Respuesta en 24 horas
             </p>
-            <p className="text-base text-gray-600 mb-6">Lunes a Viernes</p>
+            <p className="mb-6 text-gray-600 text-base">Lunes a Viernes</p>
             <Button
               variant="outline"
               size="lg"
-              className="w-full text-lg py-3 h-auto border-2 bg-transparent border-blue-200 text-blue-600 hover:bg-blue-50"
+              className="bg-transparent hover:bg-blue-50 py-3 border-2 border-blue-200 w-full h-auto text-blue-600 text-lg"
             >
-              <Mail className="h-5 w-5 mr-2" />
+              <Mail className="mr-2 w-5 h-5" />
               Enviar Email
             </Button>
           </CardContent>
@@ -173,28 +173,28 @@ export function SupportPage() {
         {/* Live Chat */}
         <Card className="border-2 border-gray-200 hover:border-green-200 transition-colors">
           <CardContent className="p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <MessageCircle className="h-8 w-8 text-green-600" />
+            <div className="flex justify-center items-center bg-green-100 mx-auto mb-4 rounded-full w-16 h-16">
+              <MessageCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">
+            <h3 className="mb-2 font-bold text-gray-900 text-xl">
               Chat en Vivo
             </h3>
-            <p className="text-base text-gray-600 mb-2">Asistencia inmediata</p>
-            <p className="text-base text-gray-600 mb-4">
+            <p className="mb-2 text-gray-600 text-base">Asistencia inmediata</p>
+            <p className="mb-4 text-gray-600 text-base">
               Lunes a Viernes: 9:00 - 18:00
             </p>
-            <div className="flex items-center justify-center space-x-2 mb-6">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-sm text-green-600 font-medium">
+            <div className="flex justify-center items-center space-x-2 mb-6">
+              <div className="bg-green-500 rounded-full w-3 h-3 animate-pulse"></div>
+              <span className="font-medium text-green-600 text-sm">
                 En línea
               </span>
             </div>
             <Button
               size="lg"
-              className="w-full text-lg py-3 h-auto bg-green-600 hover:bg-green-700"
+              className="bg-green-600 hover:bg-green-700 py-3 w-full h-auto text-lg"
               onClick={() => alert("Chat en vivo se abrirá aquí")}
             >
-              <MessageCircle className="h-5 w-5 mr-2" />
+              <MessageCircle className="mr-2 w-5 h-5" />
               Iniciar Chat
             </Button>
           </CardContent>
@@ -202,51 +202,51 @@ export function SupportPage() {
       </div>
 
       {/* Store Information */}
-      <Card className="border-2 border-gray-200 mb-16">
+      <Card className="mb-16 border-2 border-gray-200">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-gray-900 flex items-center">
-            <MapPin className="h-6 w-6 mr-2" />
+          <CardTitle className="flex items-center font-bold text-gray-900 text-2xl">
+            <MapPin className="mr-2 w-6 h-6" />
             Información de la Tienda
           </CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <CardContent className="gap-8 grid grid-cols-1 md:grid-cols-2">
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <h3 className="mb-4 font-semibold text-gray-900 text-xl">
               Dirección
             </h3>
-            <p className="text-lg text-gray-700 mb-2">Av. Corrientes 1234</p>
-            <p className="text-lg text-gray-700 mb-2">
+            <p className="mb-2 text-gray-700 text-lg">Av. Corrientes 1234</p>
+            <p className="mb-2 text-gray-700 text-lg">
               Ciudad Autónoma de Buenos Aires
             </p>
-            <p className="text-lg text-gray-700 mb-4">C1043AAZ, Argentina</p>
+            <p className="mb-4 text-gray-700 text-lg">C1043AAZ, Argentina</p>
             <Button
               variant="outline"
               size="lg"
-              className="text-base py-3 h-auto border-2 bg-transparent"
+              className="bg-transparent py-3 border-2 h-auto text-base"
             >
               Ver en Google Maps
             </Button>
           </div>
           <div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <h3 className="mb-4 font-semibold text-gray-900 text-xl">
               Horarios de Atención
             </h3>
             <div className="space-y-2">
               <div className="flex items-center space-x-3">
-                <Clock className="h-5 w-5 text-gray-600" />
-                <span className="text-lg text-gray-700">
-                  Lunes a Viernes: 9:00 - 18:00
+                <Clock className="w-5 h-5 text-gray-600" />
+                <span className="text-gray-700 text-lg">
+                  Lunes a Viernes: 8:30 - 13:00 y 17:00 - 20:00
                 </span>
               </div>
               <div className="flex items-center space-x-3">
-                <Clock className="h-5 w-5 text-gray-600" />
-                <span className="text-lg text-gray-700">
+                <Clock className="w-5 h-5 text-gray-600" />
+                <span className="text-gray-700 text-lg">
                   Sábados: 9:00 - 13:00
                 </span>
               </div>
               <div className="flex items-center space-x-3">
-                <Clock className="h-5 w-5 text-gray-600" />
-                <span className="text-lg text-gray-700">Domingos: Cerrado</span>
+                <Clock className="w-5 h-5 text-gray-600" />
+                <span className="text-gray-700 text-lg">Domingos: Cerrado</span>
               </div>
             </div>
           </div>
@@ -255,11 +255,11 @@ export function SupportPage() {
 
       {/* FAQ Section */}
       <div>
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="mb-8 text-center">
+          <h2 className="mb-4 font-bold text-gray-900 text-3xl">
             Preguntas Frecuentes
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-gray-600 text-lg">
             Encuentra respuestas rápidas a las consultas más comunes
           </p>
         </div>
@@ -293,22 +293,22 @@ export function SupportPage() {
               >
                 <CollapsibleTrigger className="w-full">
                   <CardHeader className="hover:bg-gray-50 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-left text-lg md:text-xl font-semibold text-gray-900 leading-tight">
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="font-semibold text-gray-900 text-lg md:text-xl text-left leading-tight">
                         {faq.question}
                       </CardTitle>
                       {openFAQ === faq.id ? (
-                        <ChevronUp className="h-6 w-6 text-gray-600 flex-shrink-0 ml-4" />
+                        <ChevronUp className="flex-shrink-0 ml-4 w-6 h-6 text-gray-600" />
                       ) : (
-                        <ChevronDown className="h-6 w-6 text-gray-600 flex-shrink-0 ml-4" />
+                        <ChevronDown className="flex-shrink-0 ml-4 w-6 h-6 text-gray-600" />
                       )}
                     </div>
                   </CardHeader>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <CardContent className="pt-0">
-                    <div className="border-t border-gray-200 pt-6">
-                      <p className="text-base md:text-lg text-gray-700 leading-relaxed">
+                    <div className="pt-6 border-gray-200 border-t">
+                      <p className="text-gray-700 text-base md:text-lg leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
@@ -321,29 +321,29 @@ export function SupportPage() {
       </div>
 
       {/* Still Need Help */}
-      <div className="mt-16 text-center p-8 bg-gray-50 rounded-2xl">
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+      <div className="bg-gray-50 mt-16 p-8 rounded-2xl text-center">
+        <h3 className="mb-4 font-bold text-gray-900 text-2xl">
           ¿Aún necesitas ayuda?
         </h3>
-        <p className="text-lg text-gray-600 mb-6">
+        <p className="mb-6 text-gray-600 text-lg">
           Nuestro equipo de atención al cliente está listo para ayudarte con
           cualquier consulta adicional.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex sm:flex-row flex-col justify-center gap-4">
           <Button
             size="lg"
-            className="text-lg px-8 py-4 h-auto bg-red-600 hover:bg-red-700"
+            className="bg-red-600 hover:bg-red-700 px-8 py-4 h-auto text-lg"
           >
-            <Phone className="h-5 w-5 mr-2" />
+            <Phone className="mr-2 w-5 h-5" />
             Llamar Ahora
           </Button>
           <Button
             variant="outline"
             size="lg"
-            className="text-lg px-8 py-4 h-auto border-2 bg-transparent"
+            className="bg-transparent px-8 py-4 border-2 h-auto text-lg"
             onClick={() => alert("Chat en vivo se abrirá aquí")}
           >
-            <MessageCircle className="h-5 w-5 mr-2" />
+            <MessageCircle className="mr-2 w-5 h-5" />
             Iniciar Chat
           </Button>
         </div>
