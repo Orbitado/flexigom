@@ -128,7 +128,7 @@ export function TestimonialsSection({
               {sectionContent.testimonials.map((testimonial) => (
                 <CarouselItem
                   key={testimonial.id}
-                  className="pl-1 basis-full md:basis-1/2 xl:basis-1/3"
+                  className="pl-6 basis-full md:basis-1/2 xl:basis-1/3"
                 >
                   <TestimonialCard testimonial={testimonial} />
                 </CarouselItem>
