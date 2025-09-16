@@ -21,7 +21,7 @@ const defaultContent: HelpSectionContent = {
     },
     {
       text: "Chat por WhatsApp",
-      href: "https://wa.me/5493815277935",
+      href: "https://wa.me/5493815277935?text=¡Hola! Vengo de parte del ECommerce y me gustaría recibir más información sobre sus productos.",
       icon: <MessageCircleIcon className="w-5 h-5" />,
       variant: "secondary",
     },
