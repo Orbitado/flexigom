@@ -74,26 +74,6 @@ export interface SectionTitleProps {
   subtitleClassName?: string;
 }
 
-export interface TestimonialItem {
-  id: string;
-  rating: number;
-  testimonial: string;
-  customerName: string;
-  customerLocation: string;
-  customerSince: string;
-}
-
-export interface TestimonialsContent {
-  title: string;
-  subtitle?: string;
-  testimonials: TestimonialItem[];
-}
-
-export interface TestimonialsSectionProps {
-  content?: Partial<TestimonialsContent>;
-  className?: string;
-}
-
 export interface HelpContactButton {
   text: string;
   href: string;
@@ -231,5 +211,24 @@ export interface FAQsContent {
 
 export interface FAQsSectionProps {
   content?: Partial<FAQsContent>;
+  className?: string;
+}
+
+export interface Review extends StrapiEntity {
+  rating?: number | null;
+  testimonial?: string | null;
+  customerName?: string | null;
+  customerLocation?: string | null;
+  customerSince?: string | null;
+}
+
+export interface ReviewsContent {
+  title: string;
+  subtitle?: string;
+  testimonials?: Review[];
+}
+
+export interface ReviewsSectionProps {
+  content?: Partial<ReviewsContent>;
   className?: string;
 }
