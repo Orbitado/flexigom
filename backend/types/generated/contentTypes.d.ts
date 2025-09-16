@@ -529,20 +529,22 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    customerLocation: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'San Miguel de Tucum\u00E1n'>;
+    customerName: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+        minLength: 1;
+      }> &
+      Schema.Attribute.DefaultTo<'An\u00F3nimo'>;
+    customerSince: Schema.Attribute.Date &
+      Schema.Attribute.DefaultTo<'2025-09-16'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::review.review'
     > &
       Schema.Attribute.Private;
-    location: Schema.Attribute.String &
-      Schema.Attribute.DefaultTo<'San Miguel de Tucum\u00E1n'>;
-    name: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 40;
-        minLength: 1;
-      }> &
-      Schema.Attribute.DefaultTo<'An\u00F3nimo'>;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Integer &
       Schema.Attribute.Required &
@@ -554,7 +556,6 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
         number
       > &
       Schema.Attribute.DefaultTo<5>;
-    since: Schema.Attribute.Date & Schema.Attribute.DefaultTo<'2025-09-16'>;
     testimonial: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
