@@ -9,7 +9,7 @@ import { navbarConfig } from "../config/navbar-config";
 export function Navbar() {
   return (
     <header
-      className="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur border-b w-full"
+      className="top-0 z-50 sticky bg-white border-b w-full"
       role="banner"
     >
       <div className="flex justify-between items-center mx-auto px-4 h-full container">
