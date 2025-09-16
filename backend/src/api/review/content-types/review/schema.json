@@ -1,0 +1,41 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "rating": {
+      "type": "integer",
+      "required": true,
+      "default": 5,
+      "min": 1,
+      "max": 5
+    },
+    "testimonial": {
+      "type": "text",
+      "maxLength": 120,
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "default": "Anónimo",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "location": {
+      "type": "string",
+      "default": "San Miguel de Tucumán"
+    },
+    "since": {
+      "type": "date",
+      "default": "2025-09-16"
+    }
+  }
+}
