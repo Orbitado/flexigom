@@ -24,3 +24,12 @@ export function getImageUrl(url?: string): string | null {
   const mediaBaseUrl = baseUrl.replace("/api", "");
   return `${mediaBaseUrl}${url}`;
 }
+
+export const formatPrice = (price: number) => {
+  return new Intl.NumberFormat("es-AR", {
+    style: "currency",
+    currency: "ARS",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+};
