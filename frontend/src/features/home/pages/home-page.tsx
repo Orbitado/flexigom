@@ -4,6 +4,7 @@ import { FeaturedProductsSection } from "@/features/home/sections/featured-produ
 import { WhyChooseFlexigomSection } from "@/features/home/sections/why-choose-flexigom-section";
 import { TestimonialsSection } from "@/features/home/sections/testimonials-section";
 import { HelpSection } from "@/features/home/sections/help-section";
+import { FAQsSection } from "@/features/home/sections/faqs-section";
 import { FooterSection } from "@/features/home/sections/footer-section";
 
 export function HomePage() {
@@ -14,6 +15,7 @@ export function HomePage() {
       <CategoriesSection />
       <FeaturedProductsSection />
       <HelpSection />
+      <FAQsSection />
       <TestimonialsSection />
       <FooterSection />
     </>
