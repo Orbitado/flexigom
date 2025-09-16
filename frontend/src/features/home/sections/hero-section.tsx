@@ -25,7 +25,7 @@ const defaultContent: HeroContent = {
 };
 
 const defaultImage: HeroImage = {
-  src: "/placeholder.svg?height=600&width=800",
+  src: "/woman-sleeping.webp",
   alt: "Dormitorio moderno con colchón Flexigom",
   badge: {
     primary: "20+ Años",
@@ -42,7 +42,7 @@ export function HeroSection({
   const heroImage = { ...defaultImage, ...image };
 
   return (
-    <section className={cn("relative py-16 md:py-48", className)}>
+    <section className={cn("relative py-16 lg:py-48", className)}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="items-center gap-12 grid grid-cols-1 lg:grid-cols-2">
           {/* Content */}
