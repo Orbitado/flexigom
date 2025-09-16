@@ -8,7 +8,11 @@ export class FeaturedProductService {
       "/featured-products",
       {
         params: {
-          populate: "products.images,products.categories",
+          populate: {
+            products: {
+              populate: ["images", "categories"],
+            },
+          },
         },
       },
     );
@@ -22,7 +26,11 @@ export class FeaturedProductService {
       `/featured-products/${documentId}`,
       {
         params: {
-          populate: "products.images,products.categories",
+          populate: {
+            products: {
+              populate: ["images", "categories"],
+            },
+          },
         },
       },
     );
@@ -36,7 +44,11 @@ export class FeaturedProductService {
       "/featured-products",
       {
         params: {
-          populate: "products.images,products.categories",
+          populate: {
+            products: {
+              populate: ["images", "categories"],
+            },
+          },
           filters: {
             section: {
               $eq: section,
