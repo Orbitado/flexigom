@@ -217,3 +217,19 @@ export interface FeaturedProductsSectionProps {
   content?: Partial<FeaturedProductsContent>;
   className?: string;
 }
+
+export interface FAQ extends StrapiEntity {
+  question: string;
+  answer: string;
+}
+
+export interface FAQsContent {
+  title: string;
+  subtitle?: string;
+  faqs: FAQ[];
+}
+
+export interface FAQsSectionProps {
+  content?: Partial<FAQsContent>;
+  className?: string;
+}
