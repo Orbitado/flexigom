@@ -33,3 +33,15 @@ export const formatPrice = (price: number) => {
     maximumFractionDigits: 0,
   }).format(price);
 };
+
+export const getCustomerSinceYear = (
+  dateString: string | null | undefined,
+): string => {
+  if (!dateString) return "2024";
+  try {
+    const year = new Date(dateString).getFullYear();
+    return isNaN(year) ? "2024" : year.toString();
+  } catch {
+    return "2024";
+  }
+};
