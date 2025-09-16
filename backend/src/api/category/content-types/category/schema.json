@@ -31,6 +31,8 @@
     },
     "description": {
       "type": "text",
+      "minLength": 20,
+      "maxLength": 220,
       "required": true,
       "unique": false
     },

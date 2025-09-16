@@ -13,7 +13,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
   return (
     <div
       className={cn(
-        "group bg-white shadow-lg hover:shadow-xl border border-gray-100 rounded-xl overflow-hidden transition-shadow duration-300",
+        "group flex flex-col bg-white shadow-lg hover:shadow-xl border border-gray-100 rounded-xl h-full overflow-hidden transition-shadow duration-300",
         className,
       )}
     >
@@ -32,17 +32,19 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
         )}
       </div>
 
-      <div className="space-y-4 p-6">
-        <div className="space-y-2">
-          <h3 className="font-bold text-black text-xl">{category.name}</h3>
-          <p className="text-gray-700 text-sm leading-relaxed">
+      <div className="flex flex-col flex-1 space-y-4 p-6 min-h-[180px]">
+        <div className="flex-1 space-y-2">
+          <h3 className="font-bold text-black text-xl line-clamp-2">
+            {category.name}
+          </h3>
+          <p className="overflow-hidden text-gray-700 text-sm break-words line-clamp-5 leading-relaxed">
             {category.description}
           </p>
         </div>
 
         <Button
           asChild
-          className="bg-red-600 hover:bg-red-700 w-full font-medium text-white"
+          className="bg-red-600 hover:bg-red-700 mt-auto w-full font-medium text-white"
         >
           <a href={category.slug}>Ver Productos</a>
         </Button>
