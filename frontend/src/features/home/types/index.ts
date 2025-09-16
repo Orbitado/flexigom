@@ -1,4 +1,4 @@
-import type { StrapiEntity, StrapiMedia } from "@/types";
+import type { StrapiEntity, StrapiMedia, Product } from "@/types";
 
 export interface TrustIndicator {
   icon: React.ReactNode;
@@ -196,5 +196,24 @@ export interface CategoriesContent {
 
 export interface CategoriesSectionProps {
   content?: Partial<CategoriesContent>;
+  className?: string;
+}
+
+export type FeaturedProductSection = "homepage";
+
+export interface FeaturedProduct extends StrapiEntity {
+  section: FeaturedProductSection;
+  products: Product[];
+}
+
+export interface FeaturedProductsContent {
+  title: string;
+  subtitle?: string;
+  featuredProducts: FeaturedProduct[];
+}
+
+export interface FeaturedProductsSectionProps {
+  section?: FeaturedProductSection;
+  content?: Partial<FeaturedProductsContent>;
   className?: string;
 }
