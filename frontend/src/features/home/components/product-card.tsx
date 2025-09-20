@@ -2,6 +2,7 @@ import { cn, getImageUrl, formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Product } from "@/types";
+import { Link } from "react-router";
 
 interface ProductCardProps {
   product: Product;
@@ -83,7 +84,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
           asChild
           className="bg-red-600 hover:bg-red-700 mt-auto w-full font-medium text-white"
         >
-          <a href={`/products/${product.slug || "producto"}`}>Ver Producto</a>
+          <Link to={`/products/${product.id || "producto"}`}>Ver Producto</Link>
         </Button>
       </div>
     </div>

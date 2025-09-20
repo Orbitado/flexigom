@@ -12,7 +12,7 @@ export const categoryService = {
       "/categories",
       {
         params: {
-          populate: "image",
+          populate: ["image", "products"],
         },
       },
     );
