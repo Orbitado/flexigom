@@ -9,6 +9,7 @@ import {
   PRICE_RANGE,
   POPULAR_PRICE_RANGES,
 } from "../constants/products-constants";
+import { formatPrice } from "@/lib/utils";
 
 interface PriceRangeFilterProps {
   tempPriceRange: number[];
@@ -39,8 +40,8 @@ export function PriceRangeFilter({
             className="w-full"
           />
           <div className="flex justify-between text-gray-600 text-sm">
-            <span>$ {tempPriceRange[0].toLocaleString()}</span>
-            <span>$ {tempPriceRange[1].toLocaleString()}</span>
+            <span>{formatPrice(tempPriceRange[0])}</span>
+            <span>{formatPrice(tempPriceRange[1])}</span>
           </div>
         </div>
 
