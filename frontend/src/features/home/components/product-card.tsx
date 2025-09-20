@@ -1,6 +1,7 @@
 import { cn, getImageUrl, formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { StarRating } from "@/components/ui/star-rating";
 import type { Product } from "@/types";
 import { Link } from "react-router";
 
@@ -56,16 +57,45 @@ export function ProductCard({ product, className }: ProductCardProps) {
             {product.name || "Producto sin nombre"}
           </h3>
 
+          {/* Brand and category tags */}
+          <div className="flex flex-wrap gap-1 mb-2">
+            {product.brand && (
+              <Badge variant="destructive" className="text-xs">
+                {product.brand.charAt(0).toUpperCase() + product.brand.slice(1)}
+              </Badge>
+            )}
+            {product.categories?.[0]?.name && (
+              <Badge variant="outline" className="text-xs">
+                {product.categories[0].name}
+              </Badge>
+            )}
+          </div>
+
+          {/* Star rating */}
+          {product.rating && (
+            <StarRating
+              rating={product.rating}
+              reviewCount={product.reviewCount}
+              size="sm"
+              className="mb-2"
+            />
+          )}
+
           <div className="space-y-1">
             {hasDiscount ? (
-              <div className="flex flex-row items-center space-x-3">
-                <span className="text-gray-500 text-sm line-through">
-                  {formatPrice(price)}
-                </span>
-                <span className="font-bold text-red-600 text-2xl">
-                  {formatPrice(discountPrice)}
-                </span>
-              </div>
+              <>
+                <div className="flex flex-row items-center space-x-3">
+                  <span className="text-gray-500 text-sm line-through">
+                    {formatPrice(price)}
+                  </span>
+                  <span className="font-bold text-red-600 text-2xl">
+                    {formatPrice(discountPrice)}
+                  </span>
+                </div>
+                <div className="font-medium text-green-600 text-sm">
+                  Ahorras {formatPrice(price - discountPrice)}
+                </div>
+              </>
             ) : (
               <span className="font-bold text-gray-900 text-2xl">
                 {formatPrice(price)}

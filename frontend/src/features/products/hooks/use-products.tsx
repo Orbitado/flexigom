@@ -1,10 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { ProductService } from "../services/products-service";
+import type { ProductFilters } from "@/types";
 
-export function useProducts() {
+export function useProducts(filters?: ProductFilters) {
   return useQuery({
-    queryKey: ["products"],
-    queryFn: ProductService.getProducts,
+    queryKey: ["products", filters],
+    queryFn: () => ProductService.getProducts(filters),
+    select: (data) => ({
+      products: data.data,
+      pagination: data.meta.pagination,
+    }),
   });
 }
 

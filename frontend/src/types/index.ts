@@ -99,4 +99,18 @@ export interface Product extends StrapiEntity {
   composition: string;
   measurement: string;
   brand: string;
+  rating?: number;
+  reviewCount?: number;
+}
+
+export interface ProductFilters {
+  category?: string;
+  priceRange?: {
+    min: number;
+    max: number;
+  };
+  brands?: string[];
+  sortBy?: "price_asc" | "price_desc" | "name" | "rating" | "newest";
+  page?: number;
+  pageSize?: number;
 }
