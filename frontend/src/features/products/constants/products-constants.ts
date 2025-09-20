@@ -2,6 +2,8 @@ import type { ProductFilters } from "@/types";
 
 export const DEFAULT_FILTERS: ProductFilters = {
   brands: [],
+  compositions: [],
+  measurements: [],
   sortBy: "name",
   page: 1,
   pageSize: 6,
@@ -22,7 +24,22 @@ export const POPULAR_PRICE_RANGES = [
   { label: "$ 1.200.000 - $ 1.500.000", min: 1200000, max: 1500000 },
 ] as const;
 
-export const BRANDS = ["Flexigom", "Premium", "Comfort"] as const;
+export const BRANDS = ["flexigom", "premium", "comfort"] as const;
+
+export const COMPOSITIONS = [
+  "Latex",
+  "MemoryFoam",
+  "Spring",
+  "Hybrid",
+] as const;
+
+export const MEASUREMENTS = [
+  "single",
+  "twin",
+  "full",
+  "queen",
+  "king",
+] as const;
 
 export const SORT_OPTIONS = [
   { value: "name", label: "Relevancia" },

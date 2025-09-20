@@ -110,6 +110,8 @@ export interface ProductFilters {
     max: number;
   };
   brands?: string[];
+  compositions?: string[];
+  measurements?: string[];
   sortBy?: "price_asc" | "price_desc" | "name" | "rating" | "newest";
   page?: number;
   pageSize?: number;

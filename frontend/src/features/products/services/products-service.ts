@@ -21,6 +21,12 @@ interface ProductApiParams extends ApiRequestOptions {
     brand?: {
       $in: string[];
     };
+    composition?: {
+      $in: string[];
+    };
+    measurement?: {
+      $in: string[];
+    };
   };
   sort?: string;
 }
@@ -57,6 +63,18 @@ export class ProductService {
         if (filters.brands && filters.brands.length > 0) {
           apiParams.filters.brand = {
             $in: filters.brands,
+          };
+        }
+
+        if (filters.compositions && filters.compositions.length > 0) {
+          apiParams.filters.composition = {
+            $in: filters.compositions,
+          };
+        }
+
+        if (filters.measurements && filters.measurements.length > 0) {
+          apiParams.filters.measurement = {
+            $in: filters.measurements,
           };
         }
 

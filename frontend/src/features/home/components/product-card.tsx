@@ -57,7 +57,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
             {product.name || "Producto sin nombre"}
           </h3>
 
-          {/* Brand and category tags */}
+          {/* Brand, category, composition and measurement tags */}
           <div className="flex flex-wrap gap-1 mb-2">
             {product.brand && (
               <Badge variant="destructive" className="text-xs">
@@ -67,6 +67,16 @@ export function ProductCard({ product, className }: ProductCardProps) {
             {product.categories?.[0]?.name && (
               <Badge variant="outline" className="text-xs">
                 {product.categories[0].name}
+              </Badge>
+            )}
+            {product.composition && (
+              <Badge variant="secondary" className="text-xs">
+                {product.composition}
+              </Badge>
+            )}
+            {product.measurement && (
+              <Badge variant="default" className="text-xs capitalize">
+                {product.measurement}
               </Badge>
             )}
           </div>

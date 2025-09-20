@@ -6,38 +6,38 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { BRANDS } from "../constants/products-constants";
+import { COMPOSITIONS } from "../constants/products-constants";
 
-interface BrandFilterProps {
-  selectedBrands: string[];
-  onBrandChange: (brand: string, checked: boolean) => void;
+interface CompositionFilterProps {
+  selectedCompositions: string[];
+  onCompositionChange: (composition: string, checked: boolean) => void;
 }
 
-export function BrandFilter({
-  selectedBrands,
-  onBrandChange,
-}: BrandFilterProps) {
+export function CompositionFilter({
+  selectedCompositions,
+  onCompositionChange,
+}: CompositionFilterProps) {
   return (
     <Collapsible defaultOpen>
       <CollapsibleTrigger className="flex justify-between items-center pb-3 w-full">
-        <h3 className="font-medium">Marca</h3>
+        <h3 className="font-medium">Composición</h3>
         <ChevronDown className="size-4" />
       </CollapsibleTrigger>
       <CollapsibleContent className="space-y-3">
-        {BRANDS.map((brand) => (
-          <div key={brand} className="flex items-center space-x-2">
+        {COMPOSITIONS.map((composition) => (
+          <div key={composition} className="flex items-center space-x-2">
             <Checkbox
-              id={brand}
-              checked={selectedBrands.includes(brand)}
+              id={composition}
+              checked={selectedCompositions.includes(composition)}
               onCheckedChange={(checked) =>
-                onBrandChange(brand, checked as boolean)
+                onCompositionChange(composition, checked as boolean)
               }
             />
             <Label
-              htmlFor={brand}
+              htmlFor={composition}
               className="font-normal text-sm cursor-pointer"
             >
-              {brand.charAt(0).toUpperCase() + brand.slice(1).toLowerCase()}
+              {composition}
             </Label>
           </div>
         ))}

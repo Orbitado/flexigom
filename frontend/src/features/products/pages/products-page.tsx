@@ -20,6 +20,8 @@ export function ProductsPage() {
     tempPriceRange,
     setTempPriceRange,
     handleBrandFilter,
+    handleCompositionFilter,
+    handleMeasurementFilter,
     handlePriceRangeChange,
     handleSortChange,
     handlePageChange,
@@ -59,9 +61,13 @@ export function ProductsPage() {
       <div className="flex gap-8">
         <ProductsFilter
           selectedBrands={filters.brands || []}
+          selectedCompositions={filters.compositions || []}
+          selectedMeasurements={filters.measurements || []}
           tempPriceRange={tempPriceRange}
           hasActiveFilters={hasActiveFilters() ?? false}
           onBrandChange={handleBrandFilter}
+          onCompositionChange={handleCompositionFilter}
+          onMeasurementChange={handleMeasurementFilter}
           onTempPriceRangeChange={setTempPriceRange}
           onPriceRangeCommit={handlePriceRangeChange}
           onClearFilters={clearFilters}
