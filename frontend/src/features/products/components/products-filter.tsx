@@ -4,16 +4,19 @@ import { PriceRangeFilter } from "./price-range-filter";
 import { BrandFilter } from "./brand-filter";
 import { CompositionFilter } from "./composition-filter";
 import { MeasurementFilter } from "./measurement-filter";
+import { CategoryFilter } from "./category-filter";
 
 interface ProductsFilterProps {
   selectedBrands: string[];
   selectedCompositions: string[];
   selectedMeasurements: string[];
+  selectedCategories: string[];
   tempPriceRange: number[];
   hasActiveFilters: boolean;
   onBrandChange: (brand: string, checked: boolean) => void;
   onCompositionChange: (composition: string, checked: boolean) => void;
   onMeasurementChange: (measurement: string, checked: boolean) => void;
+  onCategoryChange: (category: string, checked: boolean) => void;
   onTempPriceRangeChange: (values: number[]) => void;
   onPriceRangeCommit: (values: number[]) => void;
   onClearFilters: () => void;
@@ -23,17 +26,19 @@ export function ProductsFilter({
   selectedBrands,
   selectedCompositions,
   selectedMeasurements,
+  selectedCategories,
   tempPriceRange,
   hasActiveFilters,
   onBrandChange,
   onCompositionChange,
   onMeasurementChange,
+  onCategoryChange,
   onTempPriceRangeChange,
   onPriceRangeCommit,
   onClearFilters,
 }: ProductsFilterProps) {
   return (
-    <aside className="flex-shrink-0 w-64">
+    <aside className="flex-shrink-0 mt-2 w-64">
       <div className="space-y-6">
         <div className="flex items-center gap-2 pb-4 border-b">
           <Filter className="size-4" />
@@ -44,6 +49,11 @@ export function ProductsFilter({
           tempPriceRange={tempPriceRange}
           onTempPriceRangeChange={onTempPriceRangeChange}
           onPriceRangeCommit={onPriceRangeCommit}
+        />
+
+        <CategoryFilter
+          selectedCategories={selectedCategories}
+          onCategoryChange={onCategoryChange}
         />
 
         <BrandFilter

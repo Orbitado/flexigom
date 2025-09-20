@@ -40,6 +40,16 @@ export function useProductFilters() {
     }));
   };
 
+  const handleCategoryFilter = (category: string, checked: boolean) => {
+    setFilters((prev) => ({
+      ...prev,
+      categories: checked
+        ? [...(prev.categories || []), category]
+        : (prev.categories || []).filter((c) => c !== category),
+      page: 1,
+    }));
+  };
+
   const handlePriceRangeChange = (values: number[]) => {
     setTempPriceRange(values);
     setFilters((prev) => ({
@@ -74,6 +84,7 @@ export function useProductFilters() {
       (filters.brands && filters.brands.length > 0) ||
       (filters.compositions && filters.compositions.length > 0) ||
       (filters.measurements && filters.measurements.length > 0) ||
+      (filters.categories && filters.categories.length > 0) ||
       (filters.priceRange &&
         (filters.priceRange.min !== DEFAULT_PRICE_RANGE[0] ||
           filters.priceRange.max !== DEFAULT_PRICE_RANGE[1]))
@@ -87,6 +98,7 @@ export function useProductFilters() {
     handleBrandFilter,
     handleCompositionFilter,
     handleMeasurementFilter,
+    handleCategoryFilter,
     handlePriceRangeChange,
     handleSortChange,
     handlePageChange,

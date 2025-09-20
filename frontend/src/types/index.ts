@@ -105,6 +105,7 @@ export interface Product extends StrapiEntity {
 
 export interface ProductFilters {
   category?: string;
+  categories?: string[];
   priceRange?: {
     min: number;
     max: number;

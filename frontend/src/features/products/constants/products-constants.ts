@@ -4,6 +4,7 @@ export const DEFAULT_FILTERS: ProductFilters = {
   brands: [],
   compositions: [],
   measurements: [],
+  categories: [],
   sortBy: "name",
   page: 1,
   pageSize: 6,

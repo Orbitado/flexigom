@@ -11,7 +11,8 @@ interface ProductApiParams extends ApiRequestOptions {
   filters?: {
     categories?: {
       slug?: {
-        $eq: string;
+        $eq?: string;
+        $in?: string[];
       };
     };
     price?: {
@@ -49,6 +50,14 @@ export class ProductService {
           apiParams.filters.categories = {
             slug: {
               $eq: filters.category,
+            },
+          };
+        }
+
+        if (filters.categories && filters.categories.length > 0) {
+          apiParams.filters.categories = {
+            slug: {
+              $in: filters.categories,
             },
           };
         }

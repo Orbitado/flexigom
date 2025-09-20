@@ -22,6 +22,7 @@ export function ProductsPage() {
     handleBrandFilter,
     handleCompositionFilter,
     handleMeasurementFilter,
+    handleCategoryFilter,
     handlePriceRangeChange,
     handleSortChange,
     handlePageChange,
@@ -63,11 +64,13 @@ export function ProductsPage() {
           selectedBrands={filters.brands || []}
           selectedCompositions={filters.compositions || []}
           selectedMeasurements={filters.measurements || []}
+          selectedCategories={filters.categories || []}
           tempPriceRange={tempPriceRange}
           hasActiveFilters={hasActiveFilters() ?? false}
           onBrandChange={handleBrandFilter}
           onCompositionChange={handleCompositionFilter}
           onMeasurementChange={handleMeasurementFilter}
+          onCategoryChange={handleCategoryFilter}
           onTempPriceRangeChange={setTempPriceRange}
           onPriceRangeCommit={handlePriceRangeChange}
           onClearFilters={clearFilters}
