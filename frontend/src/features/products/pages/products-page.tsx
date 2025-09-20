@@ -60,22 +60,26 @@ export function ProductsPage() {
       </Breadcrumb>
 
       <div className="flex gap-8">
-        <ProductsFilter
-          selectedBrands={filters.brands || []}
-          selectedCompositions={filters.compositions || []}
-          selectedMeasurements={filters.measurements || []}
-          selectedCategories={filters.categories || []}
-          tempPriceRange={tempPriceRange}
-          hasActiveFilters={hasActiveFilters() ?? false}
-          onBrandChange={handleBrandFilter}
-          onCompositionChange={handleCompositionFilter}
-          onMeasurementChange={handleMeasurementFilter}
-          onCategoryChange={handleCategoryFilter}
-          onTempPriceRangeChange={setTempPriceRange}
-          onPriceRangeCommit={handlePriceRangeChange}
-          onClearFilters={clearFilters}
-        />
+        {/* Desktop Filter Sidebar */}
+        <aside className="hidden md:block flex-shrink-0 w-64">
+          <ProductsFilter
+            selectedBrands={filters.brands || []}
+            selectedCompositions={filters.compositions || []}
+            selectedMeasurements={filters.measurements || []}
+            selectedCategories={filters.categories || []}
+            tempPriceRange={tempPriceRange}
+            hasActiveFilters={hasActiveFilters() ?? false}
+            onBrandChange={handleBrandFilter}
+            onCompositionChange={handleCompositionFilter}
+            onMeasurementChange={handleMeasurementFilter}
+            onCategoryChange={handleCategoryFilter}
+            onTempPriceRangeChange={setTempPriceRange}
+            onPriceRangeCommit={handlePriceRangeChange}
+            onClearFilters={clearFilters}
+          />
+        </aside>
 
+        {/* Main Content */}
         <main className="flex-1">
           <ProductsHeader
             isLoading={isLoading}
@@ -84,6 +88,16 @@ export function ProductsPage() {
             totalPages={pagination?.pageCount}
             sortBy={filters.sortBy}
             onSortChange={handleSortChange}
+            hasActiveFilters={hasActiveFilters() ?? false}
+            onClearFilters={clearFilters}
+            filters={filters}
+            tempPriceRange={tempPriceRange}
+            onBrandChange={handleBrandFilter}
+            onCompositionChange={handleCompositionFilter}
+            onMeasurementChange={handleMeasurementFilter}
+            onCategoryChange={handleCategoryFilter}
+            onTempPriceRangeChange={setTempPriceRange}
+            onPriceRangeCommit={handlePriceRangeChange}
           />
 
           <ProductsGrid

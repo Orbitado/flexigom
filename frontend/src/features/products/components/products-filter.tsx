@@ -1,5 +1,6 @@
 import { Filter, RefreshCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { PriceRangeFilter } from "./price-range-filter";
 import { BrandFilter } from "./brand-filter";
 import { CompositionFilter } from "./composition-filter";
@@ -38,51 +39,57 @@ export function ProductsFilter({
   onClearFilters,
 }: ProductsFilterProps) {
   return (
-    <aside className="flex-shrink-0 mt-2 w-64">
-      <div className="space-y-6">
-        <div className="flex items-center gap-2 pb-4 border-b">
-          <Filter className="size-4" />
-          <h2 className="font-semibold">Filtrar por</h2>
-        </div>
-
-        <PriceRangeFilter
-          tempPriceRange={tempPriceRange}
-          onTempPriceRangeChange={onTempPriceRangeChange}
-          onPriceRangeCommit={onPriceRangeCommit}
-        />
-
-        <CategoryFilter
-          selectedCategories={selectedCategories}
-          onCategoryChange={onCategoryChange}
-        />
-
-        <BrandFilter
-          selectedBrands={selectedBrands}
-          onBrandChange={onBrandChange}
-        />
-
-        <CompositionFilter
-          selectedCompositions={selectedCompositions}
-          onCompositionChange={onCompositionChange}
-        />
-
-        <MeasurementFilter
-          selectedMeasurements={selectedMeasurements}
-          onMeasurementChange={onMeasurementChange}
-        />
-
-        <div className="pt-4 border-t">
-          <Button
-            variant="outline"
-            onClick={onClearFilters}
-            disabled={!hasActiveFilters}
-            className="flex justify-center items-center gap-2 w-full"
-          >
-            <RefreshCcw className="size-4" />
-            Limpiar filtros
-          </Button>
-        </div>
+    <div className="space-y-6 mt-2">
+      <div className="flex items-center gap-2 pb-4 border-b">
+        <Filter className="size-4" />
+        <h2 className="font-semibold">Filtrar por</h2>
       </div>
-    </aside>
+
+      <PriceRangeFilter
+        tempPriceRange={tempPriceRange}
+        onTempPriceRangeChange={onTempPriceRangeChange}
+        onPriceRangeCommit={onPriceRangeCommit}
+      />
+      
+      <Separator className="my-4" />
+
+      <CategoryFilter
+        selectedCategories={selectedCategories}
+        onCategoryChange={onCategoryChange}
+      />
+      
+      <Separator className="my-4" />
+
+      <BrandFilter
+        selectedBrands={selectedBrands}
+        onBrandChange={onBrandChange}
+      />
+      
+      <Separator className="my-4" />
+
+      <CompositionFilter
+        selectedCompositions={selectedCompositions}
+        onCompositionChange={onCompositionChange}
+      />
+      
+      <Separator className="my-4" />
+
+      <MeasurementFilter
+        selectedMeasurements={selectedMeasurements}
+        onMeasurementChange={onMeasurementChange}
+      />
+
+      <div className="pt-4 border-t">
+        <Button
+          variant="outline"
+          onClick={onClearFilters}
+          disabled={!hasActiveFilters}
+          className="flex justify-center items-center gap-2 w-full"
+        >
+          <RefreshCcw className="size-4" />
+          Limpiar filtros
+        </Button>
+      </div>
+    </div>
   );
 }

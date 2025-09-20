@@ -94,7 +94,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
           <div className="space-y-1">
             {hasDiscount ? (
               <>
-                <div className="flex flex-row items-center space-x-3">
+                <div className="flex flex-row flex-wrap items-center space-x-3">
                   <span className="text-gray-500 text-sm line-through">
                     {formatPrice(price)}
                   </span>
