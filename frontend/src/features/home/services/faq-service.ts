@@ -9,9 +9,7 @@ export class FAQService {
   }
 
   static async getFAQ(documentId: string): Promise<FAQ> {
-    const response = await api.get<StrapiResponse<FAQ>>(
-      `/faqs/${documentId}`,
-    );
+    const response = await api.get<StrapiResponse<FAQ>>(`/faqs/${documentId}`);
     return response.data.data;
   }
 
@@ -26,12 +24,9 @@ export class FAQService {
     documentId: string,
     faqData: Partial<FAQ>,
   ): Promise<FAQ> {
-    const response = await api.put<StrapiResponse<FAQ>>(
-      `/faqs/${documentId}`,
-      {
-        data: faqData,
-      },
-    );
+    const response = await api.put<StrapiResponse<FAQ>>(`/faqs/${documentId}`, {
+      data: faqData,
+    });
     return response.data.data;
   }
 
