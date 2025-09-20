@@ -19,7 +19,7 @@ export function CompositionFilter({
 }: CompositionFilterProps) {
   return (
     <Collapsible defaultOpen>
-      <CollapsibleTrigger className="flex justify-between items-center pb-3 w-full">
+      <CollapsibleTrigger className="flex justify-between items-center pb-3 w-full cursor-pointer">
         <h3 className="font-medium">Composición</h3>
         <ChevronDown className="size-4" />
       </CollapsibleTrigger>

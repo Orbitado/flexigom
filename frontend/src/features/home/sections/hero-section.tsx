@@ -16,11 +16,11 @@ const defaultContent: HeroContent = {
     "Descubrí nuestra amplia selección de colchones, sommiers y ropa de cama de la más alta calidad. Más de 20 años brindando comodidad y descanso a familias argentinas.",
   primaryCta: {
     text: "Hablar con Nosotros",
-    href: "/ofertas",
+    href: "tel:+5493815277935",
   },
   secondaryCta: {
     text: "Explorar Productos",
-    href: "/colchones",
+    href: "/products",
   },
 };
 

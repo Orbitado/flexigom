@@ -1,6 +1,7 @@
 import { cn, getImageUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import type { CategoryItem } from "../types";
+import { Link } from "react-router";
 
 interface CategoryCardProps {
   category: CategoryItem;
@@ -46,7 +47,7 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
           asChild
           className="bg-red-600 hover:bg-red-700 mt-auto w-full font-medium text-white"
         >
-          <a href={category.slug}>Ver Productos</a>
+          <Link to={`/products/${category.slug}`}>Ver Categoria</Link>
         </Button>
       </div>
     </div>

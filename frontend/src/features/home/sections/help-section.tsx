@@ -32,7 +32,7 @@ export function HelpSection({ content, className }: HelpSectionProps = {}) {
   const helpContent = { ...defaultContent, ...content };
 
   return (
-    <section className={cn("bg-red-600 py-16", className)}>
+    <section id="help" className={cn("bg-red-600 py-16", className)}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="space-y-8 text-center">
           {/* Title */}

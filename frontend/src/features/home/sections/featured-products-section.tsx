@@ -5,11 +5,14 @@ import { useFeaturedProductsBySection } from "../hooks/use-featured-products";
 import type { FeaturedProductsSectionProps } from "../types";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/types";
+import { useNavigate } from "react-router";
 
 export function FeaturedProductsSection({
   section = "homepage",
   className,
 }: FeaturedProductsSectionProps = {}) {
+  const navigate = useNavigate();
+
   const {
     data: featuredProducts,
     isLoading,
@@ -22,11 +25,6 @@ export function FeaturedProductsSection({
     title: "Productos Destacados",
     subtitle:
       "Descubre nuestros productos más populares y con ofertas especiales",
-  };
-
-  const handleViewMoreProducts = () => {
-    // TODO: Implement navigation to products page
-    console.log("Navigate to products page");
   };
 
   if (error) {
@@ -97,7 +95,7 @@ export function FeaturedProductsSection({
         {/* Call to Action Button */}
         <div className="text-center">
           <Button
-            onClick={handleViewMoreProducts}
+            onClick={() => navigate("/products")}
             size="lg"
             className="bg-red-600 hover:bg-red-700 px-8 py-4 font-semibold text-white text-lg hover:cursor-pointer"
           >
