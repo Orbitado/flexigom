@@ -86,16 +86,28 @@ export interface Category extends StrapiEntity {
   products?: Product[];
 }
 
+export interface RichTextChild {
+  text?: string;
+  type: string;
+  children?: RichTextChild[];
+}
+
+export interface RichTextBlock {
+  type: string;
+  children: RichTextChild[];
+  format?: string;
+}
+
 export interface Product extends StrapiEntity {
   categories: Category[];
   slug: string;
   name: string;
-  description: string;
+  description: RichTextBlock[];
   price: number;
   discount_price: number;
   stock: number;
-  images: StrapiMedia[];
-  specifications: Record<string, unknown>;
+  images: StrapiMedia[] | null;
+  specifications: RichTextBlock[];
   composition: string;
   measurement: string;
   brand: string;

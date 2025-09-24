@@ -113,9 +113,9 @@ export function ProductCard({ product, className }: ProductCardProps) {
             )}
           </div>
 
-          {product.description && typeof product.description === "string" && (
+          {product.description && Array.isArray(product.description) && product.description.length > 0 && (
             <p className="overflow-hidden text-gray-700 text-sm break-words line-clamp-3 leading-relaxed">
-              {product.description}
+              {product.description[0]?.children?.map(child => child.text || "").join("") || ""}
             </p>
           )}
         </div>
@@ -124,7 +124,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
           asChild
           className="bg-red-600 hover:bg-red-700 mt-auto w-full font-medium text-white"
         >
-          <Link to={`/products/${product.id || "producto"}`}>Ver Producto</Link>
+          <Link to={`/products/${product.documentId || "producto"}`}>Ver Producto</Link>
         </Button>
       </div>
     </div>
