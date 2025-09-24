@@ -1,29 +1,120 @@
 import { Link } from "react-router";
-import { Button } from "@/components/ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from "@/components/ui/breadcrumb";
+import { useProducts } from "../hooks/use-products";
+import { useProductFilters } from "../hooks/use-product-filters";
+import { ProductsFilter } from "../components/products-filter";
+import { ProductsHeader } from "../components/products-header";
+import { ProductsGrid } from "../components/products-grid";
+import { ProductsPagination } from "../components/products-pagination";
 
 export function ProductsPage() {
-  const products = [
-    { id: 1, name: "Product 1", price: "$99.99" },
-    { id: 2, name: "Product 2", price: "$149.99" },
-    { id: 3, name: "Product 3", price: "$199.99" },
-  ];
+  const {
+    filters,
+    tempPriceRange,
+    setTempPriceRange,
+    handleBrandFilter,
+    handleCompositionFilter,
+    handleMeasurementFilter,
+    handleCategoryFilter,
+    handlePriceRangeChange,
+    handleSortChange,
+    handlePageChange,
+    clearFilters,
+    hasActiveFilters,
+  } = useProductFilters();
+
+  const { data, isLoading, error } = useProducts(filters);
+
+  const products = data?.products || [];
+  const pagination = data?.pagination;
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center py-16">
+        <p className="text-gray-500">Error al cargar los productos</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Products</h1>
-        <p className="text-muted-foreground">Discover our amazing products</p>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
-          <div key={product.id} className="border rounded-lg p-4 space-y-2">
-            <h3 className="font-semibold">{product.name}</h3>
-            <p className="text-muted-foreground">{product.price}</p>
-            <Button asChild variant="outline">
-              <Link to={`/products/${product.id}`}>View Details</Link>
-            </Button>
-          </div>
-        ))}
+    <div className="mx-auto px-4 py-6 container">
+      <Breadcrumb className="mb-6">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link to="/">Inicio</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Productos</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <div className="flex gap-8">
+        {/* Desktop Filter Sidebar */}
+        <aside className="hidden md:block flex-shrink-0 w-64">
+          <ProductsFilter
+            selectedBrands={filters.brands || []}
+            selectedCompositions={filters.compositions || []}
+            selectedMeasurements={filters.measurements || []}
+            selectedCategories={filters.categories || []}
+            tempPriceRange={tempPriceRange}
+            hasActiveFilters={hasActiveFilters() ?? false}
+            onBrandChange={handleBrandFilter}
+            onCompositionChange={handleCompositionFilter}
+            onMeasurementChange={handleMeasurementFilter}
+            onCategoryChange={handleCategoryFilter}
+            onTempPriceRangeChange={setTempPriceRange}
+            onPriceRangeCommit={handlePriceRangeChange}
+            onClearFilters={clearFilters}
+          />
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1">
+          <ProductsHeader
+            isLoading={isLoading}
+            totalProducts={pagination?.total || products.length}
+            currentPage={pagination?.page}
+            totalPages={pagination?.pageCount}
+            sortBy={filters.sortBy}
+            onSortChange={handleSortChange}
+            hasActiveFilters={hasActiveFilters() ?? false}
+            onClearFilters={clearFilters}
+            filters={filters}
+            tempPriceRange={tempPriceRange}
+            onBrandChange={handleBrandFilter}
+            onCompositionChange={handleCompositionFilter}
+            onMeasurementChange={handleMeasurementFilter}
+            onCategoryChange={handleCategoryFilter}
+            onTempPriceRangeChange={setTempPriceRange}
+            onPriceRangeCommit={handlePriceRangeChange}
+          />
+
+          <ProductsGrid
+            products={products}
+            isLoading={isLoading}
+            hasActiveFilters={hasActiveFilters() ?? false}
+            onClearFilters={clearFilters}
+          />
+
+          {pagination && (
+            <ProductsPagination
+              pagination={pagination}
+              isLoading={isLoading}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </main>
       </div>
     </div>
   );

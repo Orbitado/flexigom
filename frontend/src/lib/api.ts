@@ -87,19 +87,4 @@ api.interceptors.response.use(
   },
 );
 
-export const getStrapiUrl = (path: string = ""): string => {
-  const strapiUrl = import.meta.env.VITE_STRAPI_URL || "http://localhost:1337";
-  return `${strapiUrl}${path}`;
-};
-
-export const getMediaUrl = (url: string | null): string | null => {
-  if (!url) return null;
-
-  if (url.startsWith("http")) {
-    return url;
-  }
-
-  return getStrapiUrl(url);
-};
-
 export default api;

@@ -11,6 +11,14 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
     "slug": {
       "type": "uid",
       "targetField": "name",
@@ -23,6 +31,8 @@
     },
     "description": {
       "type": "text",
+      "minLength": 20,
+      "maxLength": 220,
       "required": true,
       "unique": false
     },

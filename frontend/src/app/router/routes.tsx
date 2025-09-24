@@ -38,7 +38,7 @@ export const routes: RouteObject[] = [
             lazy: () => import("@/features/products/pages/products-page"),
           },
           {
-            path: ":id",
+            path: ":documentId",
             lazy: () => import("@/features/products/pages/product-detail-page"),
           },
         ],

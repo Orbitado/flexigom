@@ -12,7 +12,7 @@ export interface StrapiResponse<T> {
 
 export interface StrapiEntity {
   id: number;
-  attributes: Record<string, unknown>;
+  documentId: string;
   createdAt: string;
   updatedAt: string;
   publishedAt?: string;
@@ -20,6 +20,7 @@ export interface StrapiEntity {
 
 export interface StrapiMedia {
   id: number;
+  documentId: string;
   name: string;
   alternativeText?: string;
   caption?: string;
@@ -41,6 +42,7 @@ export interface StrapiMedia {
   provider_metadata?: unknown;
   createdAt: string;
   updatedAt: string;
+  publishedAt?: string;
 }
 
 export interface StrapiMediaFormat {
@@ -77,30 +79,53 @@ export interface ApiRequestOptions {
 }
 
 export interface Category extends StrapiEntity {
-  attributes: {
-    name: string;
-    slug: string;
-    description?: string;
-    image?: {
-      data: StrapiMedia | null;
-    };
-    products?: {
-      data: Product[];
-    };
-  };
+  image?: StrapiMedia;
+  slug: string;
+  name: string;
+  description: string;
+  products?: Product[];
+}
+
+export interface RichTextChild {
+  text?: string;
+  type: string;
+  children?: RichTextChild[];
+}
+
+export interface RichTextBlock {
+  type: string;
+  children: RichTextChild[];
+  format?: string;
 }
 
 export interface Product extends StrapiEntity {
-  attributes: {
-    name: string;
-    slug: string;
-    description?: string;
-    price: number;
-    image?: {
-      data: StrapiMedia | null;
-    };
-    category?: {
-      data: Category | null;
-    };
+  categories: Category[];
+  slug: string;
+  name: string;
+  description: RichTextBlock[];
+  price: number;
+  discount_price: number;
+  stock: number;
+  images: StrapiMedia[] | null;
+  specifications: RichTextBlock[];
+  composition: string;
+  measurement: string;
+  brand: string;
+  rating?: number;
+  reviewCount?: number;
+}
+
+export interface ProductFilters {
+  category?: string;
+  categories?: string[];
+  priceRange?: {
+    min: number;
+    max: number;
   };
+  brands?: string[];
+  compositions?: string[];
+  measurements?: string[];
+  sortBy?: "price_asc" | "price_desc" | "name" | "rating" | "newest";
+  page?: number;
+  pageSize?: number;
 }

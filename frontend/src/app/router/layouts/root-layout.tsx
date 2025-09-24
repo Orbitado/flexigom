@@ -1,11 +1,15 @@
 import { Outlet } from "react-router";
+import { Navbar } from "@/features/home/components/navbar";
+import { FloatingSupport } from "@/components/floating-support";
 
 export function RootLayout() {
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container mx-auto px-4">
+    <div className="relative bg-background min-h-screen">
+      <Navbar />
+      <main className="mx-auto">
         <Outlet />
       </main>
+      <FloatingSupport />
     </div>
   );
 }

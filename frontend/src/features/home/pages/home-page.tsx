@@ -1,40 +1,23 @@
-import { Link } from "react-router";
-import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/features/home/sections/hero-section";
+import { CategoriesSection } from "@/features/home/sections/categories-section";
+import { FeaturedProductsSection } from "@/features/home/sections/featured-products-section";
+import { WhyChooseFlexigomSection } from "@/features/home/sections/why-choose-flexigom-section";
+import { TestimonialsSection } from "@/features/home/sections/testimonials-section";
+import { HelpSection } from "@/features/home/sections/help-section";
+import { FAQsSection } from "@/features/home/sections/faqs-section";
+import { FooterSection } from "@/features/home/sections/footer-section";
 
 export function HomePage() {
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen space-y-6">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold">Welcome to Flexigom</h1>
-        <p className="text-lg text-muted-foreground max-w-md">
-          A modern application built with React Router 7 and screaming
-          architecture
-        </p>
-      </div>
-
-      <div className="flex flex-wrap gap-4 justify-center">
-        <Button asChild>
-          <Link to="/products">View Products</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link to="/auth/login">Sign In</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link to="/auth/register">Sign Up</Link>
-        </Button>
-      </div>
-
-      <div className="text-center space-y-2">
-        <h2 className="text-lg font-semibold">Architecture Features</h2>
-        <ul className="text-sm text-muted-foreground space-y-1">
-          <li>✅ React Router 7 Data Mode</li>
-          <li>✅ Screaming Architecture</li>
-          <li>✅ Feature-based Organization</li>
-          <li>✅ Lazy Loading Routes</li>
-          <li>✅ Centralized Providers</li>
-          <li>✅ Error Boundaries</li>
-        </ul>
-      </div>
-    </div>
+    <>
+      <HeroSection />
+      <WhyChooseFlexigomSection />
+      <CategoriesSection />
+      <FeaturedProductsSection />
+      <HelpSection />
+      <FAQsSection />
+      <TestimonialsSection />
+      <FooterSection />
+    </>
   );
 }
