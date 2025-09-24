@@ -45,3 +45,15 @@ export const getCustomerSinceYear = (
     return "2024";
   }
 };
+
+export const handleShare = (product: { name: string }) => {
+  if (navigator.share) {
+    navigator.share({
+      title: product.name,
+      text: `Check out this ${product.name}`,
+      url: window.location.href,
+    });
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+  }
+};

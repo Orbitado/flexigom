@@ -5,7 +5,10 @@ interface RichTextRendererProps {
   className?: string;
 }
 
-export function RichTextRenderer({ content, className }: RichTextRendererProps) {
+export function RichTextRenderer({
+  content,
+  className,
+}: RichTextRendererProps) {
   if (!content || !Array.isArray(content)) {
     return null;
   }
@@ -15,9 +18,7 @@ export function RichTextRenderer({ content, className }: RichTextRendererProps) 
       case "paragraph":
         return (
           <p key={index} className="mb-4 leading-relaxed">
-            {block.children?.map((child) =>
-              child.text || ""
-            ).join("")}
+            {block.children?.map((child) => child.text || "").join("")}
           </p>
         );
 
@@ -29,9 +30,9 @@ export function RichTextRenderer({ content, className }: RichTextRendererProps) 
               if (listItem.type === "list-item") {
                 return (
                   <li key={itemIndex} className="leading-relaxed">
-                    {listItem.children?.map((child) =>
-                      child.text || ""
-                    ).join("")}
+                    {listItem.children
+                      ?.map((child) => child.text || "")
+                      .join("")}
                   </li>
                 );
               }
@@ -44,26 +45,18 @@ export function RichTextRenderer({ content, className }: RichTextRendererProps) 
       case "list-item":
         return (
           <li key={index} className="leading-relaxed">
-            {block.children?.map((child) =>
-              child.text || ""
-            ).join("")}
+            {block.children?.map((child) => child.text || "").join("")}
           </li>
         );
 
       default:
         return (
           <div key={index} className="mb-2">
-            {block.children?.map((child) =>
-              child.text || ""
-            ).join("")}
+            {block.children?.map((child) => child.text || "").join("")}
           </div>
         );
     }
   };
 
-  return (
-    <div className={className}>
-      {content.map(renderBlock)}
-    </div>
-  );
+  return <div className={className}>{content.map(renderBlock)}</div>;
 }

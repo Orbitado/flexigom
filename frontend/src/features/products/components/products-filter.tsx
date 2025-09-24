@@ -50,28 +50,28 @@ export function ProductsFilter({
         onTempPriceRangeChange={onTempPriceRangeChange}
         onPriceRangeCommit={onPriceRangeCommit}
       />
-      
+
       <Separator className="my-4" />
 
       <CategoryFilter
         selectedCategories={selectedCategories}
         onCategoryChange={onCategoryChange}
       />
-      
+
       <Separator className="my-4" />
 
       <BrandFilter
         selectedBrands={selectedBrands}
         onBrandChange={onBrandChange}
       />
-      
+
       <Separator className="my-4" />
 
       <CompositionFilter
         selectedCompositions={selectedCompositions}
         onCompositionChange={onCompositionChange}
       />
-      
+
       <Separator className="my-4" />
 
       <MeasurementFilter

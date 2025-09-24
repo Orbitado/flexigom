@@ -36,8 +36,10 @@ import {
   Minus,
   Heart,
   Share2,
+  ChevronLeft,
 } from "lucide-react";
 import { useState } from "react";
+import { handleShare } from "@/lib/utils";
 
 export function ProductDetailPage() {
   const { documentId } = useParams();
@@ -61,7 +63,7 @@ export function ProductDetailPage() {
         </div>
         <Button asChild variant="outline">
           <Link to="/products">
-            <ArrowLeft className="mr-2 w-4 h-4" />
+            <ChevronLeft className="mr-2 w-4 h-4" />
             Volver a Productos
           </Link>
         </Button>
@@ -87,33 +89,9 @@ export function ProductDetailPage() {
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: product.name,
-        text: `Check out this ${product.name}`,
-        url: window.location.href,
-      });
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-    }
-  };
-
   return (
-    <div className="mx-auto px-4 py-6 max-w-7xl container">
+    <div className="mx-auto px-4 py-6 container">
       <div className="space-y-6">
-        {/* Back Button */}
-        <Button
-          asChild
-          variant="ghost"
-          className="p-0 w-fit h-auto text-gray-600 hover:text-gray-900"
-        >
-          <Link to="/products" className="flex items-center gap-2">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Volver a Colchones</span>
-          </Link>
-        </Button>
-
         {/* Breadcrumb */}
         <Breadcrumb>
           <BreadcrumbList>
@@ -146,6 +124,18 @@ export function ProductDetailPage() {
             <BreadcrumbPage>{product.name}</BreadcrumbPage>
           </BreadcrumbList>
         </Breadcrumb>
+
+        {/* Back Button */}
+        <Button
+          asChild
+          variant="ghost"
+          className="w-fit h-auto text-gray-600 hover:text-gray-900 m"
+        >
+          <Link to="/products">
+            <ChevronLeft className="w-4 h-4" />
+            Volver a Productos
+          </Link>
+        </Button>
 
         {/* Main Product Section */}
         <div className="gap-8 grid lg:grid-cols-2">
@@ -382,7 +372,7 @@ export function ProductDetailPage() {
                 variant="outline"
                 size="icon"
                 className="w-12 h-12"
-                onClick={handleShare}
+                onClick={() => handleShare(product)}
               >
                 <Share2 className="w-5 h-5" />
               </Button>

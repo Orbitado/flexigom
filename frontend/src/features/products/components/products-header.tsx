@@ -67,7 +67,7 @@ export function ProductsHeader({
 }: ProductsHeaderProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const isMobile = useIsMobile();
-  
+
   const getCountText = () => {
     if (isLoading) return "Cargando...";
     if (currentPage && totalPages) {
@@ -82,10 +82,14 @@ export function ProductsHeader({
     if (filters.compositions?.length) count += filters.compositions.length;
     if (filters.measurements?.length) count += filters.measurements.length;
     if (filters.categories?.length) count += filters.categories.length;
-    if (filters.priceRange?.min !== undefined || filters.priceRange?.max !== undefined) count += 1;
+    if (
+      filters.priceRange?.min !== undefined ||
+      filters.priceRange?.max !== undefined
+    )
+      count += 1;
     return count;
   };
-  
+
   const filterCount = getActiveFiltersCount();
 
   // Versión desktop original
@@ -98,9 +102,7 @@ export function ProductsHeader({
         </div>
         <div className="flex items-center gap-2">
           {/* Sort Controls */}
-          <span className="hidden sm:block text-sm">
-            Ordenar por:
-          </span>
+          <span className="hidden sm:block text-sm">Ordenar por:</span>
           <Select value={sortBy} onValueChange={onSortChange}>
             <SelectTrigger className="w-36 sm:w-48">
               <SelectValue placeholder="Seleccionar orden" />
@@ -130,10 +132,10 @@ export function ProductsHeader({
           {/* Mobile Filter Button */}
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className={`relative flex-1 ${hasActiveFilters ? 'border-primary' : ''}`}
+              <Button
+                variant="outline"
+                size="sm"
+                className={`relative flex-1 ${hasActiveFilters ? "border-primary" : ""}`}
               >
                 <SlidersHorizontal className="mr-2 size-4" />
                 Filtros
@@ -151,7 +153,8 @@ export function ProductsHeader({
                   Filtros de productos
                 </SheetTitle>
                 <SheetDescription>
-                  Filtra los productos por categoría, marca, composición y precio.
+                  Filtra los productos por categoría, marca, composición y
+                  precio.
                 </SheetDescription>
               </SheetHeader>
               <div className="px-4 py-6 max-h-[calc(100vh-12rem)] overflow-y-auto">
@@ -161,30 +164,30 @@ export function ProductsHeader({
                     onTempPriceRangeChange={onTempPriceRangeChange}
                     onPriceRangeCommit={onPriceRangeCommit}
                   />
-                  
+
                   <Separator />
-                  
+
                   <CategoryFilter
                     selectedCategories={filters.categories || []}
                     onCategoryChange={onCategoryChange}
                   />
-                  
+
                   <Separator />
-                  
+
                   <BrandFilter
                     selectedBrands={filters.brands || []}
                     onBrandChange={onBrandChange}
                   />
-                  
+
                   <Separator />
-                  
+
                   <CompositionFilter
                     selectedCompositions={filters.compositions || []}
                     onCompositionChange={onCompositionChange}
                   />
-                  
+
                   <Separator />
-                  
+
                   <MeasurementFilter
                     selectedMeasurements={filters.measurements || []}
                     onMeasurementChange={onMeasurementChange}
@@ -193,16 +196,16 @@ export function ProductsHeader({
               </div>
               <SheetFooter className="p-4 border-t">
                 <div className="flex gap-2 w-full">
-                  <Button 
-                    variant="outline" 
-                    className="flex-1" 
+                  <Button
+                    variant="outline"
+                    className="flex-1"
                     onClick={() => setIsSheetOpen(false)}
                   >
                     Cerrar
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    className="flex-1" 
+                  <Button
+                    variant="outline"
+                    className="flex-1"
                     onClick={() => {
                       onClearFilters();
                       if (filterCount > 0) {
@@ -235,14 +238,14 @@ export function ProductsHeader({
           </div>
         </div>
       </div>
-      
+
       {/* Active filters display for mobile */}
       {hasActiveFilters && filterCount > 0 && (
         <div className="flex items-center gap-2 mt-2">
           <Badge variant="secondary" className="flex items-center gap-1">
             <span>Filtros activos: {filterCount}</span>
-            <button 
-              className="ml-1 hover:text-destructive cursor-pointer" 
+            <button
+              className="ml-1 hover:text-destructive cursor-pointer"
               onClick={onClearFilters}
             >
               ×
