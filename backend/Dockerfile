@@ -1,8 +1,8 @@
 # PostgreSQL Dockerfile for Flexigom Development
 FROM postgres:15-alpine
 
-# Copy initialization scripts (if any exist)
-COPY database/init/ /docker-entrypoint-initdb.d/
+# # Copy initialization scripts (if any exist)
+# COPY database/init/ /docker-entrypoint-initdb.d/
 
 # Expose PostgreSQL port
 EXPOSE 5432
