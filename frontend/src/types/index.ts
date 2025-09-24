@@ -129,3 +129,15 @@ export interface ProductFilters {
   page?: number;
   pageSize?: number;
 }
+
+export type PaymentMethod = {
+  src: string;
+  alt: string;
+  className?: string;
+};
+
+export type TrustIndicator = {
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+};
