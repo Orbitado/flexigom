@@ -73,7 +73,7 @@ export function createProductSEO(product: {
     .join(", ");
 
   const canonical = product.documentId
-    ? `${SITE_CONFIG.url}/products/${product.documentId}`
+    ? `${SITE_CONFIG.url}/products/product/${product.documentId}`
     : `${SITE_CONFIG.url}/products`;
 
   const mainImage = product.images?.[0] || DEFAULT_SEO.image;

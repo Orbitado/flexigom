@@ -38,7 +38,24 @@ export const routes: RouteObject[] = [
             lazy: () => import("@/features/products/pages/products-page"),
           },
           {
-            path: ":documentId",
+            path: ":categorySlug",
+            loader: ({ params }) => {
+              const categorySlug = params.categorySlug;
+              if (categorySlug) {
+                // Redirect to products page with category filter
+                return new Response(null, {
+                  status: 302,
+                  headers: {
+                    Location: `/products?category=${categorySlug}`,
+                  },
+                });
+              }
+              return null;
+            },
+            lazy: () => import("@/features/products/pages/products-page"),
+          },
+          {
+            path: "product/:documentId",
             lazy: () => import("@/features/products/pages/product-detail-page"),
           },
         ],

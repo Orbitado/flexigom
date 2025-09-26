@@ -16,6 +16,7 @@ import { ProductsPagination } from "../components/products-pagination";
 import { SEOHead } from "@/components/seo";
 import { createPageSEO, createBreadcrumbSchema } from "@/lib/seo";
 import { useMemo } from "react";
+import { useCategories } from "@/features/home/hooks/use-categories";
 
 export function ProductsPage() {
   const {
@@ -34,9 +35,16 @@ export function ProductsPage() {
   } = useProductFilters();
 
   const { data, isLoading, error } = useProducts(filters);
+  const { data: categories } = useCategories();
 
   const products = data?.products || [];
   const pagination = data?.pagination;
+
+  // Find the current category if filtering by category
+  const currentCategory = useMemo(() => {
+    if (!filters.categories?.length || !categories?.length) return null;
+    return categories.find(cat => cat.slug === filters.categories![0]);
+  }, [filters.categories, categories]);
 
   const seoConfig = useMemo(() => {
     const hasFilters = filters.categories && filters.categories.length > 0;
@@ -80,8 +88,16 @@ export function ProductsPage() {
       { name: "Productos", url: "/products" },
     ];
 
+    // Add category to breadcrumbs if filtering by category
+    if (currentCategory) {
+      breadcrumbs.push({
+        name: currentCategory.name,
+        url: `/products?category=${currentCategory.slug}`
+      });
+    }
+
     return createBreadcrumbSchema(breadcrumbs);
-  }, []);
+  }, [currentCategory]);
 
   if (error) {
     return (
@@ -109,8 +125,22 @@ export function ProductsPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Productos</BreadcrumbPage>
+              {currentCategory ? (
+                <BreadcrumbLink asChild>
+                  <Link to="/products">Productos</Link>
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbPage>Productos</BreadcrumbPage>
+              )}
             </BreadcrumbItem>
+            {currentCategory && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{currentCategory.name}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </>
+            )}
           </BreadcrumbList>
         </Breadcrumb>
 
