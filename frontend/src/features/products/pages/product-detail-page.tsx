@@ -154,7 +154,7 @@ export function ProductDetailPage() {
     const breadcrumbs = [
       { name: "Inicio", url: "/" },
       { name: "Productos", url: "/products" },
-      { name: product.name, url: `/products/${documentId}` },
+      { name: product.name, url: `/products/product/${documentId}` },
     ];
 
     return createBreadcrumbSchema(breadcrumbs);

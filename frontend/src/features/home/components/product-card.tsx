@@ -128,7 +128,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
           asChild
           className="bg-red-600 hover:bg-red-700 mt-auto w-full font-medium text-white"
         >
-          <Link to={`/products/${product.documentId || "producto"}`}>
+          <Link to={`/products/product/${product.documentId || "producto"}`}>
             Ver Producto
           </Link>
         </Button>
