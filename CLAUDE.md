@@ -150,3 +150,91 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### About this project
 
 Flexigom is an MVP for bed, mattress and pillow shop with a Strapi CMS backend and React frontend. The project focuses on fast product iteration and reliable checkout flow.
+
+## SEO Implementation Status
+
+### Completed SEO Features
+
+1. **React Helmet Async** - Installed and configured for dynamic meta tag management
+2. **SEO Infrastructure** - Created comprehensive SEO utilities and components:
+   - `src/lib/seo/` - SEO utilities, constants, and type definitions
+   - `src/components/seo/` - SEOHead and StructuredData components
+   - Full TypeScript support with proper interfaces
+
+3. **Basic SEO Setup** - Updated main `index.html` with:
+   - Spanish Argentina locale (`es-AR`)
+   - Geo-targeting for Tucumán
+   - Basic meta tags with local business focus
+   - Open Graph and Twitter Card base tags
+
+4. **Component-Level SEO** - Implemented dynamic SEO for:
+   - **Homepage**: Local business schema, website schema, organization schema
+   - **Products page**: Dynamic meta based on category filters, breadcrumb schema
+   - **Product detail pages**: Product schema, breadcrumb schema, optimized meta
+
+5. **Structured Data (JSON-LD)** - Complete implementation:
+   - Local business markup with Tucumán location
+   - Product schema with pricing and availability
+   - Organization schema with contact details
+   - Breadcrumb navigation schema
+   - Website search functionality schema
+
+6. **Technical SEO Files**:
+   - `public/robots.txt` - Optimized for search engine crawling
+   - `public/sitemap.xml` - Basic sitemap with main pages
+
+### SEO Strategy & Positioning
+
+**Target Keywords (vs Competitor Hipercolchonerias):**
+- Primary: "colchones Tucumán", "sommiers Tucumán", "ropa de cama Tucumán"
+- Local: "colchonería Flexigom", "tienda de colchones San Miguel de Tucumán"
+- Long-tail: "donde comprar colchones en Tucumán", "mejores colchones Tucumán"
+
+**Competitive Positioning:**
+- Emphasize **20+ years of experience** (vs competitor's 40 years)
+- Focus on **personalized service** and **family business values**
+- Highlight **quality over speed** approach
+- Strong **local Tucumán specialization**
+
+### Remaining SEO Tasks
+
+1. **Image Alt Text Optimization** (In Progress)
+   - ✅ Category cards - enhanced with location and descriptive keywords
+   - ⏳ Product cards - improve fallback alt text
+   - ⏳ Hero section images - verify SEO optimization
+   - ⏳ Payment method icons - add descriptive alt text
+
+2. **Code Quality Fixes** (High Priority)
+   - Fix React Hook violations in `product-detail-page.tsx`
+   - Resolve TypeScript errors for product schema
+   - Move useMemo hooks before early returns
+
+3. **Testing & Validation**
+   - Test dynamic meta tag rendering
+   - Validate structured data with Google's Rich Results Test
+   - Check mobile-friendliness
+   - Verify page load speeds
+   - Test social media sharing (Open Graph)
+
+4. **Advanced SEO Enhancements** (Future)
+   - Dynamic sitemap generation based on products
+   - FAQ schema from existing FAQ section
+   - Review/rating schema for testimonials
+   - Local business hours schema optimization
+   - Image optimization and WebP conversion
+
+### SEO Configuration Files
+
+Key files for SEO management:
+- `src/lib/seo/constants.ts` - Business info, keywords, default configs
+- `src/lib/seo/utils.ts` - SEO generation functions
+- `src/lib/seo/structured-data.ts` - Schema.org implementations
+- `src/components/seo/seo-head.tsx` - Main SEO component
+
+### Next Steps for Continuation
+
+1. Fix TypeScript/React errors in product detail page
+2. Complete image alt text optimization
+3. Run comprehensive SEO testing
+4. Validate all structured data implementations
+5. Consider dynamic sitemap based on product catalog
