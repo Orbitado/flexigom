@@ -3,26 +3,7 @@ import { SectionTitle } from "../components/section-title";
 import { FAQList } from "../components/faq-list";
 import { useFAQs } from "../hooks/use-faqs";
 import type { FAQsSectionProps } from "../types";
-
-function FAQSkeleton() {
-  return (
-    <div className="space-y-4">
-      {Array.from({ length: 6 }).map((_, index) => (
-        <div
-          key={index}
-          className="border border-gray-200 rounded-lg overflow-hidden"
-        >
-          <div className="p-6">
-            <div className="flex justify-between items-center">
-              <div className="flex-1 bg-gray-200 mr-4 rounded h-6 animate-pulse" />
-              <div className="bg-gray-200 rounded w-5 h-5 animate-pulse" />
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+import { FAQsSkeleton } from "@/features/products/skeletons/faqs-skeleton";
 
 function FAQError() {
   return (
@@ -48,6 +29,10 @@ export function FAQsSection({ content, className }: FAQsSectionProps = {}) {
 
   const sectionContent = { ...defaultContent, ...content };
 
+  if (!isLoading && !isError && (!faqs || faqs.length === 0)) {
+    return null;
+  }
+
   return (
     <section className={cn("bg-gray-50 py-12 md:py-16", className)}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -61,7 +46,7 @@ export function FAQsSection({ content, className }: FAQsSectionProps = {}) {
         {/* FAQ Content */}
         <div className="mx-auto max-w-4xl">
           {isLoading ? (
-            <FAQSkeleton />
+            <FAQsSkeleton />
           ) : isError ? (
             <FAQError />
           ) : (
