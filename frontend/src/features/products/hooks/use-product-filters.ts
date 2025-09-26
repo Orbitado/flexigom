@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import type { ProductFilters } from "@/types";
 import {
@@ -6,82 +6,88 @@ import {
   DEFAULT_PRICE_RANGE,
 } from "../constants/products-constants";
 
+// Helper function to parse URL parameters into filters
+function parseFiltersFromURL(searchParams: URLSearchParams): ProductFilters {
+  const categoryParam = searchParams.get("category");
+  const brandParam = searchParams.get("brand");
+  const compositionParam = searchParams.get("composition");
+  const measurementParam = searchParams.get("measurement");
+  const sortParam = searchParams.get("sort");
+  const pageParam = searchParams.get("page");
+  const minPriceParam = searchParams.get("minPrice");
+  const maxPriceParam = searchParams.get("maxPrice");
+
+  return {
+    ...DEFAULT_FILTERS,
+    categories: categoryParam ? [categoryParam] : undefined,
+    brands: brandParam ? brandParam.split(",") : undefined,
+    compositions: compositionParam ? compositionParam.split(",") : undefined,
+    measurements: measurementParam ? measurementParam.split(",") : undefined,
+    sortBy: (sortParam as ProductFilters["sortBy"]) || DEFAULT_FILTERS.sortBy,
+    page: pageParam ? parseInt(pageParam, 10) : DEFAULT_FILTERS.page,
+    priceRange:
+      minPriceParam && maxPriceParam
+        ? {
+            min: parseInt(minPriceParam, 10),
+            max: parseInt(maxPriceParam, 10),
+          }
+        : DEFAULT_FILTERS.priceRange,
+  };
+}
+
+// Helper function to create URLSearchParams from filters
+function createURLFromFilters(filters: ProductFilters): URLSearchParams {
+  const params = new URLSearchParams();
+
+  if (filters.categories?.length) {
+    params.set("category", filters.categories[0]);
+  }
+  if (filters.brands?.length) {
+    params.set("brand", filters.brands.join(","));
+  }
+  if (filters.compositions?.length) {
+    params.set("composition", filters.compositions.join(","));
+  }
+  if (filters.measurements?.length) {
+    params.set("measurement", filters.measurements.join(","));
+  }
+  if (filters.sortBy && filters.sortBy !== DEFAULT_FILTERS.sortBy) {
+    params.set("sort", filters.sortBy);
+  }
+  if (filters.page && filters.page !== DEFAULT_FILTERS.page) {
+    params.set("page", filters.page.toString());
+  }
+  if (
+    filters.priceRange &&
+    (filters.priceRange.min !== DEFAULT_PRICE_RANGE[0] ||
+      filters.priceRange.max !== DEFAULT_PRICE_RANGE[1])
+  ) {
+    params.set("minPrice", filters.priceRange.min.toString());
+    params.set("maxPrice", filters.priceRange.max.toString());
+  }
+
+  return params;
+}
+
 export function useProductFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [filters, setFilters] = useState<ProductFilters>(DEFAULT_FILTERS);
-  const [tempPriceRange, setTempPriceRange] =
-    useState<number[]>(DEFAULT_PRICE_RANGE);
 
-  // Initialize filters from URL parameters on mount
-  useEffect(() => {
-    const categoryParam = searchParams.get("category");
-    const brandParam = searchParams.get("brand");
-    const compositionParam = searchParams.get("composition");
-    const measurementParam = searchParams.get("measurement");
-    const sortParam = searchParams.get("sort");
-    const pageParam = searchParams.get("page");
-    const minPriceParam = searchParams.get("minPrice");
-    const maxPriceParam = searchParams.get("maxPrice");
+  // Derive filters directly from URL parameters (always in sync)
+  const filters = useMemo(() => parseFiltersFromURL(searchParams), [searchParams]);
 
-    const initialFilters: ProductFilters = {
-      ...DEFAULT_FILTERS,
-      categories: categoryParam ? [categoryParam] : undefined,
-      brands: brandParam ? brandParam.split(",") : undefined,
-      compositions: compositionParam ? compositionParam.split(",") : undefined,
-      measurements: measurementParam ? measurementParam.split(",") : undefined,
-      sortBy: (sortParam as ProductFilters["sortBy"]) || DEFAULT_FILTERS.sortBy,
-      page: pageParam ? parseInt(pageParam, 10) : DEFAULT_FILTERS.page,
-      priceRange:
-        minPriceParam && maxPriceParam
-          ? {
-              min: parseInt(minPriceParam, 10),
-              max: parseInt(maxPriceParam, 10),
-            }
-          : DEFAULT_FILTERS.priceRange,
-    };
-
-    setFilters(initialFilters);
-
-    // Update temp price range if price params exist
-    if (minPriceParam && maxPriceParam) {
-      setTempPriceRange([
-        parseInt(minPriceParam, 10),
-        parseInt(maxPriceParam, 10),
-      ]);
+  // Use URL price range directly or fall back to defaults
+  const tempPriceRange = useMemo(() => {
+    if (filters.priceRange) {
+      return [filters.priceRange.min, filters.priceRange.max];
     }
-  }, [searchParams]);
+    return DEFAULT_PRICE_RANGE;
+  }, [filters.priceRange]);
+
+  const [localTempPriceRange, setLocalTempPriceRange] = useState<number[]>(tempPriceRange);
 
   // Update URL when filters change
   const updateURL = (newFilters: ProductFilters) => {
-    const params = new URLSearchParams();
-
-    if (newFilters.categories?.length) {
-      params.set("category", newFilters.categories[0]);
-    }
-    if (newFilters.brands?.length) {
-      params.set("brand", newFilters.brands.join(","));
-    }
-    if (newFilters.compositions?.length) {
-      params.set("composition", newFilters.compositions.join(","));
-    }
-    if (newFilters.measurements?.length) {
-      params.set("measurement", newFilters.measurements.join(","));
-    }
-    if (newFilters.sortBy && newFilters.sortBy !== DEFAULT_FILTERS.sortBy) {
-      params.set("sort", newFilters.sortBy);
-    }
-    if (newFilters.page && newFilters.page !== DEFAULT_FILTERS.page) {
-      params.set("page", newFilters.page.toString());
-    }
-    if (
-      newFilters.priceRange &&
-      (newFilters.priceRange.min !== DEFAULT_PRICE_RANGE[0] ||
-        newFilters.priceRange.max !== DEFAULT_PRICE_RANGE[1])
-    ) {
-      params.set("minPrice", newFilters.priceRange.min.toString());
-      params.set("maxPrice", newFilters.priceRange.max.toString());
-    }
-
+    const params = createURLFromFilters(newFilters);
     setSearchParams(params, { replace: true });
   };
 
@@ -93,7 +99,6 @@ export function useProductFilters() {
         : (filters.brands || []).filter((b) => b !== brand),
       page: 1,
     };
-    setFilters(newFilters);
     updateURL(newFilters);
   };
 
@@ -105,7 +110,6 @@ export function useProductFilters() {
         : (filters.compositions || []).filter((c) => c !== composition),
       page: 1,
     };
-    setFilters(newFilters);
     updateURL(newFilters);
   };
 
@@ -117,7 +121,6 @@ export function useProductFilters() {
         : (filters.measurements || []).filter((m) => m !== measurement),
       page: 1,
     };
-    setFilters(newFilters);
     updateURL(newFilters);
   };
 
@@ -129,18 +132,16 @@ export function useProductFilters() {
         : (filters.categories || []).filter((c) => c !== category),
       page: 1,
     };
-    setFilters(newFilters);
     updateURL(newFilters);
   };
 
   const handlePriceRangeChange = (values: number[]) => {
-    setTempPriceRange(values);
+    setLocalTempPriceRange(values);
     const newFilters = {
       ...filters,
       priceRange: { min: values[0], max: values[1] },
       page: 1,
     };
-    setFilters(newFilters);
     updateURL(newFilters);
   };
 
@@ -150,7 +151,6 @@ export function useProductFilters() {
       sortBy: sortBy as ProductFilters["sortBy"],
       page: 1,
     };
-    setFilters(newFilters);
     updateURL(newFilters);
   };
 
@@ -159,13 +159,11 @@ export function useProductFilters() {
       ...filters,
       page,
     };
-    setFilters(newFilters);
     updateURL(newFilters);
   };
 
   const clearFilters = () => {
-    setFilters(DEFAULT_FILTERS);
-    setTempPriceRange(DEFAULT_PRICE_RANGE);
+    setLocalTempPriceRange(DEFAULT_PRICE_RANGE);
     setSearchParams({}, { replace: true });
   };
 
@@ -183,8 +181,8 @@ export function useProductFilters() {
 
   return {
     filters,
-    tempPriceRange,
-    setTempPriceRange,
+    tempPriceRange: localTempPriceRange,
+    setTempPriceRange: setLocalTempPriceRange,
     handleBrandFilter,
     handleCompositionFilter,
     handleMeasurementFilter,
