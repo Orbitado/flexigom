@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/carousel";
 import { useReviews } from "../hooks/use-reviews";
 import { getCustomerSinceYear } from "@/lib/utils";
+import { TestimonialsSkeleton } from "@/features/products/skeletons/testimonials-skeleton";
 interface ReviewCardProps {
   testimonial: Review;
 }
@@ -131,17 +132,13 @@ export function TestimonialsSection({
             subtitle={sectionContent.subtitle}
             className="mb-12 md:mb-16"
           />
-          <div className="flex justify-center">
-            <div className="text-gray-500 animate-pulse">
-              Cargando testimonios...
-            </div>
-          </div>
+          <TestimonialsSkeleton />
         </div>
       </section>
     );
   }
 
-  if (error || (!isLoading && testimonials.length === 0)) {
+  if (error) {
     return (
       <section className={cn("bg-gray-50 py-12 md:py-16", className)}>
         <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -152,9 +149,7 @@ export function TestimonialsSection({
           />
           <div className="flex flex-col justify-center items-center py-12 text-center">
             <div className="mb-4 text-gray-500">
-              {error
-                ? "Error al cargar los testimonios"
-                : "No hay testimonios disponibles"}
+              Error al cargar los testimonios
             </div>
             <div className="text-gray-400 text-sm">
               Por favor, inténtalo de nuevo más tarde.
@@ -163,6 +158,10 @@ export function TestimonialsSection({
         </div>
       </section>
     );
+  }
+
+  if (!isLoading && testimonials.length === 0) {
+    return null;
   }
 
   return (

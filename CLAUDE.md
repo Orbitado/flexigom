@@ -97,6 +97,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Types pattern: `[resource]-types.ts` in feature types
 - Ever create a way to handle errors in the query and create her error boundary component.
 - Ever create a way to handle loading states in the query and create her skeleton components.
+- **Null Data Handling**: All sections should hide (return `null`) when data is empty/null, following the pattern in `featured-products-section.tsx`. Sections should not render empty states when no data is available.
 
 ### UI System
 

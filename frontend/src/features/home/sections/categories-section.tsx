@@ -12,6 +12,7 @@ import {
   CarouselNext,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import { CategoriesSkeleton } from "@/features/products/skeletons/categories-skeleton";
 
 interface DotIndicatorsProps {
   totalSlides: number;
@@ -150,17 +151,14 @@ export function CategoriesSection({
             subtitle="Explora nuestra amplia gama de productos para el descanso"
             className="mb-12 md:mb-16"
           />
-          <div className="gap-6 md:gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto max-w-6xl">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="bg-gray-200 rounded-lg h-48 animate-pulse"
-              />
-            ))}
-          </div>
+          <CategoriesSkeleton />
         </div>
       </section>
     );
+  }
+
+  if (!categories || categories.length === 0) {
+    return null;
   }
 
   return (

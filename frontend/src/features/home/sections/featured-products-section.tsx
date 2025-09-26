@@ -6,6 +6,7 @@ import type { FeaturedProductsSectionProps } from "../types";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/types";
 import { useNavigate } from "react-router";
+import { FeaturedProductsSkeleton } from "@/features/products/skeletons/featured-products-skeleton";
 
 export function FeaturedProductsSection({
   section = "homepage",
@@ -56,14 +57,7 @@ export function FeaturedProductsSection({
             subtitle="Descubre nuestros productos más populares y con ofertas especiales"
             className="mb-12 md:mb-16"
           />
-          <div className="gap-6 md:gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto max-w-6xl">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="bg-gray-200 rounded-lg h-80 animate-pulse"
-              />
-            ))}
-          </div>
+          <FeaturedProductsSkeleton count={3} />
         </div>
       </section>
     );
