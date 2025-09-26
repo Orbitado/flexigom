@@ -23,13 +23,17 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
           <img
             src={imageUrl}
             alt={
-              category.image?.alternativeText || `Imagen de ${category.name}`
+              category.image?.alternativeText ||
+              `${category.name} de calidad en Flexigom Tucumán - Especialistas en descanso`
             }
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
           />
         ) : (
-          <img src="/flexigom.png" alt={category.name} />
+          <img
+            src="/flexigom.png"
+            alt={`${category.name} disponibles en Flexigom - Tienda de descanso en Tucumán`}
+          />
         )}
       </div>
 

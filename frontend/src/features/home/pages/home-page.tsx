@@ -6,10 +6,30 @@ import { TestimonialsSection } from "@/features/home/sections/testimonials-secti
 import { HelpSection } from "@/features/home/sections/help-section";
 import { FAQsSection } from "@/features/home/sections/faqs-section";
 import { FooterSection } from "@/features/home/sections/footer-section";
+import { SEOHead } from "@/components/seo";
+import {
+  createHomeSEO,
+  createLocalBusinessSchema,
+  createWebsiteSchema,
+  createOrganizationSchema,
+} from "@/lib/seo";
 
 export function HomePage() {
+  const seoConfig = createHomeSEO();
+  const structuredData = [
+    createLocalBusinessSchema(),
+    createWebsiteSchema(),
+    createOrganizationSchema(),
+  ];
+
   return (
     <>
+      <SEOHead
+        config={{
+          ...seoConfig,
+          structuredData,
+        }}
+      />
       <HeroSection />
       <WhyChooseFlexigomSection />
       <CategoriesSection />
