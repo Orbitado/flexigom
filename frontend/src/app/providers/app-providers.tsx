@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { HelmetProvider } from "react-helmet-async";
 import { QueryProvider } from "./query-provider";
 
 interface AppProvidersProps {
@@ -6,5 +7,9 @@ interface AppProvidersProps {
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
-  return <QueryProvider>{children}</QueryProvider>;
+  return (
+    <HelmetProvider>
+      <QueryProvider>{children}</QueryProvider>
+    </HelmetProvider>
+  );
 }

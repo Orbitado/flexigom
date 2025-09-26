@@ -1,0 +1,31 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://flexigom.com/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin
+Disallow: /api
+Disallow: /_vite
+Disallow: /src
+
+# Allow important pages
+Allow: /
+Allow: /products
+Allow: /products/*
+Allow: /auth
+Allow: /auth/*
+
+# SEO optimized crawl delay
+Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /

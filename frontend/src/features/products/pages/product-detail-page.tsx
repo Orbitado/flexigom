@@ -38,13 +38,127 @@ import {
   Share2,
   ChevronLeft,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { handleShare } from "@/lib/utils";
+import { SEOHead } from "@/components/seo";
+import {
+  createProductSEO,
+  createProductSchema,
+  createBreadcrumbSchema,
+  type StructuredDataConfig,
+} from "@/lib/seo";
 
 export function ProductDetailPage() {
   const { documentId } = useParams();
   const { data: product, isLoading, error } = useProduct(documentId || "");
   const [quantity, setQuantity] = useState(1);
+
+  // Memoize images array to prevent hook dependency issues
+  const images = useMemo(() => {
+    return product?.images && Array.isArray(product.images)
+      ? product.images
+      : [];
+  }, [product?.images]);
+
+  // Calculate pricing values
+  const price = Number(product?.price) || 0;
+  const discountPrice = Number(product?.discount_price) || 0;
+  const hasDiscount = discountPrice > 0 && discountPrice < price;
+  const discountPercentage = hasDiscount
+    ? Math.round(((price - discountPrice) / price) * 100)
+    : 0;
+  const savings = hasDiscount ? price - discountPrice : 0;
+  const hasImages = images.length > 0;
+
+  // Generate SEO configuration for the product
+  const seoConfig = useMemo(() => {
+    if (!product) return null;
+
+    const productImages = images.map((img: { url?: string }) =>
+      getImageUrl(img.url || ""),
+    );
+
+    // Convert rich text description to string
+    const descriptionText =
+      product.description && Array.isArray(product.description)
+        ? product.description
+            .map(
+              (block: { children?: Array<{ text?: string }> }) =>
+                block.children?.map((child) => child.text || "").join("") || "",
+            )
+            .join(" ")
+        : typeof product.description === "string"
+          ? product.description
+          : undefined;
+
+    return createProductSEO({
+      name: product.name,
+      description: descriptionText,
+      price: hasDiscount ? formatPrice(discountPrice) : formatPrice(price),
+      brand:
+        typeof product.brand === "string"
+          ? product.brand
+          : product.brand || "Flexigom",
+      category: product.categories?.[0]?.name || "Producto",
+      images: productImages.filter(
+        (url): url is string => typeof url === "string",
+      ),
+      documentId: documentId,
+    });
+  }, [product, documentId, images, hasDiscount, price, discountPrice]);
+
+  // Generate product structured data
+  const productSchema = useMemo(() => {
+    if (!product) return null;
+
+    const productImages = images.map((img: { url?: string }) =>
+      getImageUrl(img.url || ""),
+    );
+
+    // Convert rich text description to string
+    const descriptionText =
+      product.description && Array.isArray(product.description)
+        ? product.description
+            .map(
+              (block: { children?: Array<{ text?: string }> }) =>
+                block.children?.map((child) => child.text || "").join("") || "",
+            )
+            .join(" ")
+        : typeof product.description === "string"
+          ? product.description
+          : `${product.name} disponible en Flexigom Tucumán`;
+
+    return createProductSchema({
+      name: product.name,
+      description: descriptionText,
+      price: hasDiscount ? discountPrice.toString() : price.toString(),
+      currency: "ARS",
+      brand:
+        typeof product.brand === "string"
+          ? product.brand
+          : product.brand || "Flexigom",
+      category: product.categories?.[0]?.name || "Producto",
+      images: productImages.filter(
+        (url): url is string => typeof url === "string",
+      ),
+      availability: (product.stock || 0) > 0 ? "InStock" : "OutOfStock",
+      condition: "NewCondition",
+      sku: product.documentId, // Use documentId as SKU
+    });
+  }, [product, images, hasDiscount, price, discountPrice]);
+
+  // Generate breadcrumb structured data
+  const breadcrumbSchema = useMemo(() => {
+    if (!product) return null;
+
+    const breadcrumbs = [
+      { name: "Inicio", url: "/" },
+      { name: "Productos", url: "/products" },
+      { name: product.name, url: `/products/${documentId}` },
+    ];
+
+    return createBreadcrumbSchema(breadcrumbs);
+  }, [product, documentId]);
 
   if (isLoading) {
     return <ProductDetailSkeleton />;
@@ -71,18 +185,6 @@ export function ProductDetailPage() {
     );
   }
 
-  const price = Number(product.price) || 0;
-  const discountPrice = Number(product.discount_price) || 0;
-  const hasDiscount = discountPrice > 0 && discountPrice < price;
-  const discountPercentage = hasDiscount
-    ? Math.round(((price - discountPrice) / price) * 100)
-    : 0;
-  const savings = hasDiscount ? price - discountPrice : 0;
-
-  const images =
-    product.images && Array.isArray(product.images) ? product.images : [];
-  const hasImages = images.length > 0;
-
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity >= 1 && newQuantity <= product.stock) {
       setQuantity(newQuantity);
@@ -90,342 +192,361 @@ export function ProductDetailPage() {
   };
 
   return (
-    <div className="mx-auto px-4 py-6 container">
-      <div className="space-y-6">
-        {/* Breadcrumb */}
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/">Inicio</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to="/products">Productos</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            {product.categories?.[0] && (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link
-                      to={`/products?category=${product.categories[0].slug}`}
+    <>
+      {seoConfig && (
+        <SEOHead
+          config={{
+            ...seoConfig,
+            structuredData: [productSchema, breadcrumbSchema].filter(
+              (schema): schema is StructuredDataConfig => schema !== null,
+            ),
+          }}
+        />
+      )}
+      <div className="mx-auto px-4 py-6 container">
+        <div className="space-y-6">
+          {/* Breadcrumb */}
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/">Inicio</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link to="/products">Productos</Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              {product.categories?.[0] && (
+                <>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <Link
+                        to={`/products?category=${product.categories[0].slug}`}
+                      >
+                        {product.categories[0].name}
+                      </Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                </>
+              )}
+              <BreadcrumbSeparator />
+              <BreadcrumbPage>{product.name}</BreadcrumbPage>
+            </BreadcrumbList>
+          </Breadcrumb>
+
+          {/* Back Button */}
+          <Button
+            asChild
+            variant="ghost"
+            className="w-fit h-auto text-gray-600 hover:text-gray-900 m"
+          >
+            <Link to="/products">
+              <ChevronLeft className="w-4 h-4" />
+              Volver a Productos
+            </Link>
+          </Button>
+
+          {/* Main Product Section */}
+          <div className="gap-8 grid lg:grid-cols-2">
+            {/* Image Carousel */}
+            <div className="space-y-4">
+              {hasImages ? (
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {images.map((image, index) => (
+                      <CarouselItem key={image.id || index}>
+                        <div className="relative bg-gray-100 rounded-lg aspect-square overflow-hidden">
+                          <img
+                            src={getImageUrl(image.url) || "/flexigom.png"}
+                            alt={
+                              image.alternativeText ||
+                              `Imagen ${index + 1} de ${product.name}`
+                            }
+                            className="w-full h-full object-cover"
+                            loading={index === 0 ? "eager" : "lazy"}
+                          />
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  {images.length > 1 && (
+                    <>
+                      <CarouselPrevious className="left-4" />
+                      <CarouselNext className="right-4" />
+                    </>
+                  )}
+                </Carousel>
+              ) : (
+                <div className="flex justify-center items-center bg-gray-100 rounded-lg aspect-square">
+                  <div className="space-y-2 text-center">
+                    <Package className="mx-auto w-16 h-16 text-gray-400" />
+                    <p className="text-muted-foreground">
+                      Imagen no disponible
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Thumbnail row for multiple images */}
+              {images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto">
+                  {images.slice(0, 4).map((image, index) => (
+                    <div
+                      key={image.id || index}
+                      className="flex-shrink-0 bg-gray-100 border-2 hover:border-primary border-transparent rounded-md w-20 h-20 overflow-hidden transition-colors cursor-pointer"
                     >
-                      {product.categories[0].name}
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-            <BreadcrumbSeparator />
-            <BreadcrumbPage>{product.name}</BreadcrumbPage>
-          </BreadcrumbList>
-        </Breadcrumb>
-
-        {/* Back Button */}
-        <Button
-          asChild
-          variant="ghost"
-          className="w-fit h-auto text-gray-600 hover:text-gray-900 m"
-        >
-          <Link to="/products">
-            <ChevronLeft className="w-4 h-4" />
-            Volver a Productos
-          </Link>
-        </Button>
-
-        {/* Main Product Section */}
-        <div className="gap-8 grid lg:grid-cols-2">
-          {/* Image Carousel */}
-          <div className="space-y-4">
-            {hasImages ? (
-              <Carousel className="w-full">
-                <CarouselContent>
-                  {images.map((image, index) => (
-                    <CarouselItem key={image.id || index}>
-                      <div className="relative bg-gray-100 rounded-lg aspect-square overflow-hidden">
-                        <img
-                          src={getImageUrl(image.url) || "/flexigom.png"}
-                          alt={
-                            image.alternativeText ||
-                            `Imagen ${index + 1} de ${product.name}`
-                          }
-                          className="w-full h-full object-cover"
-                          loading={index === 0 ? "eager" : "lazy"}
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                {images.length > 1 && (
-                  <>
-                    <CarouselPrevious className="left-4" />
-                    <CarouselNext className="right-4" />
-                  </>
-                )}
-              </Carousel>
-            ) : (
-              <div className="flex justify-center items-center bg-gray-100 rounded-lg aspect-square">
-                <div className="space-y-2 text-center">
-                  <Package className="mx-auto w-16 h-16 text-gray-400" />
-                  <p className="text-muted-foreground">Imagen no disponible</p>
-                </div>
-              </div>
-            )}
-
-            {/* Thumbnail row for multiple images */}
-            {images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto">
-                {images.slice(0, 4).map((image, index) => (
-                  <div
-                    key={image.id || index}
-                    className="flex-shrink-0 bg-gray-100 border-2 hover:border-primary border-transparent rounded-md w-20 h-20 overflow-hidden transition-colors cursor-pointer"
-                  >
-                    <img
-                      src={getImageUrl(image.url) || "/flexigom.png"}
-                      alt={`Miniatura ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
-                {images.length > 4 && (
-                  <div className="flex flex-shrink-0 justify-center items-center bg-gray-100 border-2 border-transparent rounded-md w-20 h-20 text-muted-foreground text-sm">
-                    +{images.length - 4}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Product Information */}
-          <div className="space-y-6">
-            {/* Product Title */}
-            <div>
-              <h1 className="font-bold text-gray-900 text-3xl leading-tight">
-                {product.name}
-              </h1>
-            </div>
-
-            {/* Product Badges */}
-            <div className="flex flex-wrap gap-2">
-              {product.brand && (
-                <Badge
-                  variant="destructive"
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  {product.brand.charAt(0).toUpperCase() +
-                    product.brand.slice(1)}
-                </Badge>
-              )}
-              {product.categories?.map((category) => (
-                <Badge key={category.id} variant="outline">
-                  {category.name}
-                </Badge>
-              ))}
-              {product.composition && (
-                <Badge variant="secondary">{product.composition}</Badge>
-              )}
-              {product.measurement && (
-                <Badge variant="default" className="capitalize">
-                  {product.measurement}
-                </Badge>
-              )}
-            </div>
-
-            {/* Rating */}
-            {product.rating && (
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={cn(
-                        "w-4 h-4",
-                        i < Math.floor(product.rating!)
-                          ? "text-yellow-400 fill-current"
-                          : "text-gray-300",
-                      )}
-                    />
-                  ))}
-                </div>
-                <span className="text-gray-600 text-sm">
-                  {product.rating.toFixed(1)}
-                  {product.reviewCount && ` (${product.reviewCount} reviews)`}
-                </span>
-              </div>
-            )}
-
-            {/* Price Section */}
-            <Card className="p-6">
-              <div className="space-y-3">
-                {hasDiscount && (
-                  <Badge variant="destructive" className="bg-red-600 font-bold">
-                    -{discountPercentage}% OFF
-                  </Badge>
-                )}
-
-                <div className="space-y-2">
-                  {hasDiscount ? (
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-gray-500 text-sm line-through">
-                          {formatPrice(price)}
-                        </span>
-                        <span className="font-bold text-red-600 text-3xl">
-                          {formatPrice(discountPrice)}
-                        </span>
-                      </div>
-                      <p className="font-medium text-green-600 text-sm">
-                        Ahorras {formatPrice(savings)}
-                      </p>
+                      <img
+                        src={getImageUrl(image.url) || "/flexigom.png"}
+                        alt={`Miniatura ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
                     </div>
-                  ) : (
-                    <span className="font-bold text-gray-900 text-3xl">
-                      {formatPrice(price)}
-                    </span>
+                  ))}
+                  {images.length > 4 && (
+                    <div className="flex flex-shrink-0 justify-center items-center bg-gray-100 border-2 border-transparent rounded-md w-20 h-20 text-muted-foreground text-sm">
+                      +{images.length - 4}
+                    </div>
                   )}
                 </div>
+              )}
+            </div>
 
-                {/* Stock Status */}
-                <div className="flex items-center space-x-2">
-                  <Package className="w-4 h-4" />
-                  <span
-                    className={cn(
-                      "font-medium text-sm",
-                      product.stock > 0 ? "text-green-600" : "text-red-600",
-                    )}
-                  >
-                    {product.stock > 0
-                      ? `${product.stock} en stock`
-                      : "Sin stock"}
-                  </span>
-                </div>
+            {/* Product Information */}
+            <div className="space-y-6">
+              {/* Product Title */}
+              <div>
+                <h1 className="font-bold text-gray-900 text-3xl leading-tight">
+                  {product.name}
+                </h1>
               </div>
-            </Card>
 
-            {/* Description */}
-            {product.description &&
-              Array.isArray(product.description) &&
-              product.description.length > 0 && (
-                <div className="space-y-3">
-                  <h2 className="font-semibold text-xl">Descripción</h2>
-                  <RichTextRenderer
-                    content={product.description}
-                    className="max-w-none text-gray-700 prose prose-sm"
-                  />
+              {/* Product Badges */}
+              <div className="flex flex-wrap gap-2">
+                {product.brand && (
+                  <Badge
+                    variant="destructive"
+                    className="bg-red-600 hover:bg-red-700"
+                  >
+                    {product.brand.charAt(0).toUpperCase() +
+                      product.brand.slice(1)}
+                  </Badge>
+                )}
+                {product.categories?.map((category) => (
+                  <Badge key={category.id} variant="outline">
+                    {category.name}
+                  </Badge>
+                ))}
+                {product.composition && (
+                  <Badge variant="secondary">{product.composition}</Badge>
+                )}
+                {product.measurement && (
+                  <Badge variant="default" className="capitalize">
+                    {product.measurement}
+                  </Badge>
+                )}
+              </div>
+
+              {/* Rating */}
+              {product.rating && (
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={cn(
+                          "w-4 h-4",
+                          i < Math.floor(product.rating!)
+                            ? "text-yellow-400 fill-current"
+                            : "text-gray-300",
+                        )}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-gray-600 text-sm">
+                    {product.rating.toFixed(1)}
+                    {product.reviewCount && ` (${product.reviewCount} reviews)`}
+                  </span>
                 </div>
               )}
 
-            {/* Quantity Section */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <h3 className="font-medium text-sm">Cantidad</h3>
-                <span className="text-green-600 text-sm">Stock disponible</span>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center border rounded-md">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-0 w-10 h-10"
-                    onClick={() => handleQuantityChange(quantity - 1)}
-                    disabled={quantity <= 1}
-                  >
-                    <Minus className="w-4 h-4" />
-                  </Button>
-                  <span className="w-12 font-medium text-center">
-                    {quantity}
+              {/* Price Section */}
+              <Card className="p-6">
+                <div className="space-y-3">
+                  {hasDiscount && (
+                    <Badge
+                      variant="destructive"
+                      className="bg-red-600 font-bold"
+                    >
+                      -{discountPercentage}% OFF
+                    </Badge>
+                  )}
+
+                  <div className="space-y-2">
+                    {hasDiscount ? (
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-gray-500 text-sm line-through">
+                            {formatPrice(price)}
+                          </span>
+                          <span className="font-bold text-red-600 text-3xl">
+                            {formatPrice(discountPrice)}
+                          </span>
+                        </div>
+                        <p className="font-medium text-green-600 text-sm">
+                          Ahorras {formatPrice(savings)}
+                        </p>
+                      </div>
+                    ) : (
+                      <span className="font-bold text-gray-900 text-3xl">
+                        {formatPrice(price)}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Stock Status */}
+                  <div className="flex items-center space-x-2">
+                    <Package className="w-4 h-4" />
+                    <span
+                      className={cn(
+                        "font-medium text-sm",
+                        product.stock > 0 ? "text-green-600" : "text-red-600",
+                      )}
+                    >
+                      {product.stock > 0
+                        ? `${product.stock} en stock`
+                        : "Sin stock"}
+                    </span>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Description */}
+              {product.description &&
+                Array.isArray(product.description) &&
+                product.description.length > 0 && (
+                  <div className="space-y-3">
+                    <h2 className="font-semibold text-xl">Descripción</h2>
+                    <RichTextRenderer
+                      content={product.description}
+                      className="max-w-none text-gray-700 prose prose-sm"
+                    />
+                  </div>
+                )}
+
+              {/* Quantity Section */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <h3 className="font-medium text-sm">Cantidad</h3>
+                  <span className="text-green-600 text-sm">
+                    Stock disponible
                   </span>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-0 w-10 h-10"
-                    onClick={() => handleQuantityChange(quantity + 1)}
-                    disabled={quantity >= product.stock}
-                  >
-                    <Plus className="w-4 h-4" />
-                  </Button>
                 </div>
-                <span className="font-medium text-green-600 text-sm">
-                  {product.stock} unidades
-                </span>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center border rounded-md">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="p-0 w-10 h-10"
+                      onClick={() => handleQuantityChange(quantity - 1)}
+                      disabled={quantity <= 1}
+                    >
+                      <Minus className="w-4 h-4" />
+                    </Button>
+                    <span className="w-12 font-medium text-center">
+                      {quantity}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="p-0 w-10 h-10"
+                      onClick={() => handleQuantityChange(quantity + 1)}
+                      disabled={quantity >= product.stock}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <span className="font-medium text-green-600 text-sm">
+                    {product.stock} unidades
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3">
-              <Button
-                className="flex-1 bg-red-600 hover:bg-red-700 h-12 font-medium text-white"
-                disabled={product.stock <= 0}
-              >
-                <ShoppingCart className="mr-2 w-5 h-5" />
-                {product.stock > 0 ? "Agregar al Carrito" : "Sin Stock"}
-              </Button>
-              <Button variant="outline" size="icon" className="w-12 h-12">
-                <Heart className="w-5 h-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="w-12 h-12"
-                onClick={() => handleShare(product)}
-              >
-                <Share2 className="w-5 h-5" />
-              </Button>
-            </div>
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  className="flex-1 bg-red-600 hover:bg-red-700 h-12 font-medium text-white"
+                  disabled={product.stock <= 0}
+                >
+                  <ShoppingCart className="mr-2 w-5 h-5" />
+                  {product.stock > 0 ? "Agregar al Carrito" : "Sin Stock"}
+                </Button>
+                <Button variant="outline" size="icon" className="w-12 h-12">
+                  <Heart className="w-5 h-5" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="w-12 h-12"
+                  onClick={() => handleShare(product)}
+                >
+                  <Share2 className="w-5 h-5" />
+                </Button>
+              </div>
 
-            {/* Shipping Info */}
-            <div className="gap-4 grid grid-cols-3 pt-4 border-t">
-              <div className="space-y-1 text-center">
-                <div className="flex justify-center items-center bg-green-100 mx-auto rounded-full w-8 h-8">
-                  <Package className="w-4 h-4 text-green-600" />
+              {/* Shipping Info */}
+              <div className="gap-4 grid grid-cols-3 pt-4 border-t">
+                <div className="space-y-1 text-center">
+                  <div className="flex justify-center items-center bg-green-100 mx-auto rounded-full w-8 h-8">
+                    <Package className="w-4 h-4 text-green-600" />
+                  </div>
+                  <p className="font-medium text-xs">Envío Gratis</p>
+                  <p className="text-gray-500 text-xs">En compras +$50.000</p>
                 </div>
-                <p className="font-medium text-xs">Envío Gratis</p>
-                <p className="text-gray-500 text-xs">En compras +$50.000</p>
-              </div>
-              <div className="space-y-1 text-center">
-                <div className="flex justify-center items-center bg-blue-100 mx-auto rounded-full w-8 h-8">
-                  <Star className="w-4 h-4 text-blue-600" />
+                <div className="space-y-1 text-center">
+                  <div className="flex justify-center items-center bg-blue-100 mx-auto rounded-full w-8 h-8">
+                    <Star className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <p className="font-medium text-xs">Garantía</p>
+                  <p className="text-gray-500 text-xs">5 años</p>
                 </div>
-                <p className="font-medium text-xs">Garantía</p>
-                <p className="text-gray-500 text-xs">5 años</p>
-              </div>
-              <div className="space-y-1 text-center">
-                <div className="flex justify-center items-center bg-purple-100 mx-auto rounded-full w-8 h-8">
-                  <ArrowLeft className="w-4 h-4 text-purple-600" />
+                <div className="space-y-1 text-center">
+                  <div className="flex justify-center items-center bg-purple-100 mx-auto rounded-full w-8 h-8">
+                    <ArrowLeft className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <p className="font-medium text-xs">Devolución</p>
+                  <p className="text-gray-500 text-xs">30 días</p>
                 </div>
-                <p className="font-medium text-xs">Devolución</p>
-                <p className="text-gray-500 text-xs">30 días</p>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Specifications Section */}
-        {product.specifications &&
-          Array.isArray(product.specifications) &&
-          product.specifications.length > 0 && (
-            <Card className="p-6">
-              <h2 className="mb-4 font-semibold text-xl">Especificaciones</h2>
-              <Accordion type="single" collapsible defaultValue="item-0">
-                <AccordionItem value="item-0">
-                  <AccordionTrigger>Detalles del Producto</AccordionTrigger>
-                  <AccordionContent>
-                    <RichTextRenderer
-                      content={product.specifications}
-                      className="max-w-none text-gray-700 prose prose-sm"
-                    />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </Card>
-          )}
+          {/* Specifications Section */}
+          {product.specifications &&
+            Array.isArray(product.specifications) &&
+            product.specifications.length > 0 && (
+              <Card className="p-6">
+                <h2 className="mb-4 font-semibold text-xl">Especificaciones</h2>
+                <Accordion type="single" collapsible defaultValue="item-0">
+                  <AccordionItem value="item-0">
+                    <AccordionTrigger>Detalles del Producto</AccordionTrigger>
+                    <AccordionContent>
+                      <RichTextRenderer
+                        content={product.specifications}
+                        className="max-w-none text-gray-700 prose prose-sm"
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </Card>
+            )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
