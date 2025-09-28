@@ -12,6 +12,7 @@ function parseFiltersFromURL(searchParams: URLSearchParams): ProductFilters {
   const brandParam = searchParams.get("brand");
   const compositionParam = searchParams.get("composition");
   const measurementParam = searchParams.get("measurement");
+  const searchParam = searchParams.get("search");
   const sortParam = searchParams.get("sort");
   const pageParam = searchParams.get("page");
   const minPriceParam = searchParams.get("minPrice");
@@ -23,6 +24,7 @@ function parseFiltersFromURL(searchParams: URLSearchParams): ProductFilters {
     brands: brandParam ? brandParam.split(",") : undefined,
     compositions: compositionParam ? compositionParam.split(",") : undefined,
     measurements: measurementParam ? measurementParam.split(",") : undefined,
+    search: searchParam || undefined,
     sortBy: (sortParam as ProductFilters["sortBy"]) || DEFAULT_FILTERS.sortBy,
     page: pageParam ? parseInt(pageParam, 10) : DEFAULT_FILTERS.page,
     priceRange:
@@ -50,6 +52,9 @@ function createURLFromFilters(filters: ProductFilters): URLSearchParams {
   }
   if (filters.measurements?.length) {
     params.set("measurement", filters.measurements.join(","));
+  }
+  if (filters.search) {
+    params.set("search", filters.search);
   }
   if (filters.sortBy && filters.sortBy !== DEFAULT_FILTERS.sortBy) {
     params.set("sort", filters.sortBy);
@@ -162,6 +167,15 @@ export function useProductFilters() {
     updateURL(newFilters);
   };
 
+  const handleSearchFilter = (search: string) => {
+    const newFilters = {
+      ...filters,
+      search: search.trim() || undefined,
+      page: 1,
+    };
+    updateURL(newFilters);
+  };
+
   const clearFilters = () => {
     setLocalTempPriceRange(DEFAULT_PRICE_RANGE);
     setSearchParams({}, { replace: true });
@@ -173,6 +187,7 @@ export function useProductFilters() {
       (filters.compositions && filters.compositions.length > 0) ||
       (filters.measurements && filters.measurements.length > 0) ||
       (filters.categories && filters.categories.length > 0) ||
+      (filters.search && filters.search.trim().length > 0) ||
       (filters.priceRange &&
         (filters.priceRange.min !== DEFAULT_PRICE_RANGE[0] ||
           filters.priceRange.max !== DEFAULT_PRICE_RANGE[1]))
@@ -187,6 +202,7 @@ export function useProductFilters() {
     handleCompositionFilter,
     handleMeasurementFilter,
     handleCategoryFilter,
+    handleSearchFilter,
     handlePriceRangeChange,
     handleSortChange,
     handlePageChange,

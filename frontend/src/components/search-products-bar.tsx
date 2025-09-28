@@ -127,7 +127,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
             onSearch(sanitizedQuery);
           } else {
             const safeParam = sanitizeUrlParameter(sanitizedQuery);
-            navigate(`/productos?search=${safeParam}`);
+            navigate(`/products?search=${safeParam}`);
           }
           setIsOpen(false);
           clearSearch();

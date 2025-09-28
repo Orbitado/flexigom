@@ -9,6 +9,22 @@ import type {
 interface ProductApiParams extends ApiRequestOptions {
   populate: string[];
   filters?: {
+    $or?: Array<{
+      name?: {
+        $containsi: string;
+      };
+      brand?: {
+        $containsi: string;
+      };
+      composition?: {
+        $containsi: string;
+      };
+      categories?: {
+        name?: {
+          $containsi: string;
+        };
+      };
+    }>;
     categories?: {
       slug?: {
         $eq?: string;
@@ -44,6 +60,35 @@ export class ProductService {
       if (filters) {
         if (!apiParams.filters) {
           apiParams.filters = {};
+        }
+
+        // Handle search query
+        if (filters.search && filters.search.trim()) {
+          const searchTerm = filters.search.trim();
+          apiParams.filters.$or = [
+            {
+              name: {
+                $containsi: searchTerm,
+              },
+            },
+            {
+              brand: {
+                $containsi: searchTerm,
+              },
+            },
+            {
+              composition: {
+                $containsi: searchTerm,
+              },
+            },
+            {
+              categories: {
+                name: {
+                  $containsi: searchTerm,
+                },
+              },
+            },
+          ];
         }
 
         if (filters.category) {
