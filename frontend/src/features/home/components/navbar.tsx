@@ -4,7 +4,7 @@ import { NavbarLogo } from "./navbar-logo";
 import { NavbarLinks } from "./navbar-links";
 import { NavbarMobile } from "./navbar-mobile";
 import { navbarConfig } from "../config/navbar-config";
-import SearchBar from "@/components/search-bar";
+import { SearchProductsBar } from "@/components/search-products-bar";
 
 export function Navbar() {
   return (
@@ -27,7 +27,11 @@ export function Navbar() {
 
         <div className="flex items-center space-x-2 md:space-x-4">
           {/* Search Bar */}
-          <SearchBar />
+          <SearchProductsBar
+            variant="dialog"
+            className="hidden md:block"
+            placeholder="Buscar productos..."
+          />
 
           <Button variant="ghost" size="icon" aria-label="Carrito de compras">
             <ShoppingCartIcon className="w-5 h-5" />
