@@ -60,6 +60,22 @@ export const routes: RouteObject[] = [
           },
         ],
       },
+      {
+        path: "productos",
+        loader: ({ request }) => {
+          const url = new URL(request.url);
+
+          const newUrl = new URL(url);
+          newUrl.pathname = "/products";
+
+          return new Response(null, {
+            status: 302,
+            headers: {
+              Location: newUrl.toString(),
+            },
+          });
+        },
+      },
     ],
   },
 ];
