@@ -144,6 +144,18 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
       [setQuery, handleSearchSubmit],
     );
 
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          if (query.trim()) {
+            handleSearchSubmit(query);
+          }
+        }
+      },
+      [query, handleSearchSubmit],
+    );
+
     if (variant === "dialog") {
       return (
         <>
@@ -180,6 +192,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                 placeholder={placeholder}
                 value={query}
                 onValueChange={setQuery}
+                onKeyDown={handleKeyDown}
                 className="px-4 rounded-none focus:ring-0 h-12 text-base text-left"
               />
             </div>
@@ -393,6 +406,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
             placeholder={placeholder}
             value={query}
             onValueChange={setQuery}
+            onKeyDown={handleKeyDown}
             onFocus={() => setIsOpen(true)}
           />
           {isOpen && (
