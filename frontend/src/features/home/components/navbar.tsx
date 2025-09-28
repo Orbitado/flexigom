@@ -1,10 +1,10 @@
-import { SearchIcon, ShoppingCartIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { ShoppingCartIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavbarLogo } from "./navbar-logo";
 import { NavbarLinks } from "./navbar-links";
 import { NavbarMobile } from "./navbar-mobile";
 import { navbarConfig } from "../config/navbar-config";
+import { SearchProductsBar } from "@/components/search-products-bar";
 
 export function Navbar() {
   return (
@@ -26,15 +26,12 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center space-x-2 md:space-x-4">
-          <div className="hidden md:block relative">
-            <SearchIcon className="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 transform" />
-            <Input
-              type="search"
-              placeholder="Buscar productos..."
-              className="pl-10 w-48 lg:w-64"
-              aria-label="Buscar productos"
-            />
-          </div>
+          {/* Search Bar */}
+          <SearchProductsBar
+            variant="dialog"
+            className="hidden md:block"
+            placeholder="Buscar productos..."
+          />
 
           <Button variant="ghost" size="icon" aria-label="Carrito de compras">
             <ShoppingCartIcon className="w-5 h-5" />

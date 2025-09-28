@@ -47,9 +47,28 @@ export function ProductsPage() {
   }, [filters.categories, categories]);
 
   const seoConfig = useMemo(() => {
-    const hasFilters = filters.categories && filters.categories.length > 0;
-    const categoryName = hasFilters ? filters.categories![0] : null;
+    const hasCategories = filters.categories && filters.categories.length > 0;
+    const categoryName = hasCategories ? filters.categories![0] : null;
+    const searchQuery = filters.search?.trim();
 
+    // Search results page
+    if (searchQuery) {
+      const title = `Resultados de búsqueda: "${searchQuery}" - Flexigom Tucumán`;
+      const description = `${pagination?.total ? `${pagination.total} resultados encontrados` : "Resultados"} para "${searchQuery}" en Flexigom. Especialistas en productos de descanso en Tucumán con más de 20 años de experiencia.`;
+
+      return createPageSEO({
+        title,
+        description,
+        path: `/products?search=${encodeURIComponent(searchQuery)}`,
+        keywords: [
+          `${searchQuery} Tucumán`,
+          `buscar ${searchQuery}`,
+          `${searchQuery} Flexigom`,
+        ],
+      });
+    }
+
+    // Category page
     if (categoryName) {
       const title = `${categoryName} en Tucumán - Flexigom | Especialistas en Descanso`;
       const description = `Descubrí nuestra selección de ${categoryName.toLowerCase()} en Tucumán. ${pagination?.total ? `${pagination.total} productos disponibles.` : ""} Flexigom, especialistas en productos de descanso con más de 20 años de experiencia.`;
@@ -66,6 +85,7 @@ export function ProductsPage() {
       });
     }
 
+    // Default products page
     const title = "Productos de Descanso en Tucumán - Flexigom";
     const description = `Explorá nuestra amplia selección de productos de descanso en Tucumán. ${pagination?.total ? `${pagination.total} productos disponibles.` : ""} Colchones, sommiers y ropa de cama de la mejor calidad. Más de 20 años de experiencia.`;
 
@@ -79,7 +99,7 @@ export function ProductsPage() {
         "tienda completa colchones",
       ],
     });
-  }, [filters.categories, pagination?.total]);
+  }, [filters.categories, filters.search, pagination?.total]);
 
   // Generate breadcrumb structured data
   const breadcrumbSchema = useMemo(() => {
@@ -88,8 +108,15 @@ export function ProductsPage() {
       { name: "Productos", url: "/products" },
     ];
 
-    // Add category to breadcrumbs if filtering by category
-    if (currentCategory) {
+    // Add search context to breadcrumbs if searching
+    if (filters.search?.trim()) {
+      breadcrumbs.push({
+        name: `Búsqueda: "${filters.search.trim()}"`,
+        url: `/products?search=${encodeURIComponent(filters.search.trim())}`
+      });
+    }
+    // Add category to breadcrumbs if filtering by category (and not searching)
+    else if (currentCategory) {
       breadcrumbs.push({
         name: currentCategory.name,
         url: `/products?category=${currentCategory.slug}`
@@ -97,7 +124,7 @@ export function ProductsPage() {
     }
 
     return createBreadcrumbSchema(breadcrumbs);
-  }, [currentCategory]);
+  }, [currentCategory, filters.search]);
 
   if (error) {
     return (
@@ -125,7 +152,7 @@ export function ProductsPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              {currentCategory ? (
+              {(currentCategory && !filters.search?.trim()) || filters.search?.trim() ? (
                 <BreadcrumbLink asChild>
                   <Link to="/products">Productos</Link>
                 </BreadcrumbLink>
@@ -133,7 +160,15 @@ export function ProductsPage() {
                 <BreadcrumbPage>Productos</BreadcrumbPage>
               )}
             </BreadcrumbItem>
-            {currentCategory && (
+            {filters.search?.trim() && (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Búsqueda: "{filters.search.trim()}"</BreadcrumbPage>
+                </BreadcrumbItem>
+              </>
+            )}
+            {currentCategory && !filters.search?.trim() && (
               <>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
