@@ -142,7 +142,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
             onOpenChange={setIsOpen}
             title="Buscar Productos"
             description="Encuentra productos por nombre, marca o categoría"
-            className="max-w-2xl"
+            className="w-[90vw] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl h-[75vh] max-h-[700px] [&_[data-slot=command]]:h-full"
           >
             <div className="px-1 py-1">
               <CommandInput
@@ -152,23 +152,23 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                 className="px-4 rounded-none focus:ring-0 h-12 text-base text-left"
               />
             </div>
-            <CommandList className="flex justify-center overflow-auto align-middle">
+            <CommandList className="flex-1 px-2 overflow-auto max-h-none">
               {isLoading && (
                 <CommandGroup>
-                  <div className="px-2 py-4">
-                    <div className="space-y-3">
-                      {Array.from({ length: 3 }).map((_, i) => (
+                  <div className="px-4 py-6">
+                    <div className="space-y-4">
+                      {Array.from({ length: 4 }).map((_, i) => (
                         <div
                           key={i}
-                          className="flex items-center gap-4 p-4 animate-pulse"
+                          className="flex items-center gap-6 p-6 animate-pulse"
                         >
-                          <Skeleton className="rounded-lg w-16 h-16" />
-                          <div className="flex-1 space-y-2">
-                            <Skeleton className="w-3/4 h-4" />
-                            <Skeleton className="w-1/2 h-3" />
-                            <div className="flex gap-2">
-                              <Skeleton className="rounded-full w-16 h-5" />
-                              <Skeleton className="w-12 h-3" />
+                          <Skeleton className="rounded-lg w-20 h-20" />
+                          <div className="flex-1 space-y-3">
+                            <Skeleton className="w-3/4 h-5" />
+                            <Skeleton className="w-1/2 h-4" />
+                            <div className="flex gap-3">
+                              <Skeleton className="rounded-full w-20 h-6" />
+                              <Skeleton className="w-16 h-4" />
                             </div>
                           </div>
                         </div>
@@ -196,17 +196,17 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center">
+                  <div className="px-6 py-12 text-center">
                     {query.trim() ? (
-                      <div className="space-y-4">
-                        <div className="flex justify-center items-center bg-gray-100 mx-auto rounded-full w-16 h-16">
-                          <Search className="w-8 h-8 text-gray-400" />
+                      <div className="space-y-6">
+                        <div className="flex justify-center items-center bg-gray-100 mx-auto rounded-full w-20 h-20">
+                          <Search className="w-10 h-10 text-gray-400" />
                         </div>
-                        <div className="space-y-2">
-                          <h3 className="font-semibold text-gray-900 text-lg">
+                        <div className="space-y-3">
+                          <h3 className="font-semibold text-gray-900 text-xl">
                             No encontramos productos
                           </h3>
-                          <p className="mx-auto max-w-sm text-gray-600 text-sm">
+                          <p className="mx-auto max-w-md text-gray-600 text-base">
                             No hay productos que coincidan con "{query}".
                             Intenta con otros términos o navega por categorías.
                           </p>
@@ -214,21 +214,22 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                         <Button
                           variant="outline"
                           onClick={() => handleSearchSubmit(query)}
+                          className="px-6 py-3 text-base"
                         >
-                          <Search className="mr-2 w-4 h-4" />
+                          <Search className="mr-3 w-5 h-5" />
                           Ver todos los productos
                         </Button>
                       </div>
                     ) : (
-                      <div className="space-y-4">
-                        <div className="flex justify-center items-center bg-gray-100 mx-auto rounded-full w-16 h-16">
-                          <ShoppingBag className="w-8 h-8 text-gray-500" />
+                      <div className="space-y-6">
+                        <div className="flex justify-center items-center bg-gray-100 mx-auto rounded-full w-20 h-20">
+                          <ShoppingBag className="w-10 h-10 text-gray-500" />
                         </div>
-                        <div className="space-y-2">
-                          <h3 className="font-semibold text-gray-900 text-lg">
+                        <div className="space-y-3">
+                          <h3 className="font-semibold text-gray-900 text-xl">
                             Busca tus productos favoritos
                           </h3>
-                          <p className="mx-auto max-w-sm text-gray-600 text-sm">
+                          <p className="mx-auto max-w-md text-gray-600 text-base">
                             Encuentra colchones, almohadas y ropa de cama
                             escribiendo el nombre del producto, marca o
                             categoría.
@@ -241,13 +242,13 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
               </CommandEmpty>
 
               {products.length > 0 && (
-                <CommandGroup className="p-6" heading="Productos">
+                <CommandGroup className="px-6 py-4" heading="Productos">
                   {products.map((product) => (
                     <CommandItem
                       key={product.id}
                       value={`${product.name} ${product.brand} ${product.categories?.map((c) => c.name).join(" ")}`}
                       onSelect={() => handleProductSelect(product)}
-                      className="flex items-center gap-4 hover:bg-gray-50/80 mx-1 my-1 p-4 border hover:border-gray-200 border-transparent rounded-lg transition-colors duration-150"
+                      className="flex items-center gap-6 hover:bg-gray-50/80 mx-2 my-2 p-5 border hover:border-gray-200 border-transparent rounded-lg transition-colors duration-150"
                     >
                       <div className="relative">
                         <img
@@ -256,7 +257,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                             "/placeholder-product.jpg"
                           }
                           alt={product.name}
-                          className="shadow-sm border border-gray-100 rounded-lg w-16 h-16 object-cover"
+                          className="shadow-sm border border-gray-100 rounded-lg w-20 h-20 object-cover"
                           loading="lazy"
                         />
                         {product.discount_price && (
@@ -409,15 +410,15 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                         </Button>
                       </div>
                     ) : (
-                      <div className="space-y-4">
-                        <div className="flex justify-center items-center bg-gray-100 mx-auto rounded-full w-16 h-16">
-                          <ShoppingBag className="w-8 h-8 text-gray-500" />
+                      <div className="space-y-6">
+                        <div className="flex justify-center items-center bg-gray-100 mx-auto rounded-full w-20 h-20">
+                          <ShoppingBag className="w-10 h-10 text-gray-500" />
                         </div>
-                        <div className="space-y-2">
-                          <h3 className="font-semibold text-gray-900 text-lg">
+                        <div className="space-y-3">
+                          <h3 className="font-semibold text-gray-900 text-xl">
                             Busca tus productos favoritos
                           </h3>
-                          <p className="mx-auto max-w-sm text-gray-600 text-sm">
+                          <p className="mx-auto max-w-md text-gray-600 text-base">
                             Encuentra colchones, almohadas y ropa de cama
                             escribiendo el nombre del producto, marca o
                             categoría.
@@ -445,7 +446,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                             "/placeholder-product.jpg"
                           }
                           alt={product.name}
-                          className="shadow-sm border border-gray-100 rounded-lg w-16 h-16 object-cover"
+                          className="shadow-sm border border-gray-100 rounded-lg w-20 h-20 object-cover"
                           loading="lazy"
                         />
                         {product.discount_price && (
