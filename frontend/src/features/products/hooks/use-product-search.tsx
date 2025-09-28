@@ -12,6 +12,13 @@ import {
   addRecentSearch,
   clearRecentSearches as clearRecentSearchesUtil,
 } from "@/lib/utils/recentSearches";
+import {
+  validateSearchInput,
+  showSearchError,
+  shouldShowError,
+  logSecurityEvent,
+  SecurityErrorType,
+} from "@/lib/utils";
 import type { Product } from "@/types";
 
 interface UseProductSearchOptions {
@@ -56,14 +63,37 @@ export function useProductSearch({
     queryFn: async () => {
       if (!shouldSearch) return { data: [] };
 
-      return ProductService.getProducts({
-        pageSize: maxResults * 2, // Get more products to filter locally for better relevance
-        sortBy: "name",
-      });
+      const validation = validateSearchInput(debouncedQuery);
+      if (!validation.isValid) {
+        logSecurityEvent(SecurityErrorType.INVALID_INPUT, {
+          query: debouncedQuery,
+          error: validation.error,
+        });
+        throw new Error('Invalid search input');
+      }
+
+      try {
+        return await ProductService.getProducts({
+          pageSize: maxResults * 2,
+          sortBy: "name",
+        });
+      } catch (error) {
+        logSecurityEvent(SecurityErrorType.SEARCH_FAILED, {
+          query: validation.sanitized,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        });
+        throw error;
+      }
     },
     enabled: shouldSearch,
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
+    retry: (failureCount, error) => {
+      if (error instanceof Error && error.message === 'Invalid search input') {
+        return false;
+      }
+      return failureCount < 2;
+    },
   });
 
   const products = useMemo(() => {
@@ -84,15 +114,24 @@ export function useProductSearch({
     return sortedProducts.slice(0, maxResults);
   }, [searchResponse, debouncedQuery, shouldSearch, maxResults]);
 
+  // Handle errors when they occur
+  if (error && shouldShowError(error)) {
+    showSearchError(error instanceof Error ? error : undefined);
+  }
+
   const clearSearch = useCallback(() => {
     setQuery("");
   }, []);
 
   const addToRecentSearches = useCallback(
     (search: string) => {
-      if (!isValidSearchTerm(search)) return;
+      // Validate and sanitize before adding to recent searches
+      const validation = validateSearchInput(search);
+      if (!validation.isValid || !isValidSearchTerm(validation.sanitized)) {
+        return;
+      }
 
-      const updatedSearches = addRecentSearch(search, {
+      const updatedSearches = addRecentSearch(validation.sanitized, {
         maxItems: maxRecentSearches,
       });
       setRecentSearches(updatedSearches);

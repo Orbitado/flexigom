@@ -15,7 +15,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProductSearch } from "@/features/products/hooks/use-product-search";
-import { cn, formatPrice, getImageUrl, getKeyboardShortcut, isShortcutPressed } from "@/lib/utils";
+import {
+  cn,
+  formatPrice,
+  getImageUrl,
+  getKeyboardShortcut,
+  isShortcutPressed,
+  validateSearchInput,
+  createSecureDisplayTerm,
+  showSearchValidationError,
+  sanitizeUrlParameter
+} from "@/lib/utils";
 import type { Product } from "@/types";
 
 interface SearchProductsBarProps {
@@ -63,7 +73,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
 
     const {
       query,
-      setQuery,
+      setQuery: setQueryOriginal,
       products,
       isLoading,
       recentSearches,
@@ -74,6 +84,19 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
       maxResults,
       enabled: true, // Always enabled, the hook will handle when to actually search
     });
+
+    // Secure query setter with validation
+    const setQuery = useCallback((newQuery: string) => {
+      // Validate input
+      const validation = validateSearchInput(newQuery);
+      if (!validation.isValid && newQuery.length > 0) {
+        showSearchValidationError(validation.error || 'Invalid input');
+        return;
+      }
+
+      // Set the sanitized query
+      setQueryOriginal(validation.sanitized);
+    }, [setQueryOriginal]);
 
     const handleProductSelect = useCallback(
       (product: Product) => {
@@ -91,12 +114,20 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
 
     const handleSearchSubmit = useCallback(
       (searchQuery: string) => {
-        if (searchQuery.trim()) {
-          addToRecentSearches(searchQuery);
+        const validation = validateSearchInput(searchQuery);
+        if (!validation.isValid) {
+          showSearchValidationError(validation.error || 'Invalid search term');
+          return;
+        }
+
+        const sanitizedQuery = validation.sanitized;
+        if (sanitizedQuery.trim()) {
+          addToRecentSearches(sanitizedQuery);
           if (onSearch) {
-            onSearch(searchQuery);
+            onSearch(sanitizedQuery);
           } else {
-            navigate(`/productos?search=${encodeURIComponent(searchQuery)}`);
+            const safeParam = sanitizeUrlParameter(sanitizedQuery);
+            navigate(`/productos?search=${safeParam}`);
           }
           setIsOpen(false);
           clearSearch();
@@ -142,7 +173,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
             onOpenChange={setIsOpen}
             title="Buscar Productos"
             description="Encuentra productos por nombre, marca o categoría"
-            className="w-[90vw] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl h-[75vh] max-h-[700px] [&_[data-slot=command]]:h-full"
+            className="w-[90vw] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl h-[75vh] [&_[data-slot=command]]:h-full max-h-[700px]"
           >
             <div className="px-1 py-1">
               <CommandInput
@@ -152,7 +183,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                 className="px-4 rounded-none focus:ring-0 h-12 text-base text-left"
               />
             </div>
-            <CommandList className="flex-1 px-2 overflow-auto max-h-none">
+            <CommandList className="flex-1 px-2 max-h-none overflow-auto">
               {isLoading && (
                 <CommandGroup>
                   <div className="px-4 py-6">
@@ -207,7 +238,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                             No encontramos productos
                           </h3>
                           <p className="mx-auto max-w-md text-gray-600 text-base">
-                            No hay productos que coincidan con "{query}".
+                            No hay productos que coincidan con "{createSecureDisplayTerm(query)}".
                             Intenta con otros términos o navega por categorías.
                           </p>
                         </div>
@@ -306,13 +337,13 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                     <>
                       <CommandSeparator />
                       <CommandItem
-                        value={`ver todos los resultados para ${query}`}
+                        value={`ver todos los resultados para ${createSecureDisplayTerm(query)}`}
                         onSelect={() => handleSearchSubmit(query)}
                         className="bg-gray-50 hover:bg-gray-100 mx-1 my-1 p-3 border border-gray-200 rounded-lg text-gray-800"
                       >
                         <Search className="mr-2 w-4 h-4 text-gray-600" />
                         <span className="font-medium">
-                          Ver todos los resultados para "{query}"
+                          Ver todos los resultados para "{createSecureDisplayTerm(query)}"
                         </span>
                       </CommandItem>
                     </>
@@ -396,7 +427,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                             No encontramos productos
                           </h3>
                           <p className="mx-auto max-w-sm text-gray-600 text-sm">
-                            No hay productos que coincidan con "{query}".
+                            No hay productos que coincidan con "{createSecureDisplayTerm(query)}".
                             Intenta con otros términos o navega por categorías.
                           </p>
                         </div>
@@ -495,13 +526,13 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                     <>
                       <CommandSeparator />
                       <CommandItem
-                        value={`ver todos los resultados para ${query}`}
+                        value={`ver todos los resultados para ${createSecureDisplayTerm(query)}`}
                         onSelect={() => handleSearchSubmit(query)}
                         className="bg-gray-50 hover:bg-gray-100 mx-1 my-1 p-3 border border-gray-200 rounded-lg text-gray-800"
                       >
                         <Search className="mr-2 w-4 h-4 text-gray-600" />
                         <span className="font-medium">
-                          Ver todos los resultados para "{query}"
+                          Ver todos los resultados para "{createSecureDisplayTerm(query)}"
                         </span>
                       </CommandItem>
                     </>

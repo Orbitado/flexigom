@@ -63,3 +63,5 @@ export * from "./utils/localStorage";
 export * from "./utils/search";
 export * from "./utils/recentSearches";
 export * from "./utils/platform";
+export * from "./utils/security";
+export * from "./utils/error-messages";

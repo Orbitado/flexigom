@@ -1,4 +1,5 @@
 import type { Product } from "@/types";
+import { validateSearchInput } from "./security";
 
 /**
  * Search and filtering utilities for products
@@ -18,7 +19,13 @@ export function filterProductsBySearchTerm(
     return products;
   }
 
-  const normalizedSearchTerm = searchTerm.toLowerCase().trim();
+  // Validate and sanitize the search term
+  const validation = validateSearchInput(searchTerm);
+  if (!validation.isValid) {
+    return [];
+  }
+
+  const normalizedSearchTerm = validation.sanitized.toLowerCase();
 
   return products.filter((product) => {
     const nameMatch = product.name.toLowerCase().includes(normalizedSearchTerm);
@@ -44,12 +51,13 @@ export function normalizeSearchTerm(searchTerm: string): string {
 }
 
 /**
- * Check if a search term is valid (non-empty after normalization)
+ * Check if a search term is valid (non-empty after normalization and security validation)
  * @param searchTerm - Search term to validate
  * @returns Boolean indicating if the search term is valid
  */
 export function isValidSearchTerm(searchTerm: string): boolean {
-  return normalizeSearchTerm(searchTerm).length > 0;
+  const validation = validateSearchInput(searchTerm);
+  return validation.isValid && normalizeSearchTerm(validation.sanitized).length > 0;
 }
 
 /**
@@ -94,8 +102,13 @@ export function scoreProductRelevance(
     return 0;
   }
 
-  const normalizedSearchTerm = normalizeSearchTerm(searchTerm);
-  const keywords = extractSearchKeywords(searchTerm);
+  const validation = validateSearchInput(searchTerm);
+  if (!validation.isValid) {
+    return 0;
+  }
+
+  const normalizedSearchTerm = normalizeSearchTerm(validation.sanitized);
+  const keywords = extractSearchKeywords(validation.sanitized);
 
   let score = 0;
 
