@@ -5,8 +5,11 @@ import { NavbarLinks } from "./navbar-links";
 import { NavbarMobile } from "./navbar-mobile";
 import { navbarConfig } from "../config/navbar-config";
 import { SearchProductsBar } from "@/components/search-products-bar";
+import { useCategories } from "../hooks/use-categories";
 
 export function Navbar() {
+  const { data: categories, isLoading: categoriesLoading } = useCategories();
+
   return (
     <header
       className="top-0 z-50 sticky bg-white border-b w-full"
@@ -21,7 +24,11 @@ export function Navbar() {
             role="navigation"
             aria-label="Navegación principal"
           >
-            <NavbarLinks items={navbarConfig.mainNavigation} />
+            <NavbarLinks
+              items={navbarConfig.mainNavigation}
+              categories={categories}
+              categoriesLoading={categoriesLoading}
+            />
           </nav>
         </div>
 
@@ -41,6 +48,8 @@ export function Navbar() {
           <NavbarMobile
             items={navbarConfig.mainNavigation}
             mobileMenu={navbarConfig.mobileMenu}
+            categories={categories}
+            categoriesLoading={categoriesLoading}
           />
         </div>
       </div>
