@@ -21,6 +21,30 @@ export const navbarConfig: NavbarConfig = {
         },
       ],
     },
+    {
+      label: "Ayuda",
+      items: [
+        {
+          label: "Preguntas Frecuentes",
+          href: "/faq",
+          description: "Resolvé tus dudas sobre nuestros productos y servicios",
+        },
+        {
+          label: "Garantías",
+          href: "/garantias",
+          description: "Información sobre garantías de nuestros productos",
+        },
+        {
+          label: "Entregas",
+          href: "/entregas",
+          description: "Conocé nuestras zonas de entrega y tiempos",
+        },
+      ],
+    },
+    {
+      label: "Contacto",
+      href: "/contacto",
+    },
   ],
   authNavigation: {
     loginLabel: "Iniciar Sesión",
