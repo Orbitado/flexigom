@@ -11,7 +11,7 @@ const shippingFormSchema = z.object({
   lastName: z.string().min(1, "El apellido es requerido"),
   email: z.email("Email inválido").min(1, "El email es requerido"),
   phone: z
-    .number()
+    .string()
     .min(7, "El teléfono es requerido")
     .max(15, "El teléfono debe tener entre 7 y 15 caracteres"),
   address: z.string().min(1, "La dirección es requerida"),
@@ -139,9 +139,7 @@ export function ShippingForm({
             <Input
               id="phone"
               type="tel"
-              pattern="[0-9]*"
-              min={7}
-              max={15}
+              pattern="[\d\s\-\+]*"
               placeholder="+54 381 123-4567"
               className={errors.phone ? "border-destructive" : ""}
               {...register("phone")}
