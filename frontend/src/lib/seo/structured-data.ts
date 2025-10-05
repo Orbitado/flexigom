@@ -215,3 +215,9 @@ export function createOrganizationSchema(): StructuredDataConfig {
     ],
   };
 }
+
+export function createFAQPageSchema(
+  faqs: Array<{ question: string; answer: string }>,
+): StructuredDataConfig {
+  return createFAQSchema(faqs);
+}
