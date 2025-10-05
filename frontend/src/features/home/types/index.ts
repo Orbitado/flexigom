@@ -232,3 +232,36 @@ export interface ReviewsSectionProps {
   content?: Partial<ReviewsContent>;
   className?: string;
 }
+
+export interface LocationAddress {
+  street: string;
+  city: string;
+  province: string;
+  country: string;
+  fullAddress: string;
+}
+
+export interface LocationContact {
+  phone: string;
+  whatsapp: string;
+}
+
+export interface LocationOperatingHours {
+  weekdays: string;
+  saturday: string;
+  sunday: string;
+}
+
+export interface LocationSectionContent {
+  title: string;
+  subtitle?: string;
+  address: LocationAddress;
+  contact: LocationContact;
+  operatingHours: LocationOperatingHours;
+  mapEmbedUrl: string;
+}
+
+export interface LocationSectionProps {
+  content?: Partial<LocationSectionContent>;
+  className?: string;
+}
