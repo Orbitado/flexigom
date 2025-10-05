@@ -61,6 +61,10 @@ export const routes: RouteObject[] = [
         ],
       },
       {
+        path: "checkout",
+        lazy: () => import("@/features/cart/pages/checkout-page"),
+      },
+      {
         path: "productos",
         loader: ({ request }) => {
           const url = new URL(request.url);
