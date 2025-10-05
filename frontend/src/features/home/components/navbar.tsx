@@ -1,11 +1,10 @@
-import { ShoppingCartIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { NavbarLogo } from "./navbar-logo";
 import { NavbarLinks } from "./navbar-links";
 import { NavbarMobile } from "./navbar-mobile";
 import { navbarConfig } from "../config/navbar-config";
 import { SearchProductsBar } from "@/components/search-products-bar";
 import { useCategories } from "../hooks/use-categories";
+import { MiniCart } from "@/features/cart/components/mini-cart";
 
 export function Navbar() {
   const { data: categories, isLoading: categoriesLoading } = useCategories();
@@ -40,9 +39,7 @@ export function Navbar() {
             placeholder="Buscar productos..."
           />
 
-          <Button variant="ghost" size="icon" aria-label="Carrito de compras">
-            <ShoppingCartIcon className="w-5 h-5" />
-          </Button>
+          <MiniCart />
 
           {/* Mobile/Tablet Menu */}
           <NavbarMobile

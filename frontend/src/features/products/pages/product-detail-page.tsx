@@ -41,6 +41,8 @@ import {
 import { useState, useMemo } from "react";
 import { handleShare } from "@/lib/utils";
 import { SEOHead } from "@/components/seo";
+import { useCartStore } from "@/features/cart/store/cart-store";
+import { toast } from "sonner";
 import {
   createProductSEO,
   createProductSchema,
@@ -52,6 +54,7 @@ export function ProductDetailPage() {
   const { documentId } = useParams();
   const { data: product, isLoading, error } = useProduct(documentId || "");
   const [quantity, setQuantity] = useState(1);
+  const addItem = useCartStore((state) => state.addItem);
 
   // Memoize images array to prevent hook dependency issues
   const images = useMemo(() => {
@@ -188,6 +191,15 @@ export function ProductDetailPage() {
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity >= 1 && newQuantity <= product.stock) {
       setQuantity(newQuantity);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (product) {
+      addItem(product, quantity);
+      toast.success(`${product.name} agregado al carrito`, {
+        description: `Cantidad: ${quantity}`,
+      });
     }
   };
 
@@ -481,6 +493,7 @@ export function ProductDetailPage() {
                 <Button
                   className="flex-1 bg-red-600 hover:bg-red-700 h-12 font-medium text-white"
                   disabled={product.stock <= 0}
+                  onClick={handleAddToCart}
                 >
                   <ShoppingCart className="mr-2 w-5 h-5" />
                   {product.stock > 0 ? "Agregar al Carrito" : "Sin Stock"}
