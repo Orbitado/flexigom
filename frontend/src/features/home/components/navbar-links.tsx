@@ -21,14 +21,18 @@ function isDropdown(item: NavItem | NavDropdown): item is NavDropdown {
   return "items" in item;
 }
 
-export function NavbarLinks({ items, categories, categoriesLoading }: NavbarLinksProps) {
-
+export function NavbarLinks({
+  items,
+  categories,
+  categoriesLoading,
+}: NavbarLinksProps) {
   const buildCatalogItems = () => {
     const staticItems = [
       {
         label: "Todos los Productos",
         href: "/products",
-        description: "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
+        description:
+          "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
       },
     ];
 
@@ -86,7 +90,8 @@ export function NavbarLinks({ items, categories, categoriesLoading }: NavbarLink
                               className={({ isActive }) =>
                                 cn(
                                   "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                                  isActive && "bg-accent text-accent-foreground",
+                                  isActive &&
+                                    "bg-accent text-accent-foreground",
                                 )
                               }
                             >
@@ -100,8 +105,7 @@ export function NavbarLinks({ items, categories, categoriesLoading }: NavbarLink
                               )}
                             </NavLink>
                           </NavigationMenuLink>
-                        ))
-                    }
+                        ))}
                   </div>
                 </NavigationMenuContent>
               </>

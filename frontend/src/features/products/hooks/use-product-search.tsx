@@ -48,7 +48,7 @@ export function useProductSearch({
 }: UseProductSearchOptions = {}): UseProductSearchReturn {
   const [query, setQuery] = useState("");
   const [recentSearches, setRecentSearches] = useState<string[]>(() =>
-    getRecentSearches({ maxItems: maxRecentSearches })
+    getRecentSearches({ maxItems: maxRecentSearches }),
   );
 
   const debouncedQuery = useDebounce(query, debounceMs);
@@ -69,7 +69,7 @@ export function useProductSearch({
           query: debouncedQuery,
           error: validation.error,
         });
-        throw new Error('Invalid search input');
+        throw new Error("Invalid search input");
       }
 
       try {
@@ -80,7 +80,7 @@ export function useProductSearch({
       } catch (error) {
         logSecurityEvent(SecurityErrorType.SEARCH_FAILED, {
           query: validation.sanitized,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: error instanceof Error ? error.message : "Unknown error",
         });
         throw error;
       }
@@ -89,7 +89,7 @@ export function useProductSearch({
     staleTime: 1000 * 60 * 5, // 5 minutes
     refetchOnWindowFocus: false,
     retry: (failureCount, error) => {
-      if (error instanceof Error && error.message === 'Invalid search input') {
+      if (error instanceof Error && error.message === "Invalid search input") {
         return false;
       }
       return failureCount < 2;
@@ -102,13 +102,13 @@ export function useProductSearch({
     // Filter products by search term
     const filteredProducts = filterProductsBySearchTerm(
       searchResponse.data,
-      debouncedQuery
+      debouncedQuery,
     );
 
     // Sort by relevance and limit results
     const sortedProducts = sortProductsByRelevance(
       filteredProducts,
-      debouncedQuery
+      debouncedQuery,
     );
 
     return sortedProducts.slice(0, maxResults);
@@ -136,7 +136,7 @@ export function useProductSearch({
       });
       setRecentSearches(updatedSearches);
     },
-    [maxRecentSearches]
+    [maxRecentSearches],
   );
 
   const clearRecentSearches = useCallback(() => {

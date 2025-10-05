@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import type { Product } from "@/types";
-import type { CartState, CartItem } from "../types";
+import type { CartState } from "../types";
 
 /**
  * Tax rate (21% IVA in Argentina)
@@ -26,40 +26,44 @@ export const useCartStore = create<CartState>()(
          * Add item to cart or update quantity if already exists
          */
         addItem: (product: Product, quantity = 1) => {
-          set((state) => {
-            const existingItem = state.items.find(
-              (item) => item.product.documentId === product.documentId,
-            );
+          set(
+            (state) => {
+              const existingItem = state.items.find(
+                (item) => item.product.documentId === product.documentId,
+              );
 
-            if (existingItem) {
-              // Update quantity if item already in cart
+              if (existingItem) {
+                // Update quantity if item already in cart
+                return {
+                  items: state.items.map((item) =>
+                    item.product.documentId === product.documentId
+                      ? {
+                          ...item,
+                          quantity: Math.min(
+                            item.quantity + quantity,
+                            product.stock,
+                          ),
+                        }
+                      : item,
+                  ),
+                };
+              }
+
+              // Add new item to cart
               return {
-                items: state.items.map((item) =>
-                  item.product.documentId === product.documentId
-                    ? {
-                        ...item,
-                        quantity: Math.min(
-                          item.quantity + quantity,
-                          product.stock,
-                        ),
-                      }
-                    : item,
-                ),
+                items: [
+                  ...state.items,
+                  {
+                    product,
+                    quantity: Math.min(quantity, product.stock),
+                    addedAt: new Date().toISOString(),
+                  },
+                ],
               };
-            }
-
-            // Add new item to cart
-            return {
-              items: [
-                ...state.items,
-                {
-                  product,
-                  quantity: Math.min(quantity, product.stock),
-                  addedAt: new Date().toISOString(),
-                },
-              ],
-            };
-          }, false, "addItem");
+            },
+            false,
+            "addItem",
+          );
         },
 
         /**
@@ -81,27 +85,31 @@ export const useCartStore = create<CartState>()(
          * Update item quantity
          */
         updateQuantity: (productId: string, quantity: number) => {
-          set((state) => {
-            // Remove item if quantity is 0 or less
-            if (quantity <= 0) {
+          set(
+            (state) => {
+              // Remove item if quantity is 0 or less
+              if (quantity <= 0) {
+                return {
+                  items: state.items.filter(
+                    (item) => item.product.documentId !== productId,
+                  ),
+                };
+              }
+
               return {
-                items: state.items.filter(
-                  (item) => item.product.documentId !== productId,
+                items: state.items.map((item) =>
+                  item.product.documentId === productId
+                    ? {
+                        ...item,
+                        quantity: Math.min(quantity, item.product.stock),
+                      }
+                    : item,
                 ),
               };
-            }
-
-            return {
-              items: state.items.map((item) =>
-                item.product.documentId === productId
-                  ? {
-                      ...item,
-                      quantity: Math.min(quantity, item.product.stock),
-                    }
-                  : item,
-              ),
-            };
-          }, false, "updateQuantity");
+            },
+            false,
+            "updateQuantity",
+          );
         },
 
         /**

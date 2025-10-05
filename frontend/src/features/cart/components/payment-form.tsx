@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card } from "@/components/ui/card";
@@ -135,7 +134,7 @@ export function PaymentForm({
         </Card>
 
         {/* Security Note */}
-        <div className="flex items-start gap-2 p-3 bg-gray-50 rounded-md text-xs text-muted-foreground">
+        <div className="flex items-start gap-2 bg-gray-50 p-3 rounded-md text-muted-foreground text-xs">
           <svg
             className="flex-shrink-0 mt-0.5 w-4 h-4"
             fill="none"
@@ -163,10 +162,7 @@ export function PaymentForm({
             Volver
           </Button>
         )}
-        <Button
-          type="submit"
-          className="flex-1 bg-red-600 hover:bg-red-700"
-        >
+        <Button type="submit" className="flex-1 bg-red-600 hover:bg-red-700">
           Revisar Pedido
         </Button>
       </div>

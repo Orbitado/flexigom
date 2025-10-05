@@ -57,7 +57,10 @@ export function Cart({ open, onOpenChange }: CartProps) {
             <div className="flex-1 px-4 overflow-y-auto">
               <div className="space-y-2">
                 {items.map((item) => (
-                  <CartItemComponent key={item.product.documentId} item={item} />
+                  <CartItemComponent
+                    key={item.product.documentId}
+                    item={item}
+                  />
                 ))}
               </div>
             </div>

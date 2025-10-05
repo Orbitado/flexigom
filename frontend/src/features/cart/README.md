@@ -5,6 +5,7 @@ This feature implements a complete shopping cart system with checkout flow for t
 ## Features
 
 ### Cart Management
+
 - ✅ Add/remove products from cart
 - ✅ Update product quantities
 - ✅ Real-time cart total calculations (subtotal, tax, total)
@@ -13,6 +14,7 @@ This feature implements a complete shopping cart system with checkout flow for t
 - ✅ Side drawer/sheet UI for cart
 
 ### Checkout Flow
+
 - ✅ Multi-step checkout process:
   1. **Shipping Information**: Customer details and delivery address
   2. **Payment Method**: Payment selection (Mercado Pago, Transfer, Cash)
@@ -24,6 +26,7 @@ This feature implements a complete shopping cart system with checkout flow for t
 - ✅ Responsive design
 
 ### State Management
+
 - ✅ Zustand for global state
 - ✅ localStorage persistence for cart
 - ✅ Separate stores for cart and checkout
@@ -90,7 +93,7 @@ function CartPage() {
   return (
     <div>
       <p>Total: {total}</p>
-      {items.map(item => (
+      {items.map((item) => (
         <div key={item.product.documentId}>
           {item.product.name} x {item.quantity}
         </div>
@@ -113,26 +116,33 @@ function Navbar() {
 ## Zustand Best Practices Applied
 
 ### 1. **Store Separation**
+
 - Cart store: Handles cart items and calculations
 - Checkout store: Manages checkout flow state
 - Separation of concerns for better maintainability
 
 ### 2. **Middleware**
+
 ```tsx
 // Persist middleware for cart
 persist(
-  (set, get) => ({ /* state */ }),
-  { name: "flexigom-cart-storage" }
-)
+  (set, get) => ({
+    /* state */
+  }),
+  { name: "flexigom-cart-storage" },
+);
 
 // DevTools for debugging
 devtools(
-  (set, get) => ({ /* state */ }),
-  { name: "CartStore" }
-)
+  (set, get) => ({
+    /* state */
+  }),
+  { name: "CartStore" },
+);
 ```
 
 ### 3. **Selectors for Performance**
+
 ```tsx
 // Optimized selectors prevent unnecessary re-renders
 export const selectCartItemCount = (state: CartState) => state.getItemCount();
@@ -143,26 +153,29 @@ const itemCount = useCartStore(selectCartItemCount);
 ```
 
 ### 4. **Immutable State Updates**
+
 ```tsx
 addItem: (product, quantity) => {
   set((state) => ({
-    items: [...state.items, newItem] // New array, not mutation
+    items: [...state.items, newItem], // New array, not mutation
   }));
-}
+};
 ```
 
 ### 5. **Action Naming**
+
 ```tsx
 set({ items: [] }, false, "clearCart"); // Named for DevTools
 ```
 
 ### 6. **Computed Values**
+
 ```tsx
 getTotal: () => {
   const subtotal = get().getSubtotal();
   const tax = get().getTax();
   return subtotal + tax;
-}
+};
 ```
 
 ## Data Persistence
@@ -177,6 +190,7 @@ Cart data is persisted to localStorage using Zustand's persist middleware:
 ## Form Validation
 
 Forms include built-in validation:
+
 - Required field validation
 - Email format validation
 - Phone format validation

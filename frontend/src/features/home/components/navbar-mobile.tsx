@@ -27,7 +27,12 @@ function isDropdown(item: NavItem | NavDropdown): item is NavDropdown {
   return "items" in item;
 }
 
-export function NavbarMobile({ items, mobileMenu, categories, categoriesLoading }: NavbarMobileProps) {
+export function NavbarMobile({
+  items,
+  mobileMenu,
+  categories,
+  categoriesLoading,
+}: NavbarMobileProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<string[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -77,7 +82,8 @@ export function NavbarMobile({ items, mobileMenu, categories, categoriesLoading 
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isOpen]);
 
@@ -86,7 +92,8 @@ export function NavbarMobile({ items, mobileMenu, categories, categoriesLoading 
       {
         label: "Todos los Productos",
         href: "/products",
-        description: "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
+        description:
+          "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
       },
     ];
 
@@ -143,83 +150,79 @@ export function NavbarMobile({ items, mobileMenu, categories, categoriesLoading 
             </div>
 
             {/* Navigation Menu */}
-            <nav
-              className="space-y-1"
-              aria-label={mobileMenu.menuAriaLabel}
-            >
-            {items.map((item) => (
-              <div key={item.label}>
-                {isDropdown(item) ? (
-                  <Collapsible
-                    open={openDropdowns.includes(item.label)}
-                    onOpenChange={() => toggleDropdown(item.label)}
-                  >
-                    <CollapsibleTrigger className="flex justify-between items-center hover:bg-accent px-3 py-2 rounded-md w-full font-medium text-left hover:text-accent-foreground">
-                      <span>{item.label}</span>
-                      <ChevronDownIcon
-                        className={cn(
-                          "w-4 h-4 transition-transform",
-                          openDropdowns.includes(item.label) && "rotate-180",
-                        )}
-                      />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="space-y-1 pl-4">
-                      {item.label === "Catálogo"
-                        ? buildCatalogItems().map((catalogItem) => (
-                            <NavLink
-                              key={catalogItem.href}
-                              to={catalogItem.href}
-                              onClick={closeMobileMenu}
-                              className="block hover:bg-accent px-3 py-2 rounded-md text-sm transition-colors hover:text-accent-foreground"
-                            >
-                              <div>{catalogItem.label}</div>
-                              {catalogItem.description && (
-                                <div className="mt-1 text-muted-foreground text-xs">
-                                  {catalogItem.description}
-                                </div>
-                              )}
-                            </NavLink>
-                          ))
-                        : item.items.map((dropdownItem) => (
-                            <NavLink
-                              key={dropdownItem.href}
-                              to={dropdownItem.href}
-                              onClick={closeMobileMenu}
-                              className={({ isActive }) =>
-                                cn(
-                                  "block hover:bg-accent px-3 py-2 rounded-md text-sm transition-colors hover:text-accent-foreground",
-                                  isActive &&
-                                    "bg-accent text-accent-foreground font-medium",
-                                )
-                              }
-                            >
-                              <div>{dropdownItem.label}</div>
-                              {dropdownItem.description && (
-                                <div className="mt-1 text-muted-foreground text-xs">
-                                  {dropdownItem.description}
-                                </div>
-                              )}
-                            </NavLink>
-                          ))
+            <nav className="space-y-1" aria-label={mobileMenu.menuAriaLabel}>
+              {items.map((item) => (
+                <div key={item.label}>
+                  {isDropdown(item) ? (
+                    <Collapsible
+                      open={openDropdowns.includes(item.label)}
+                      onOpenChange={() => toggleDropdown(item.label)}
+                    >
+                      <CollapsibleTrigger className="flex justify-between items-center hover:bg-accent px-3 py-2 rounded-md w-full font-medium text-left hover:text-accent-foreground">
+                        <span>{item.label}</span>
+                        <ChevronDownIcon
+                          className={cn(
+                            "w-4 h-4 transition-transform",
+                            openDropdowns.includes(item.label) && "rotate-180",
+                          )}
+                        />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="space-y-1 pl-4">
+                        {item.label === "Catálogo"
+                          ? buildCatalogItems().map((catalogItem) => (
+                              <NavLink
+                                key={catalogItem.href}
+                                to={catalogItem.href}
+                                onClick={closeMobileMenu}
+                                className="block hover:bg-accent px-3 py-2 rounded-md text-sm transition-colors hover:text-accent-foreground"
+                              >
+                                <div>{catalogItem.label}</div>
+                                {catalogItem.description && (
+                                  <div className="mt-1 text-muted-foreground text-xs">
+                                    {catalogItem.description}
+                                  </div>
+                                )}
+                              </NavLink>
+                            ))
+                          : item.items.map((dropdownItem) => (
+                              <NavLink
+                                key={dropdownItem.href}
+                                to={dropdownItem.href}
+                                onClick={closeMobileMenu}
+                                className={({ isActive }) =>
+                                  cn(
+                                    "block hover:bg-accent px-3 py-2 rounded-md text-sm transition-colors hover:text-accent-foreground",
+                                    isActive &&
+                                      "bg-accent text-accent-foreground font-medium",
+                                  )
+                                }
+                              >
+                                <div>{dropdownItem.label}</div>
+                                {dropdownItem.description && (
+                                  <div className="mt-1 text-muted-foreground text-xs">
+                                    {dropdownItem.description}
+                                  </div>
+                                )}
+                              </NavLink>
+                            ))}
+                      </CollapsibleContent>
+                    </Collapsible>
+                  ) : (
+                    <NavLink
+                      to={item.href}
+                      onClick={closeMobileMenu}
+                      className={({ isActive }) =>
+                        cn(
+                          "block hover:bg-accent px-3 py-2 rounded-md font-medium transition-colors hover:text-accent-foreground",
+                          isActive && "bg-accent text-accent-foreground",
+                        )
                       }
-                    </CollapsibleContent>
-                  </Collapsible>
-                ) : (
-                  <NavLink
-                    to={item.href}
-                    onClick={closeMobileMenu}
-                    className={({ isActive }) =>
-                      cn(
-                        "block hover:bg-accent px-3 py-2 rounded-md font-medium transition-colors hover:text-accent-foreground",
-                        isActive && "bg-accent text-accent-foreground",
-                      )
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                )}
-              </div>
-            ))}
+                    >
+                      {item.label}
+                    </NavLink>
+                  )}
+                </div>
+              ))}
             </nav>
           </div>
         </div>

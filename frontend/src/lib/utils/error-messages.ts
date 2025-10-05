@@ -8,43 +8,49 @@ import { toast } from "sonner";
  * Error types for different security scenarios
  */
 export const SecurityErrorType = {
-  INVALID_INPUT: 'invalid_input',
-  RATE_LIMITED: 'rate_limited',
-  SEARCH_FAILED: 'search_failed',
-  NETWORK_ERROR: 'network_error',
-  VALIDATION_ERROR: 'validation_error',
-  SUSPICIOUS_ACTIVITY: 'suspicious_activity',
+  INVALID_INPUT: "invalid_input",
+  RATE_LIMITED: "rate_limited",
+  SEARCH_FAILED: "search_failed",
+  NETWORK_ERROR: "network_error",
+  VALIDATION_ERROR: "validation_error",
+  SUSPICIOUS_ACTIVITY: "suspicious_activity",
 } as const;
 
-export type SecurityErrorType = typeof SecurityErrorType[keyof typeof SecurityErrorType];
+export type SecurityErrorType =
+  (typeof SecurityErrorType)[keyof typeof SecurityErrorType];
 
 /**
  * Security-safe error messages that don't expose system details
  */
 const SECURITY_ERROR_MESSAGES = {
   [SecurityErrorType.INVALID_INPUT]: {
-    title: 'Entrada no válida',
-    message: 'Por favor, ingresa un término de búsqueda válido usando solo letras, números y espacios.',
+    title: "Entrada no válida",
+    message:
+      "Por favor, ingresa un término de búsqueda válido usando solo letras, números y espacios.",
   },
   [SecurityErrorType.RATE_LIMITED]: {
-    title: 'Demasiadas solicitudes',
-    message: 'Has realizado muchas búsquedas recientemente. Espera un momento antes de intentar nuevamente.',
+    title: "Demasiadas solicitudes",
+    message:
+      "Has realizado muchas búsquedas recientemente. Espera un momento antes de intentar nuevamente.",
   },
   [SecurityErrorType.SEARCH_FAILED]: {
-    title: 'Error en la búsqueda',
-    message: 'No pudimos procesar tu búsqueda en este momento. Intenta nuevamente.',
+    title: "Error en la búsqueda",
+    message:
+      "No pudimos procesar tu búsqueda en este momento. Intenta nuevamente.",
   },
   [SecurityErrorType.NETWORK_ERROR]: {
-    title: 'Error de conexión',
-    message: 'Verifica tu conexión a internet e intenta nuevamente.',
+    title: "Error de conexión",
+    message: "Verifica tu conexión a internet e intenta nuevamente.",
   },
   [SecurityErrorType.VALIDATION_ERROR]: {
-    title: 'Datos incorrectos',
-    message: 'La información ingresada no es válida. Revisa e intenta nuevamente.',
+    title: "Datos incorrectos",
+    message:
+      "La información ingresada no es válida. Revisa e intenta nuevamente.",
   },
   [SecurityErrorType.SUSPICIOUS_ACTIVITY]: {
-    title: 'Actividad sospechosa detectada',
-    message: 'Por motivos de seguridad, esta acción ha sido bloqueada temporalmente.',
+    title: "Actividad sospechosa detectada",
+    message:
+      "Por motivos de seguridad, esta acción ha sido bloqueada temporalmente.",
   },
 } as const;
 
@@ -55,7 +61,7 @@ const SECURITY_ERROR_MESSAGES = {
  */
 export function showSecurityError(
   errorType: SecurityErrorType,
-  customMessage?: string
+  customMessage?: string,
 ): void {
   const errorConfig = SECURITY_ERROR_MESSAGES[errorType];
 
@@ -75,11 +81,12 @@ export function showSecurityError(
  */
 export function showRateLimitError(remainingTimeMs: number): void {
   const seconds = Math.ceil(remainingTimeMs / 1000);
-  const timeText = seconds > 60
-    ? `${Math.ceil(seconds / 60)} minuto(s)`
-    : `${seconds} segundo(s)`;
+  const timeText =
+    seconds > 60
+      ? `${Math.ceil(seconds / 60)} minuto(s)`
+      : `${seconds} segundo(s)`;
 
-  toast.error('Demasiadas solicitudes', {
+  toast.error("Demasiadas solicitudes", {
     description: `Espera ${timeText} antes de intentar nuevamente.`,
     duration: Math.min(remainingTimeMs, 10000),
   });
@@ -91,15 +98,20 @@ export function showRateLimitError(remainingTimeMs: number): void {
  */
 export function showSearchValidationError(validationError: string): void {
   const errorMessages: Record<string, string> = {
-    'Término de búsqueda requerido': 'Ingresa al menos una palabra para buscar.',
-    'Término de búsqueda demasiado corto': 'El término de búsqueda debe tener al menos 1 carácter.',
-    'Término de búsqueda demasiado largo': 'El término de búsqueda es demasiado largo. Máximo 100 caracteres.',
-    'Contiene caracteres no permitidos': 'Solo se permiten letras, números, espacios y algunos signos de puntuación.',
+    "Término de búsqueda requerido":
+      "Ingresa al menos una palabra para buscar.",
+    "Término de búsqueda demasiado corto":
+      "El término de búsqueda debe tener al menos 1 carácter.",
+    "Término de búsqueda demasiado largo":
+      "El término de búsqueda es demasiado largo. Máximo 100 caracteres.",
+    "Contiene caracteres no permitidos":
+      "Solo se permiten letras, números, espacios y algunos signos de puntuación.",
   };
 
-  const userMessage = errorMessages[validationError] || 'Término de búsqueda no válido.';
+  const userMessage =
+    errorMessages[validationError] || "Término de búsqueda no válido.";
 
-  toast.error('Búsqueda no válida', {
+  toast.error("Búsqueda no válida", {
     description: userMessage,
     duration: 4000,
   });
@@ -112,11 +124,12 @@ export function showSearchValidationError(validationError: string): void {
 export function showSearchError(originalError?: Error): void {
   // Log the actual error for debugging (in development)
   if (import.meta.env.DEV && originalError) {
-    console.error('Search error:', originalError);
+    console.error("Search error:", originalError);
   }
 
-  toast.error('Error en la búsqueda', {
-    description: 'No pudimos completar tu búsqueda. Verifica tu conexión e intenta nuevamente.',
+  toast.error("Error en la búsqueda", {
+    description:
+      "No pudimos completar tu búsqueda. Verifica tu conexión e intenta nuevamente.",
     duration: 5000,
     action: {
       label: "Reintentar",
@@ -133,7 +146,7 @@ export function showSearchError(originalError?: Error): void {
  * @param message - Success message
  */
 export function showSearchSuccess(message: string): void {
-  toast.success('Búsqueda completada', {
+  toast.success("Búsqueda completada", {
     description: message,
     duration: 3000,
   });
@@ -158,33 +171,33 @@ export function showSearchInfo(title: string, message: string): void {
  */
 export function sanitizeErrorMessage(error: unknown): string {
   if (!error) {
-    return 'Ha ocurrido un error inesperado.';
+    return "Ha ocurrido un error inesperado.";
   }
 
-  if (typeof error === 'string') {
+  if (typeof error === "string") {
     // Remove any potential HTML or script content
-    return error.replace(/<[^>]*>/g, '').substring(0, 200);
+    return error.replace(/<[^>]*>/g, "").substring(0, 200);
   }
 
   if (error instanceof Error) {
     // For known error types, return generic messages
-    if (error.name === 'NetworkError' || error.message.includes('fetch')) {
-      return 'Error de conexión. Verifica tu internet.';
+    if (error.name === "NetworkError" || error.message.includes("fetch")) {
+      return "Error de conexión. Verifica tu internet.";
     }
 
-    if (error.name === 'AbortError') {
-      return 'Búsqueda cancelada.';
+    if (error.name === "AbortError") {
+      return "Búsqueda cancelada.";
     }
 
-    if (error.name === 'TimeoutError') {
-      return 'La búsqueda tardó demasiado tiempo.';
+    if (error.name === "TimeoutError") {
+      return "La búsqueda tardó demasiado tiempo.";
     }
 
     // Generic error message
-    return 'No pudimos completar la operación.';
+    return "No pudimos completar la operación.";
   }
 
-  return 'Ha ocurrido un error inesperado.';
+  return "Ha ocurrido un error inesperado.";
 }
 
 /**
@@ -196,13 +209,13 @@ export function shouldShowError(error: unknown): boolean {
   if (!error) return false;
 
   // Don't show aborted requests (user navigated away)
-  if (error instanceof Error && error.name === 'AbortError') {
+  if (error instanceof Error && error.name === "AbortError") {
     return false;
   }
 
   // Don't show errors during development hot reload
   if (import.meta.env.DEV && error instanceof Error) {
-    if (error.message.includes('hot reload') || error.message.includes('HMR')) {
+    if (error.message.includes("hot reload") || error.message.includes("HMR")) {
       return false;
     }
   }
@@ -217,7 +230,7 @@ export function shouldShowError(error: unknown): boolean {
  */
 export function logSecurityEvent(
   event: SecurityErrorType,
-  details: Record<string, unknown> = {}
+  details: Record<string, unknown> = {},
 ): void {
   // In development, log to console
   if (import.meta.env.DEV) {

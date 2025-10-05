@@ -15,8 +15,7 @@ export function CartItemComponent({ item }: CartItemProps) {
 
   const { product, quantity } = item;
   const price =
-    product.discount_price > 0 &&
-    product.discount_price < product.price
+    product.discount_price > 0 && product.discount_price < product.price
       ? product.discount_price
       : product.price;
 
