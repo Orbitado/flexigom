@@ -61,6 +61,10 @@ export const routes: RouteObject[] = [
         ],
       },
       {
+        path: "checkout",
+        lazy: () => import("@/features/cart/pages/checkout-page"),
+      },
+      {
         path: "productos",
         loader: ({ request }) => {
           const url = new URL(request.url);
@@ -75,6 +79,30 @@ export const routes: RouteObject[] = [
             },
           });
         },
+      },
+      {
+        path: "contacto",
+        lazy: () => import("@/features/pages/contacto-page"),
+      },
+      {
+        path: "faq",
+        lazy: () => import("@/features/pages/faq-page"),
+      },
+      {
+        path: "garantias",
+        lazy: () => import("@/features/pages/garantias-page"),
+      },
+      {
+        path: "entregas",
+        lazy: () => import("@/features/pages/entregas-page"),
+      },
+      {
+        path: "terminos",
+        lazy: () => import("@/features/pages/terminos-page"),
+      },
+      {
+        path: "privacidad",
+        lazy: () => import("@/features/pages/privacidad-page"),
       },
     ],
   },

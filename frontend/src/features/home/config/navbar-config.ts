@@ -19,32 +19,27 @@ export const navbarConfig: NavbarConfig = {
           description:
             "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
         },
-        {
-          label: "Colchones",
-          href: "/products?category=colchones",
-          description:
-            "Explora nuestro catálogo completo de colchones, sommiers y ropa de cama",
-        },
-        {
-          label: "Colchones",
-          href: "/products?category=colchones",
-          description: "Colchones para todo tipo de habitaciones",
-        },
-        {
-          label: "Sommiers",
-          href: "/products?category=sommiers",
-          description: "Sommiers para todo tipo de habitaciones",
-        },
-        {
-          label: "Ropa de Cama",
-          href: "/products?category=ropa-de-cama",
-          description: "Ropa de cama para todo tipo de habitaciones",
-        },
       ],
     },
     {
-      label: "Nosotros",
-      href: "/nosotros",
+      label: "Ayuda",
+      items: [
+        {
+          label: "Preguntas Frecuentes",
+          href: "/faq",
+          description: "Resolvé tus dudas sobre nuestros productos y servicios",
+        },
+        {
+          label: "Garantías",
+          href: "/garantias",
+          description: "Información sobre garantías de nuestros productos",
+        },
+        {
+          label: "Entregas",
+          href: "/entregas",
+          description: "Conocé nuestras zonas de entrega y tiempos",
+        },
+      ],
     },
     {
       label: "Contacto",

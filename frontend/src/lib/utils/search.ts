@@ -13,7 +13,7 @@ import { validateSearchInput } from "./security";
  */
 export function filterProductsBySearchTerm(
   products: Product[],
-  searchTerm: string
+  searchTerm: string,
 ): Product[] {
   if (!searchTerm.trim()) {
     return products;
@@ -29,12 +29,14 @@ export function filterProductsBySearchTerm(
 
   return products.filter((product) => {
     const nameMatch = product.name.toLowerCase().includes(normalizedSearchTerm);
-    const brandMatch = product.brand?.toLowerCase().includes(normalizedSearchTerm);
+    const brandMatch = product.brand
+      ?.toLowerCase()
+      .includes(normalizedSearchTerm);
     const compositionMatch = product.composition
       ?.toLowerCase()
       .includes(normalizedSearchTerm);
     const categoryMatch = product.categories?.some((cat) =>
-      cat.name.toLowerCase().includes(normalizedSearchTerm)
+      cat.name.toLowerCase().includes(normalizedSearchTerm),
     );
 
     return nameMatch || brandMatch || compositionMatch || categoryMatch;
@@ -57,7 +59,9 @@ export function normalizeSearchTerm(searchTerm: string): string {
  */
 export function isValidSearchTerm(searchTerm: string): boolean {
   const validation = validateSearchInput(searchTerm);
-  return validation.isValid && normalizeSearchTerm(validation.sanitized).length > 0;
+  return (
+    validation.isValid && normalizeSearchTerm(validation.sanitized).length > 0
+  );
 }
 
 /**
@@ -96,7 +100,7 @@ export function extractSearchKeywords(searchTerm: string): string[] {
  */
 export function scoreProductRelevance(
   product: Product,
-  searchTerm: string
+  searchTerm: string,
 ): number {
   if (!isValidSearchTerm(searchTerm)) {
     return 0;
@@ -139,7 +143,7 @@ export function scoreProductRelevance(
 
   // Category exact match
   const exactCategoryMatch = product.categories?.some(
-    (cat) => cat.name.toLowerCase() === normalizedSearchTerm
+    (cat) => cat.name.toLowerCase() === normalizedSearchTerm,
   );
   if (exactCategoryMatch) {
     score += 40;
@@ -147,7 +151,7 @@ export function scoreProductRelevance(
 
   // Category contains search term
   const categoriesMatch = product.categories?.some((cat) =>
-    cat.name.toLowerCase().includes(normalizedSearchTerm)
+    cat.name.toLowerCase().includes(normalizedSearchTerm),
   );
   if (categoriesMatch && !exactCategoryMatch) {
     score += 20;
@@ -166,7 +170,11 @@ export function scoreProductRelevance(
     if (product.brand?.toLowerCase().includes(keyword)) {
       score += 5;
     }
-    if (product.categories?.some((cat) => cat.name.toLowerCase().includes(keyword))) {
+    if (
+      product.categories?.some((cat) =>
+        cat.name.toLowerCase().includes(keyword),
+      )
+    ) {
       score += 5;
     }
   });
@@ -182,7 +190,7 @@ export function scoreProductRelevance(
  */
 export function sortProductsByRelevance(
   products: Product[],
-  searchTerm: string
+  searchTerm: string,
 ): Product[] {
   if (!isValidSearchTerm(searchTerm)) {
     return products;

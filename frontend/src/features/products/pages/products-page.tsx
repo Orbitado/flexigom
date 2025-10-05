@@ -43,7 +43,7 @@ export function ProductsPage() {
   // Find the current category if filtering by category
   const currentCategory = useMemo(() => {
     if (!filters.categories?.length || !categories?.length) return null;
-    return categories.find(cat => cat.slug === filters.categories![0]);
+    return categories.find((cat) => cat.slug === filters.categories![0]);
   }, [filters.categories, categories]);
 
   const seoConfig = useMemo(() => {
@@ -112,14 +112,14 @@ export function ProductsPage() {
     if (filters.search?.trim()) {
       breadcrumbs.push({
         name: `Búsqueda: "${filters.search.trim()}"`,
-        url: `/products?search=${encodeURIComponent(filters.search.trim())}`
+        url: `/products?search=${encodeURIComponent(filters.search.trim())}`,
       });
     }
     // Add category to breadcrumbs if filtering by category (and not searching)
     else if (currentCategory) {
       breadcrumbs.push({
         name: currentCategory.name,
-        url: `/products?category=${currentCategory.slug}`
+        url: `/products?category=${currentCategory.slug}`,
       });
     }
 
@@ -152,7 +152,8 @@ export function ProductsPage() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              {(currentCategory && !filters.search?.trim()) || filters.search?.trim() ? (
+              {(currentCategory && !filters.search?.trim()) ||
+              filters.search?.trim() ? (
                 <BreadcrumbLink asChild>
                   <Link to="/products">Productos</Link>
                 </BreadcrumbLink>
@@ -164,7 +165,9 @@ export function ProductsPage() {
               <>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Búsqueda: "{filters.search.trim()}"</BreadcrumbPage>
+                  <BreadcrumbPage>
+                    Búsqueda: "{filters.search.trim()}"
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </>
             )}

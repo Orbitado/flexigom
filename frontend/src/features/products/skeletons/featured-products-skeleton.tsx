@@ -4,7 +4,9 @@ interface FeaturedProductsSkeletonProps {
   count?: number;
 }
 
-export function FeaturedProductsSkeleton({ count = 6 }: FeaturedProductsSkeletonProps) {
+export function FeaturedProductsSkeleton({
+  count = 6,
+}: FeaturedProductsSkeletonProps) {
   return (
     <div className="gap-6 md:gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto max-w-6xl">
       {Array.from({ length: count }).map((_, index) => (

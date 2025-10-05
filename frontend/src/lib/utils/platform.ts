@@ -25,16 +25,20 @@ declare global {
  * @returns true if running on macOS, false otherwise
  */
 export const isMacOS = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  
+  if (typeof window === "undefined") return false;
+
   // Use modern userAgentData API if available
   if (navigator.userAgentData?.platform) {
-    return navigator.userAgentData.platform === 'macOS';
+    return navigator.userAgentData.platform === "macOS";
   }
-  
+
   // Fallback to userAgent string parsing
   const userAgent = navigator.userAgent.toLowerCase();
-  return userAgent.includes('mac') && !userAgent.includes('iphone') && !userAgent.includes('ipad');
+  return (
+    userAgent.includes("mac") &&
+    !userAgent.includes("iphone") &&
+    !userAgent.includes("ipad")
+  );
 };
 
 /**
@@ -42,15 +46,15 @@ export const isMacOS = (): boolean => {
  * @returns true if running on Windows, false otherwise
  */
 export const isWindows = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  
+  if (typeof window === "undefined") return false;
+
   // Use modern userAgentData API if available
   if (navigator.userAgentData?.platform) {
-    return navigator.userAgentData.platform === 'Windows';
+    return navigator.userAgentData.platform === "Windows";
   }
-  
+
   // Fallback to userAgent string parsing
-  return navigator.userAgent.toLowerCase().includes('win');
+  return navigator.userAgent.toLowerCase().includes("win");
 };
 
 /**
@@ -58,13 +62,13 @@ export const isWindows = (): boolean => {
  * @param key - The key to combine with the modifier (default: 'K')
  * @returns KeyboardShortcut object with symbol, key, and display text
  */
-export const getKeyboardShortcut = (key: string = 'K'): KeyboardShortcut => {
+export const getKeyboardShortcut = (key: string = "K"): KeyboardShortcut => {
   const mac = isMacOS();
-  
+
   return {
-    symbol: mac ? '⌘' : 'Ctrl',
+    symbol: mac ? "⌘" : "Ctrl",
     key,
-    displayText: mac ? `⌘${key}` : `Ctrl+${key}`
+    displayText: mac ? `⌘${key}` : `Ctrl+${key}`,
   };
 };
 
@@ -72,8 +76,8 @@ export const getKeyboardShortcut = (key: string = 'K'): KeyboardShortcut => {
  * Gets the modifier key event property name for the current platform
  * @returns 'metaKey' for macOS, 'ctrlKey' for other platforms
  */
-export const getModifierKey = (): 'metaKey' | 'ctrlKey' => {
-  return isMacOS() ? 'metaKey' : 'ctrlKey';
+export const getModifierKey = (): "metaKey" | "ctrlKey" => {
+  return isMacOS() ? "metaKey" : "ctrlKey";
 };
 
 /**
@@ -82,10 +86,13 @@ export const getModifierKey = (): 'metaKey' | 'ctrlKey' => {
  * @param key - The key to match (case insensitive)
  * @returns true if the event matches the platform shortcut
  */
-export const isShortcutPressed = (event: KeyboardEvent, key: string): boolean => {
+export const isShortcutPressed = (
+  event: KeyboardEvent,
+  key: string,
+): boolean => {
   const targetKey = key.toLowerCase();
   const eventKey = event.key.toLowerCase();
-  
+
   // Check if the correct modifier key is pressed along with the target key
   if (isMacOS()) {
     return event.metaKey && eventKey === targetKey;

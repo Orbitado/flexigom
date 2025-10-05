@@ -24,7 +24,7 @@ import {
   validateSearchInput,
   createSecureDisplayTerm,
   showSearchValidationError,
-  sanitizeUrlParameter
+  sanitizeUrlParameter,
 } from "@/lib/utils";
 import type { Product } from "@/types";
 
@@ -86,17 +86,20 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
     });
 
     // Secure query setter with validation
-    const setQuery = useCallback((newQuery: string) => {
-      // Validate input
-      const validation = validateSearchInput(newQuery);
-      if (!validation.isValid && newQuery.length > 0) {
-        showSearchValidationError(validation.error || 'Invalid input');
-        return;
-      }
+    const setQuery = useCallback(
+      (newQuery: string) => {
+        // Validate input
+        const validation = validateSearchInput(newQuery);
+        if (!validation.isValid && newQuery.length > 0) {
+          showSearchValidationError(validation.error || "Invalid input");
+          return;
+        }
 
-      // Set the sanitized query
-      setQueryOriginal(validation.sanitized);
-    }, [setQueryOriginal]);
+        // Set the sanitized query
+        setQueryOriginal(validation.sanitized);
+      },
+      [setQueryOriginal],
+    );
 
     const handleProductSelect = useCallback(
       (product: Product) => {
@@ -116,7 +119,7 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
       (searchQuery: string) => {
         const validation = validateSearchInput(searchQuery);
         if (!validation.isValid) {
-          showSearchValidationError(validation.error || 'Invalid search term');
+          showSearchValidationError(validation.error || "Invalid search term");
           return;
         }
 
@@ -174,7 +177,10 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                 <Search className="mr-3 w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
                 <span className="flex-1 text-left">Buscar productos...</span>
                 <kbd className="hidden sm:inline-flex items-center gap-1 bg-gray-100 px-2 py-1 border rounded font-mono text-gray-600 text-xs">
-                  <span className="text-xs">{getKeyboardShortcut().symbol}</span>{getKeyboardShortcut().key}
+                  <span className="text-xs">
+                    {getKeyboardShortcut().symbol}
+                  </span>
+                  {getKeyboardShortcut().key}
                 </kbd>
               </div>
             </Button>
@@ -251,8 +257,9 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                             No encontramos productos
                           </h3>
                           <p className="mx-auto max-w-md text-gray-600 text-base">
-                            No hay productos que coincidan con "{createSecureDisplayTerm(query)}".
-                            Intenta con otros términos o navega por categorías.
+                            No hay productos que coincidan con "
+                            {createSecureDisplayTerm(query)}". Intenta con otros
+                            términos o navega por categorías.
                           </p>
                         </div>
                         <Button
@@ -356,7 +363,8 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                       >
                         <Search className="mr-2 w-4 h-4 text-gray-600" />
                         <span className="font-medium">
-                          Ver todos los resultados para "{createSecureDisplayTerm(query)}"
+                          Ver todos los resultados para "
+                          {createSecureDisplayTerm(query)}"
                         </span>
                       </CommandItem>
                     </>
@@ -441,8 +449,9 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                             No encontramos productos
                           </h3>
                           <p className="mx-auto max-w-sm text-gray-600 text-sm">
-                            No hay productos que coincidan con "{createSecureDisplayTerm(query)}".
-                            Intenta con otros términos o navega por categorías.
+                            No hay productos que coincidan con "
+                            {createSecureDisplayTerm(query)}". Intenta con otros
+                            términos o navega por categorías.
                           </p>
                         </div>
                         <Button
@@ -546,7 +555,8 @@ const SearchProductsBar = forwardRef<HTMLDivElement, SearchProductsBarProps>(
                       >
                         <Search className="mr-2 w-4 h-4 text-gray-600" />
                         <span className="font-medium">
-                          Ver todos los resultados para "{createSecureDisplayTerm(query)}"
+                          Ver todos los resultados para "
+                          {createSecureDisplayTerm(query)}"
                         </span>
                       </CommandItem>
                     </>

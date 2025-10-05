@@ -18,7 +18,7 @@ export interface RecentSearchesOptions {
  * @returns Array of recent search terms
  */
 export function getRecentSearches(
-  options: RecentSearchesOptions = {}
+  options: RecentSearchesOptions = {},
 ): string[] {
   const { storageKey = RECENT_SEARCHES_KEY } = options;
   return getLocalStorageItem<string[]>(storageKey, []);
@@ -32,7 +32,7 @@ export function getRecentSearches(
  */
 export function addRecentSearch(
   searchTerm: string,
-  options: RecentSearchesOptions = {}
+  options: RecentSearchesOptions = {},
 ): string[] {
   const {
     maxItems = DEFAULT_MAX_RECENT_SEARCHES,
@@ -47,12 +47,12 @@ export function addRecentSearch(
   const currentSearches = getRecentSearches(options);
 
   const filteredSearches = currentSearches.filter(
-    (item) => item !== trimmedSearchTerm
+    (item) => item !== trimmedSearchTerm,
   );
 
   const updatedSearches = [trimmedSearchTerm, ...filteredSearches].slice(
     0,
-    maxItems
+    maxItems,
   );
 
   setLocalStorageItem(storageKey, updatedSearches);
@@ -68,13 +68,13 @@ export function addRecentSearch(
  */
 export function removeRecentSearch(
   searchTerm: string,
-  options: RecentSearchesOptions = {}
+  options: RecentSearchesOptions = {},
 ): string[] {
   const { storageKey = RECENT_SEARCHES_KEY } = options;
 
   const currentSearches = getRecentSearches(options);
   const updatedSearches = currentSearches.filter(
-    (item) => item !== searchTerm.trim()
+    (item) => item !== searchTerm.trim(),
   );
 
   setLocalStorageItem(storageKey, updatedSearches);
@@ -88,7 +88,7 @@ export function removeRecentSearch(
  * @returns Empty array
  */
 export function clearRecentSearches(
-  options: RecentSearchesOptions = {}
+  options: RecentSearchesOptions = {},
 ): string[] {
   const { storageKey = RECENT_SEARCHES_KEY } = options;
 
@@ -105,7 +105,7 @@ export function clearRecentSearches(
  */
 export function hasRecentSearch(
   searchTerm: string,
-  options: RecentSearchesOptions = {}
+  options: RecentSearchesOptions = {},
 ): boolean {
   const recentSearches = getRecentSearches(options);
   return recentSearches.includes(searchTerm.trim());
@@ -117,7 +117,7 @@ export function hasRecentSearch(
  * @returns The most recent search term or undefined if none exist
  */
 export function getMostRecentSearch(
-  options: RecentSearchesOptions = {}
+  options: RecentSearchesOptions = {},
 ): string | undefined {
   const recentSearches = getRecentSearches(options);
   return recentSearches[0];
@@ -131,7 +131,7 @@ export function getMostRecentSearch(
  */
 export function getMatchingRecentSearches(
   partialTerm: string,
-  options: RecentSearchesOptions = {}
+  options: RecentSearchesOptions = {},
 ): string[] {
   const recentSearches = getRecentSearches(options);
   const normalizedPartial = partialTerm.toLowerCase().trim();
@@ -141,6 +141,6 @@ export function getMatchingRecentSearches(
   }
 
   return recentSearches.filter((search) =>
-    search.toLowerCase().includes(normalizedPartial)
+    search.toLowerCase().includes(normalizedPartial),
   );
 }

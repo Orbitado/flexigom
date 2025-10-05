@@ -78,7 +78,10 @@ export function useProductFilters() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Derive filters directly from URL parameters (always in sync)
-  const filters = useMemo(() => parseFiltersFromURL(searchParams), [searchParams]);
+  const filters = useMemo(
+    () => parseFiltersFromURL(searchParams),
+    [searchParams],
+  );
 
   // Use URL price range directly or fall back to defaults
   const tempPriceRange = useMemo(() => {
@@ -88,7 +91,8 @@ export function useProductFilters() {
     return DEFAULT_PRICE_RANGE;
   }, [filters.priceRange]);
 
-  const [localTempPriceRange, setLocalTempPriceRange] = useState<number[]>(tempPriceRange);
+  const [localTempPriceRange, setLocalTempPriceRange] =
+    useState<number[]>(tempPriceRange);
 
   // Update URL when filters change
   const updateURL = (newFilters: ProductFilters) => {
