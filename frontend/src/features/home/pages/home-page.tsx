@@ -5,6 +5,7 @@ import { WhyChooseFlexigomSection } from "@/features/home/sections/why-choose-fl
 import { TestimonialsSection } from "@/features/home/sections/testimonials-section";
 import { HelpSection } from "@/features/home/sections/help-section";
 import { FAQsSection } from "@/features/home/sections/faqs-section";
+import { LocationSection } from "@/features/home/sections/location-section";
 import { FooterSection } from "@/features/home/sections/footer-section";
 import { SEOHead } from "@/components/seo";
 import {
@@ -37,6 +38,7 @@ export function HomePage() {
       <HelpSection />
       <FAQsSection />
       <TestimonialsSection />
+      <LocationSection />
       <FooterSection />
     </>
   );
