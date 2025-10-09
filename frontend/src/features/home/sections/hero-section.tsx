@@ -42,7 +42,7 @@ export function HeroSection({
   const heroImage = { ...defaultImage, ...image };
 
   return (
-    <section className={cn("relative py-16 lg:pt-32 lg:pb-48", className)}>
+    <section className={cn("flex justify-center items-center py-16 md:py-12 lg:h-[calc(100svh-90px)]", className)}>
       <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="items-center gap-12 grid grid-cols-1 lg:grid-cols-2">
           {/* Content */}
