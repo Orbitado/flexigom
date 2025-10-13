@@ -94,7 +94,7 @@ export default () => ({
         "http://localhost:5173/checkout/pending";
 
       // Create the preference body
-      const preferenceBody = {
+      const preferenceBody: any = {
         items: data.items.map((item, index) => ({
           id: `item-${index}`,
           title: item.title,
@@ -105,18 +105,19 @@ export default () => ({
           picture_url: item.picture_url,
           category_id: item.category_id,
         })),
-        payer: data.payer,
         back_urls: {
           success: successUrl,
           failure: failureUrl,
           pending: pendingUrl,
         },
-        auto_return: "approved" as const,
-        external_reference: data.external_reference,
-        notification_url: data.notification_url,
         statement_descriptor: "FLEXIGOM",
-        metadata: data.metadata,
       };
+
+      // Add optional fields only if they exist
+      if (data.payer) preferenceBody.payer = data.payer;
+      if (data.external_reference) preferenceBody.external_reference = data.external_reference;
+      if (data.notification_url) preferenceBody.notification_url = data.notification_url;
+      if (data.metadata) preferenceBody.metadata = data.metadata;
 
       // Create preference with MercadoPago
       const response = await preference.create({ body: preferenceBody });
@@ -147,7 +148,11 @@ export default () => ({
   /**
    * Verify webhook signature from MercadoPago
    */
-  verifyWebhookSignature(xSignature: string, xRequestId: string, dataId: string): boolean {
+  verifyWebhookSignature(
+    xSignature: string,
+    xRequestId: string,
+    dataId: string
+  ): boolean {
     return webhookUtils.verifyWebhookSignature(xSignature, xRequestId, dataId);
   },
 
