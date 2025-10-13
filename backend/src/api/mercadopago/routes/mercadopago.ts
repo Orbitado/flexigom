@@ -9,5 +9,14 @@ export default {
         middlewares: [],
       },
     },
+    {
+      method: "POST",
+      path: "/mercadopago/webhook",
+      handler: "webhook.handleWebhook",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 };

@@ -2,7 +2,8 @@
  * mercadopago service
  */
 
-import { MercadoPagoConfig, Preference } from "mercadopago";
+import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
+import * as webhookUtils from "../utils/webhook";
 
 // Types for the preference creation
 export interface PreferenceItem {
@@ -94,7 +95,8 @@ export default () => ({
 
       // Create the preference body
       const preferenceBody = {
-        items: data.items.map((item) => ({
+        items: data.items.map((item, index) => ({
+          id: `item-${index}`,
           title: item.title,
           quantity: item.quantity,
           unit_price: item.unit_price,
@@ -140,5 +142,47 @@ export default () => ({
       }
       throw new Error("Failed to create MercadoPago preference: Unknown error");
     }
+  },
+
+  /**
+   * Verify webhook signature from MercadoPago
+   */
+  verifyWebhookSignature(xSignature: string, xRequestId: string, dataId: string): boolean {
+    return webhookUtils.verifyWebhookSignature(xSignature, xRequestId, dataId);
+  },
+
+  /**
+   * Get payment details from MercadoPago API
+   */
+  async getPaymentDetails(paymentId: string) {
+    try {
+      const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
+
+      if (!accessToken) {
+        throw new Error("MERCADOPAGO_ACCESS_TOKEN is not configured");
+      }
+
+      const client = new MercadoPagoConfig({
+        accessToken,
+        options: {
+          timeout: 5000,
+        },
+      });
+
+      const payment = new Payment(client);
+      const response = await payment.get({ id: paymentId });
+
+      return response;
+    } catch (error) {
+      console.error("Error getting payment details:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Process payment notification and update order
+   */
+  async processPaymentNotification(paymentId: string, paymentData: any) {
+    return webhookUtils.processPaymentNotification(paymentId, paymentData);
   },
 });
