@@ -1,0 +1,112 @@
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
+import {
+  createPaymentPreference,
+  buildPreferenceRequest,
+} from "../services/mercadopago-service";
+import type {
+  MercadoPagoPreferenceResponse,
+  MercadoPagoErrorResponse,
+} from "../types/mercadopago-types";
+import type { CartItem } from "@/features/cart/types";
+import type { ShippingFormData } from "@/features/cart/types";
+
+/**
+ * Input parameters for creating a payment preference
+ */
+export interface CreatePreferenceParams {
+  cartItems: CartItem[];
+  shippingData: ShippingFormData;
+  externalReference?: string;
+}
+
+/**
+ * Hook for creating MercadoPago payment preference
+ * Returns mutation with loading, error, and success states
+ */
+export function useCreatePreference() {
+  return useMutation<
+    MercadoPagoPreferenceResponse,
+    AxiosError<MercadoPagoErrorResponse>,
+    CreatePreferenceParams
+  >({
+    mutationFn: async (params: CreatePreferenceParams) => {
+      const { cartItems, shippingData, externalReference } = params;
+
+      const items = cartItems.map((item) => {
+        const price =
+          item.product.discount_price > 0 &&
+          item.product.discount_price < item.product.price
+            ? item.product.discount_price
+            : item.product.price;
+
+        return {
+          title: item.product.name,
+          quantity: item.quantity,
+          unit_price: price,
+          description:
+            typeof item.product.description === "string"
+              ? item.product.description
+              : undefined,
+          picture_url: item.product.images?.[0]?.url || undefined,
+        };
+      });
+
+      const payer = {
+        name: shippingData.firstName,
+        surname: shippingData.lastName,
+        email: shippingData.email,
+        phone: shippingData.phone,
+        address: shippingData.address,
+        city: shippingData.city,
+        postalCode: shippingData.postalCode,
+      };
+
+      const preferenceRequest = buildPreferenceRequest({
+        items,
+        payer,
+        externalReference: externalReference || `ORDER-${Date.now()}`,
+      });
+
+      return createPaymentPreference(preferenceRequest);
+    },
+    onSuccess: (data) => {
+      toast.success("Redirigiendo a MercadoPago...");
+
+      const checkoutUrl =
+        import.meta.env.VITE_NODE_ENV === "production"
+          ? data.init_point
+          : data.sandbox_init_point || data.init_point;
+
+      window.location.href = checkoutUrl;
+    },
+    onError: (error) => {
+      console.error("Error creating MercadoPago preference:", error);
+
+      let errorMessage =
+        "Error al procesar el pago. Por favor, intenta nuevamente.";
+
+      if (error.response?.data) {
+        const errorData = error.response.data;
+
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+
+        if (errorData.details && errorData.details.length > 0) {
+          const detailMessages = errorData.details
+            .map((detail) => detail.message)
+            .join(", ");
+          errorMessage = `${errorMessage}: ${detailMessages}`;
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+
+      toast.error(errorMessage);
+    },
+    retry: 1,
+    retryDelay: 1000,
+  });
+}
