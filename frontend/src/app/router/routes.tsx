@@ -69,15 +69,18 @@ export const routes: RouteObject[] = [
           },
           {
             path: "success",
-            lazy: () => import("@/features/checkout/pages/payment-success-page"),
+            lazy: () =>
+              import("@/features/checkout/pages/payment-success-page"),
           },
           {
             path: "failure",
-            lazy: () => import("@/features/checkout/pages/payment-failure-page"),
+            lazy: () =>
+              import("@/features/checkout/pages/payment-failure-page"),
           },
           {
             path: "pending",
-            lazy: () => import("@/features/checkout/pages/payment-pending-page"),
+            lazy: () =>
+              import("@/features/checkout/pages/payment-pending-page"),
           },
         ],
       },

@@ -15,11 +15,11 @@ import type {
  * Sends cart data to backend which securely creates preference with MP
  */
 export async function createPaymentPreference(
-  data: MercadoPagoPreferenceRequest
+  data: MercadoPagoPreferenceRequest,
 ): Promise<MercadoPagoPreferenceResponse> {
   const response = await api.post<{ data: MercadoPagoPreferenceResponse }>(
     "/mercadopago/create-preference",
-    data
+    data,
   );
 
   return response.data.data;

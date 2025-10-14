@@ -106,15 +106,11 @@ export function PaymentPendingPage() {
                     Estamos esperando la confirmación de tu pago (esto puede
                     tomar unos minutos)
                   </li>
-                  <li>
-                    Te enviaremos un correo cuando el pago sea confirmado
-                  </li>
+                  <li>Te enviaremos un correo cuando el pago sea confirmado</li>
                   <li>
                     Una vez confirmado, procesaremos tu pedido inmediatamente
                   </li>
-                  <li>
-                    Puedes usar el número de orden para hacer seguimiento
-                  </li>
+                  <li>Puedes usar el número de orden para hacer seguimiento</li>
                 </ul>
               </div>
             </div>

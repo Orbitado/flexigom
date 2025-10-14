@@ -28,7 +28,8 @@ export function PaymentFailurePage() {
         "Fecha de vencimiento incorrecta. Verifica los datos.",
       cc_rejected_bad_filled_security_code:
         "Código de seguridad incorrecto. Verifica los datos.",
-      cc_rejected_blacklist: "La tarjeta fue rechazada. Intenta con otra tarjeta.",
+      cc_rejected_blacklist:
+        "La tarjeta fue rechazada. Intenta con otra tarjeta.",
       cc_rejected_call_for_authorize:
         "Debes autorizar el pago con tu banco. Contacta a tu banco.",
       cc_rejected_card_disabled:
