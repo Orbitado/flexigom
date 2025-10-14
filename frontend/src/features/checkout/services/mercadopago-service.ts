@@ -35,7 +35,6 @@ export function buildPreferenceRequest(params: {
     quantity: number;
     unit_price: number;
     description?: string;
-    picture_url?: string;
     category_id?: string;
   }>;
   payer?: {
@@ -58,7 +57,6 @@ export function buildPreferenceRequest(params: {
       unit_price: item.unit_price,
       currency_id: "ARS",
       description: item.description,
-      picture_url: item.picture_url,
       category_id: item.category_id,
     })),
     external_reference: externalReference,

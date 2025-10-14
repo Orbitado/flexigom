@@ -50,7 +50,6 @@ export const itemSchema = z.object({
 
   currency_id: z.string().default("ARS").optional(),
   description: z.string().optional(),
-  picture_url: z.string().url("Invalid picture URL").optional(),
   category_id: z.string().optional(),
 });
 

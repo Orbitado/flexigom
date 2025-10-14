@@ -49,7 +49,7 @@ export function useCreatePreference() {
             typeof item.product.description === "string"
               ? item.product.description
               : undefined,
-          picture_url: item.product.images?.[0]?.url || undefined,
+          category_id: item.product.categories?.[0]?.name || undefined,
         };
       });
 
