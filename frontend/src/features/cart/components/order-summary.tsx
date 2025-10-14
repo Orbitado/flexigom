@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatPrice, getImageUrl } from "@/lib/utils";
 import { Package, MapPin, CreditCard } from "lucide-react";
 import { useCart } from "../hooks/use-cart";
+import { MercadoPagoCheckoutButton } from "@/features/checkout";
 import type { ShippingFormData, PaymentFormData } from "../types";
 
 interface OrderSummaryProps {
@@ -168,13 +169,23 @@ export function OrderSummary({
             Volver
           </Button>
         )}
-        <Button
-          onClick={onSubmit}
-          disabled={isProcessing}
-          className="flex-1 bg-red-600 hover:bg-red-700"
-        >
-          {isProcessing ? "Procesando..." : "Confirmar Pedido"}
-        </Button>
+        {paymentData.paymentMethod === "mercadopago" ? (
+          <MercadoPagoCheckoutButton
+            cartItems={items}
+            shippingData={shippingData}
+            externalReference={`ORDER-${Date.now()}`}
+            disabled={isProcessing}
+            className="flex-1"
+          />
+        ) : (
+          <Button
+            onClick={onSubmit}
+            disabled={isProcessing}
+            className="flex-1 bg-red-600 hover:bg-red-700"
+          >
+            {isProcessing ? "Procesando..." : "Confirmar Pedido"}
+          </Button>
+        )}
       </div>
 
       {/* Terms */}
