@@ -124,7 +124,8 @@ export const useCheckoutStore = create<CheckoutState>()(
 
       /**
        * Submit order
-       * TODO: Integrate with backend API
+       * NOTE: For MercadoPago payments, use MercadoPagoCheckoutButton instead
+       * This is for other payment methods (cash, transfer, etc.)
        */
       submitOrder: async () => {
         set({ isProcessing: true, error: null }, false, "submitOrder:start");
@@ -145,7 +146,12 @@ export const useCheckoutStore = create<CheckoutState>()(
             throw new Error("El carrito está vacío");
           }
 
-          // TODO: Replace with actual API call
+          // For MercadoPago, the button handles the flow
+          if (formData.payment.paymentMethod === "mercadopago") {
+            throw new Error("Use el botón de MercadoPago para continuar");
+          }
+
+          // TODO: Replace with actual API call for other payment methods
           // Simulate API call
           await new Promise((resolve) => setTimeout(resolve, 2000));
 

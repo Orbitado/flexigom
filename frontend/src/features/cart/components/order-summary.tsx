@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatPrice, getImageUrl } from "@/lib/utils";
 import { Package, MapPin, CreditCard } from "lucide-react";
 import { useCart } from "../hooks/use-cart";
+import { MercadoPagoCheckoutButton } from "@/features/checkout";
 import type { ShippingFormData, PaymentFormData } from "../types";
 
 interface OrderSummaryProps {
@@ -168,23 +169,33 @@ export function OrderSummary({
             Volver
           </Button>
         )}
-        <Button
-          onClick={onSubmit}
-          disabled={isProcessing}
-          className="flex-1 bg-red-600 hover:bg-red-700"
-        >
-          {isProcessing ? "Procesando..." : "Confirmar Pedido"}
-        </Button>
+        {paymentData.paymentMethod === "mercadopago" ? (
+          <MercadoPagoCheckoutButton
+            cartItems={items}
+            shippingData={shippingData}
+            externalReference={`ORDER-${Date.now()}`}
+            disabled={isProcessing}
+            className="flex-1"
+          />
+        ) : (
+          <Button
+            onClick={onSubmit}
+            disabled={isProcessing}
+            className="flex-1 bg-red-600 hover:bg-red-700"
+          >
+            {isProcessing ? "Procesando..." : "Confirmar Pedido"}
+          </Button>
+        )}
       </div>
 
       {/* Terms */}
-      <p className="text-center text-muted-foreground text-xs">
+      <p className="text-muted-foreground text-xs text-center">
         Al confirmar tu pedido, aceptas nuestros{" "}
-        <a href="/terminos" className="underline hover:text-foreground">
+        <a href="/terminos" className="hover:text-foreground underline">
           Términos y Condiciones
         </a>{" "}
         y{" "}
-        <a href="/privacidad" className="underline hover:text-foreground">
+        <a href="/privacidad" className="hover:text-foreground underline">
           Política de Privacidad
         </a>
         .
