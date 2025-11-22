@@ -53,6 +53,12 @@
     "customer_phone": {
       "type": "string"
     },
+    "customer_dni": {
+      "type": "string"
+    },
+    "customer_address": {
+      "type": "text"
+    },
     "items": {
       "type": "json",
       "required": true

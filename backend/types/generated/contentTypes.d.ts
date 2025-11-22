@@ -483,6 +483,8 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    customer_address: Schema.Attribute.Text;
+    customer_dni: Schema.Attribute.String;
     customer_email: Schema.Attribute.Email;
     customer_name: Schema.Attribute.String;
     customer_phone: Schema.Attribute.String;

@@ -45,6 +45,7 @@ export interface ShippingFormData {
   lastName: string;
   email: string;
   phone: string;
+  dni: string;
   address: string;
   city: string;
   province: string;

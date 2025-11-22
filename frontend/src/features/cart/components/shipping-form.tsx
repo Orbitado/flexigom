@@ -14,6 +14,11 @@ const shippingFormSchema = z.object({
     .string()
     .min(7, "El teléfono es requerido")
     .max(15, "El teléfono debe tener entre 7 y 15 caracteres"),
+  dni: z
+    .string()
+    .min(7, "El DNI debe tener al menos 7 dígitos")
+    .max(8, "El DNI debe tener hasta 8 dígitos")
+    .regex(/^\d+$/, "El DNI solo puede contener números"),
   address: z.string().min(1, "La dirección es requerida"),
   city: z.string().min(1, "La ciudad es requerida"),
   province: z.string().min(1, "La provincia es requerida"),
@@ -43,6 +48,7 @@ export function ShippingForm({
       lastName: initialData?.lastName || "",
       email: initialData?.email || "",
       phone: initialData?.phone || "",
+      dni: initialData?.dni || "",
       address: initialData?.address || "",
       city: initialData?.city || "San Miguel de Tucumán",
       province: initialData?.province || "Tucumán",
@@ -74,7 +80,11 @@ export function ShippingForm({
 
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+      {/* Personal Information Section */}
       <div className="space-y-4">
+        <h3 className="font-semibold text-lg text-gray-900">
+          Información Personal
+        </h3>
         <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
           {/* First Name */}
           <div className="space-y-2">
@@ -149,6 +159,36 @@ export function ShippingForm({
             )}
           </div>
         </div>
+
+        {/* DNI */}
+        <div className="space-y-2">
+          <Label htmlFor="dni">
+            DNI <span className="text-destructive">*</span>
+          </Label>
+          <Input
+            id="dni"
+            type="text"
+            inputMode="numeric"
+            pattern="\d*"
+            placeholder="12345678"
+            maxLength={8}
+            className={errors.dni ? "border-destructive" : ""}
+            {...register("dni")}
+          />
+          {errors.dni && (
+            <p className="text-destructive text-sm">{errors.dni.message}</p>
+          )}
+          <p className="text-muted-foreground text-xs">
+            Necesitamos tu DNI para generar la factura
+          </p>
+        </div>
+      </div>
+
+      {/* Delivery Address Section */}
+      <div className="space-y-4">
+        <h3 className="font-semibold text-lg text-gray-900">
+          Dirección de Entrega
+        </h3>
 
         {/* Address */}
         <div className="space-y-2">
