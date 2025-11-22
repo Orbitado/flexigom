@@ -108,6 +108,13 @@ export const processPaymentNotification = async (
     transaction_amount,
     customer_email: payer?.email,
     customer_name: `${payer?.first_name || ''} ${payer?.last_name || ''}`.trim() || 'CONSUMIDOR FINAL',
+    customer_phone: payer?.phone?.number || payer?.phone?.area_code
+      ? `${payer.phone.area_code || ''}${payer.phone.number || ''}`
+      : '',
+    customer_dni: payer?.identification?.number || '',
+    customer_address: payer?.address?.street_name
+      ? `${payer.address.street_name} ${payer.address.street_number || ''}`.trim()
+      : '',
     mercadopago_data: paymentData,
   };
 

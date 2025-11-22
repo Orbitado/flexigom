@@ -60,6 +60,8 @@ export interface StrapiOrder {
   customer_email?: string;
   customer_name?: string;
   customer_phone?: string;
+  customer_dni?: string;
+  customer_address?: string;
   items: OrderItem[];
   dux_invoice_id?: string;
   dux_invoice_number?: string;

@@ -16,48 +16,40 @@ export function mapOrderToDuxInvoice(order: StrapiOrder): DuxInvoiceRequest {
   const day = String(now.getDate()).padStart(2, "0");
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const year = now.getFullYear();
-  const fecha_comprobante = `${day}${month}${year}`;
+  const fecha_comprobante = `${day}/${month}/${year}`;
 
   const invoiceRequest: DuxInvoiceRequest = {
-    // Customer information
-    apellido_razon_soc: order.customer_name || "CONSUMIDOR FINAL",
-    categoria_fiscal: "CONSUMIDOR_FINAL",
-    fecha_comprobante,
-
+    // Company and Branch identifiers
     id_empresa: 9325, // DISTRIBUIDORA FLEXIGOM
     id_sucursal_empresa: 1, // CASA CENTRAL
     nro_pto_vta: "1",
     id_personal: 1,
     id_deposito: 18270, // DEPOSITO
 
+    // Invoice metadata
     tipo_entrega: "ENTREGA_INMEDIATA",
-    tipo_comp: "COMPROBANTE_VENTA",
+    tipo_comp: "FACTURA",
+    fecha_comprobante,
+
+    // Customer information
+    apellido_razon_soc: order.customer_name || "CONSUMIDOR FINAL",
+    categoria_fiscal: "CONSUMIDOR_FINAL",
+    tipo_doc: "DNI",
+    nro_doc: order.customer_dni || "00000000",
+    email_cliente: order.customer_email,
+    telefono_cliente: order.customer_phone || "",
+    direccion_cliente: order.customer_address || "",
 
     // Products - using generic "ECOMMERCE" product (EC1) for all online sales
     productos: order.items.map((item) => ({
       cod_item: "EC1",
       ctd: item.quantity,
-      porc_desc: "0",
+      porc_desc: 0,
       precio_uni: item.unit_price,
     })),
 
-    email_cliente: order.customer_email,
-    tipo_doc: "DNI",
-
-    cliente: {
-      nombre: order.customer_name || "CONSUMIDOR FINAL",
-      email: order.customer_email,
-      telefono: order.customer_phone,
-    },
-    items: order.items.map((item) => ({
-      descripcion: item.title,
-      cantidad: item.quantity,
-      precioUnitario: item.unit_price,
-      iva: 21,
-    })),
+    // Order reference
     referencia: order.external_reference,
-    montoTotal: order.transaction_amount,
-    metodoPago: order.payment_method,
   };
 
   return invoiceRequest;

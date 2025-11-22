@@ -58,8 +58,10 @@ export function useCreatePreference() {
         surname: shippingData.lastName,
         email: shippingData.email,
         phone: shippingData.phone,
-        address: shippingData.address,
+        dni: shippingData.dni,
+        address: `${shippingData.address}, ${shippingData.city}, ${shippingData.province} ${shippingData.postalCode}`,
         city: shippingData.city,
+        province: shippingData.province,
         postalCode: shippingData.postalCode,
       };
 

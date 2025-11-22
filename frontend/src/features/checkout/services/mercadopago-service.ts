@@ -42,8 +42,10 @@ export function buildPreferenceRequest(params: {
     surname?: string;
     email?: string;
     phone?: string;
+    dni?: string;
     address?: string;
     city?: string;
+    province?: string;
     postalCode?: string;
   };
   externalReference?: string;
@@ -72,6 +74,14 @@ export function buildPreferenceRequest(params: {
       email: payer.email,
     };
 
+    // Add DNI identification if provided
+    if (payer.dni) {
+      preferenceRequest.payer.identification = {
+        type: "DNI",
+        number: payer.dni,
+      };
+    }
+
     // Add phone if provided
     if (payer.phone) {
       const phoneMatch = payer.phone.match(/^(\d{2,4})?(\d+)$/);
@@ -84,7 +94,7 @@ export function buildPreferenceRequest(params: {
     }
 
     // Add address if provided
-    if (payer.address && payer.city) {
+    if (payer.address) {
       preferenceRequest.payer.address = {
         street_name: payer.address,
         zip_code: payer.postalCode,

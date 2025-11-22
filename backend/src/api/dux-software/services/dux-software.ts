@@ -132,6 +132,22 @@ export default () => {
       // Parse response (flexible schema during discovery)
       const data = response.data;
 
+      // Dux API returns 200 status even with errors
+      const errorMessage = 
+        data.error || 
+        data.mensaje_error || 
+        data.mensajeError ||
+        (data.message && data.message.toLowerCase().includes('error') ? data.message : null);
+
+      if (errorMessage) {
+        const error: any = new Error(`Dux API Error: ${errorMessage}`);
+        error.response = {
+          status: 200,
+          data,
+        };
+        throw error;
+      }
+
       // Try to extract invoice ID from response
       // Common field names: id, invoiceId, invoice_id, facturaId, factura_id, numeroFactura
       const invoiceId =
@@ -150,6 +166,15 @@ export default () => {
         data.numero_factura ||
         data.numero ||
         null;
+
+      if (!invoiceId) {
+        const error: any = new Error('Dux API did not return an invoice ID');
+        error.response = {
+          status: 200,
+          data,
+        };
+        throw error;
+      }
 
       return {
         success: true,
