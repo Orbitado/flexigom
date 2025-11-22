@@ -6,7 +6,7 @@ export default [
     name: "strapi::cors",
     config: {
       headers: ["Content-Type", "Authorization", "Origin", "Accept", "ngrok-skip-browser-warning"],
-      origin: ["http://localhost:5173", "http://localhost:1337", "https://d800a4114778.ngrok-free.app", "https://flexigom-backoffice-staging.up.railway.app", "https://flexigom.up.railway.app"],
+      origin: ["http://localhost:5173", "http://localhost:1337", "https://d800a4114778.ngrok-free.app", "https://flexigom-backoffice-staging.up.railway.app", "https://flexigom.up.railway.app", "https://flexigom-staging.up.railway.app"],
     },
   },
   "strapi::poweredBy",
