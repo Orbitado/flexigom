@@ -63,10 +63,15 @@ export function useCreatePreference() {
         postalCode: shippingData.postalCode,
       };
 
+      // Get webhook URL from environment variable
+      // This should be the publicly accessible URL for the backend webhook endpoint
+      const notificationUrl = import.meta.env.VITE_MERCADOPAGO_WEBHOOK_URL;
+
       const preferenceRequest = buildPreferenceRequest({
         items,
         payer,
         externalReference: externalReference || `ORDER-${Date.now()}`,
+        notificationUrl,
       });
 
       return createPaymentPreference(preferenceRequest);

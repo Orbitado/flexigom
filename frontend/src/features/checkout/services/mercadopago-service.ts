@@ -47,8 +47,9 @@ export function buildPreferenceRequest(params: {
     postalCode?: string;
   };
   externalReference?: string;
+  notificationUrl?: string;
 }): MercadoPagoPreferenceRequest {
-  const { items, payer, externalReference } = params;
+  const { items, payer, externalReference, notificationUrl } = params;
 
   const preferenceRequest: MercadoPagoPreferenceRequest = {
     items: items.map((item) => ({
@@ -60,6 +61,7 @@ export function buildPreferenceRequest(params: {
       category_id: item.category_id,
     })),
     external_reference: externalReference,
+    notification_url: notificationUrl,
   };
 
   // Add payer information if provided
