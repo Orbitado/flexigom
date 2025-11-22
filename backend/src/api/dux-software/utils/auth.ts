@@ -4,9 +4,8 @@ export function getAuthHeaders(config: DuxConfig): Record<string, string> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     Accept: "application/json",
+    Authorization: config.apiToken,
   };
-
-  headers["Authorization"] = `Bearer ${config.apiToken}`;
 
   if (config.environment) {
     headers["X-Environment"] = config.environment;

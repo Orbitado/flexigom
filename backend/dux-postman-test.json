@@ -1,0 +1,242 @@
+{
+  "info": {
+    "name": "Dux Software Invoice API - Test Collection",
+    "description": "Test collection for Dux Software invoice integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Test Dux Auth - Direct API Call",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          },
+          {
+            "key": "content-type",
+            "value": "application/json"
+          },
+          {
+            "key": "authorization",
+            "value": "Bv0vujcC8Ajn3jKbCAgvXRjixtyntm4FVP56NyE212xJESCiOxD9Zsi4jwrOkH2V",
+            "description": "Your DUX_API_TOKEN - replace if different"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"apellido_razon_soc\": \"CONSUMIDOR FINAL\",\n  \"categoria_fiscal\": \"CONSUMIDOR_FINAL\",\n  \"fecha_comprobante\": \"{{current_date}}\",\n  \"id_empresa\": 9325,\n  \"id_sucursal_empresa\": 1,\n  \"nro_pto_vta\": \"1\",\n  \"id_personal\": 1,\n  \"id_deposito\": 1,\n  \"productos\": [\n    {\n      \"cod_item\": \"TEST-001\",\n      \"ctd\": 1,\n      \"porc_desc\": \"0\",\n      \"precio_uni\": 10000\n    }\n  ],\n  \"tipo_entrega\": \"ENTREGA_INMEDIATA\",\n  \"tipo_comp\": \"COMPROBANTE_VENTA\",\n  \"tipo_doc\": \"DNI\",\n  \"email_cliente\": \"test@example.com\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://erp.duxsoftware.com.ar/WSERP/rest/services/factura/nuevaFactura",
+          "protocol": "https",
+          "host": ["erp", "duxsoftware", "com", "ar"],
+          "path": ["WSERP", "rest", "services", "factura", "nuevaFactura"]
+        },
+        "description": "Direct test of Dux API with minimal required fields. This will help identify what field values Dux expects (id_empresa, id_sucursal_empresa, etc.)"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Test Auth Only - Empty Body",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          },
+          {
+            "key": "content-type",
+            "value": "application/json"
+          },
+          {
+            "key": "authorization",
+            "value": "Bv0vujcC8Ajn3jKbCAgvXRjixtyntm4FVP56NyE212xJESCiOxD9Zsi4jwrOkH2V"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://erp.duxsoftware.com.ar/WSERP/rest/services/factura/nuevaFactura",
+          "protocol": "https",
+          "host": ["erp", "duxsoftware", "com", "ar"],
+          "path": ["WSERP", "rest", "services", "factura", "nuevaFactura"]
+        },
+        "description": "Test authentication with empty body to see detailed error messages about required fields"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Trigger MercadoPago Webhook (Local)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "x-signature",
+            "value": "ts=1234567890,v1=dummy_signature",
+            "description": "Mock signature for local testing"
+          },
+          {
+            "key": "x-request-id",
+            "value": "test-request-123"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"action\": \"payment.updated\",\n  \"api_version\": \"v1\",\n  \"data\": {\n    \"id\": \"1234567890\"\n  },\n  \"date_created\": \"2025-01-22T10:00:00Z\",\n  \"id\": 12345,\n  \"live_mode\": false,\n  \"type\": \"payment\",\n  \"user_id\": \"123456789\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:1337/api/mercadopago/webhook",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "1337",
+          "path": ["api", "mercadopago", "webhook"]
+        },
+        "description": "Trigger your local MercadoPago webhook endpoint. Note: This requires a real payment ID from MercadoPago."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Get Dux Company Info",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          },
+          {
+            "key": "authorization",
+            "value": "Bv0vujcC8Ajn3jKbCAgvXRjixtyntm4FVP56NyE212xJESCiOxD9Zsi4jwrOkH2V"
+          }
+        ],
+        "url": {
+          "raw": "https://erp.duxsoftware.com.ar/WSERP/rest/services/empresa",
+          "protocol": "https",
+          "host": ["erp", "duxsoftware", "com", "ar"],
+          "path": ["WSERP", "rest", "services", "empresa"]
+        },
+        "description": "Get your company information from Dux to find id_empresa, id_sucursal_empresa values"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Get Dux Sucursales (Branches)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          },
+          {
+            "key": "authorization",
+            "value": "Bv0vujcC8Ajn3jKbCAgvXRjixtyntm4FVP56NyE212xJESCiOxD9Zsi4jwrOkH2V"
+          }
+        ],
+        "url": {
+          "raw": "https://erp.duxsoftware.com.ar/WSERP/rest/services/sucursales",
+          "protocol": "https",
+          "host": ["erp", "duxsoftware", "com", "ar"],
+          "path": ["WSERP", "rest", "services", "sucursales"]
+        },
+        "description": "Get branch information from Dux to find id_sucursal_empresa values"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Dux Puntos de Venta (Sales Points)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          },
+          {
+            "key": "authorization",
+            "value": "Bv0vujcC8Ajn3jKbCAgvXRjixtyntm4FVP56NyE212xJESCiOxD9Zsi4jwrOkH2V"
+          }
+        ],
+        "url": {
+          "raw": "https://erp.duxsoftware.com.ar/WSERP/rest/services/puntoVenta",
+          "protocol": "https",
+          "host": ["erp", "duxsoftware", "com", "ar"],
+          "path": ["WSERP", "rest", "services", "puntoVenta"]
+        },
+        "description": "Get sales points to find valid nro_pto_vta values"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Get Dux Products/Items",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json"
+          },
+          {
+            "key": "authorization",
+            "value": "Bv0vujcC8Ajn3jKbCAgvXRjixtyntm4FVP56NyE212xJESCiOxD9Zsi4jwrOkH2V"
+          }
+        ],
+        "url": {
+          "raw": "https://erp.duxsoftware.com.ar/WSERP/rest/services/items",
+          "protocol": "https",
+          "host": ["erp", "duxsoftware", "com", "ar"],
+          "path": ["WSERP", "rest", "services", "items"]
+        },
+        "description": "Get product list from Dux to find valid cod_item values"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "current_date",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Generate current date in ddMMyyyy format for Dux API",
+          "const now = new Date();",
+          "const day = String(now.getDate()).padStart(2, '0');",
+          "const month = String(now.getMonth() + 1).padStart(2, '0');",
+          "const year = now.getFullYear();",
+          "pm.collectionVariables.set('current_date', `${day}${month}${year}`);"
+        ]
+      }
+    }
+  ]
+}
