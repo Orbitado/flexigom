@@ -61,19 +61,49 @@ export const processPaymentNotification = async (
     mercadopago_data: paymentData,
   };
 
+  let updatedOrder;
+
   if (orders && Array.isArray(orders) && orders.length > 0) {
-    return strapi.entityService.update(
+    updatedOrder = await strapi.entityService.update(
       "api::order.order" as any,
       orders[0].id,
       { data: orderData }
     );
+  } else {
+    updatedOrder = await strapi.entityService.create("api::order.order" as any, {
+      data: {
+        ...orderData,
+        external_reference,
+        items: paymentData.additional_info?.items || [],
+      },
+    });
   }
 
-  return strapi.entityService.create("api::order.order" as any, {
-    data: {
-      ...orderData,
-      external_reference,
-      items: paymentData.additional_info?.items || [],
-    },
-  });
+  // Trigger Dux invoice creation for approved payments
+  if (status === "approved" && updatedOrder) {
+    // Run async to not block webhook response
+    setImmediate(async () => {
+      try {
+        console.log(
+          `[MercadoPago Webhook] Triggering Dux invoice for order ${updatedOrder.id}`
+        );
+
+        await strapi
+          .service("api::dux-software.dux-software")
+          .createInvoice(updatedOrder);
+
+        console.log(
+          `[MercadoPago Webhook] Dux invoice triggered for order ${updatedOrder.id}`
+        );
+      } catch (error) {
+        console.error(
+          `[MercadoPago Webhook] Failed to create Dux invoice for order ${updatedOrder.id}:`,
+          error
+        );
+        // Don't throw - payment already succeeded
+      }
+    });
+  }
+
+  return updatedOrder;
 };

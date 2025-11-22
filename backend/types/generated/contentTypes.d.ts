@@ -486,6 +486,17 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
     customer_email: Schema.Attribute.Email;
     customer_name: Schema.Attribute.String;
     customer_phone: Schema.Attribute.String;
+    dux_invoice_attempts: Schema.Attribute.Integer &
+      Schema.Attribute.DefaultTo<0>;
+    dux_invoice_created_at: Schema.Attribute.DateTime;
+    dux_invoice_data: Schema.Attribute.JSON;
+    dux_invoice_error: Schema.Attribute.Text;
+    dux_invoice_id: Schema.Attribute.String;
+    dux_invoice_number: Schema.Attribute.String;
+    dux_invoice_status: Schema.Attribute.Enumeration<
+      ['pending', 'created', 'failed', 'retrying']
+    > &
+      Schema.Attribute.DefaultTo<'pending'>;
     external_reference: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
