@@ -3,7 +3,12 @@
  * Transforms Flexigom order data to Dux invoice format
  */
 
-import type { StrapiOrder, DuxInvoiceRequest, DuxInvoiceItem, DuxCustomer } from '../types';
+import type {
+  StrapiOrder,
+  DuxInvoiceRequest,
+  DuxInvoiceItem,
+  DuxCustomer,
+} from "../types";
 
 /**
  * Map Flexigom order to Dux invoice request
@@ -12,26 +17,23 @@ import type { StrapiOrder, DuxInvoiceRequest, DuxInvoiceItem, DuxCustomer } from
  * the exact Dux API requirements through testing.
  */
 export function mapOrderToDuxInvoice(order: StrapiOrder): DuxInvoiceRequest {
-  const customer: DuxCustomer = {
-    nombre: order.customer_name,
-    email: order.customer_email,
-    telefono: order.customer_phone,
-  };
-
-  const items: DuxInvoiceItem[] = order.items.map((item) => ({
-    descripcion: item.title,
-    cantidad: item.quantity,
-    precioUnitario: item.unit_price,
-    // IVA 21% for Argentina (most products)
-    iva: 21,
-  }));
-
-  // Build flexible invoice request
   const invoiceRequest: DuxInvoiceRequest = {
-    cliente: customer,
-    items: items,
-    // Add common fields that might be required
-    // These will be discovered during testing
+    apellido_razon_soc: order.customer_name || "CONSUMIDOR FINAL",
+    email_cliente: order.customer_email,
+
+    cliente: {
+      nombre: order.customer_name || "CONSUMIDOR FINAL",
+      email: order.customer_email,
+      telefono: order.customer_phone,
+    },
+
+    items: order.items.map((item) => ({
+      descripcion: item.title,
+      cantidad: item.quantity,
+      precioUnitario: item.unit_price,
+      iva: 21,
+    })),
+
     referencia: order.external_reference,
     montoTotal: order.transaction_amount,
     metodoPago: order.payment_method,
@@ -60,24 +62,24 @@ export function validateOrderForInvoicing(order: StrapiOrder): {
 } {
   const errors: string[] = [];
 
-  if (!order.customer_name || order.customer_name.trim() === '') {
-    errors.push('Customer name is required');
+  if (!order.customer_name || order.customer_name.trim() === "") {
+    errors.push("Customer name is required");
   }
 
-  if (!order.customer_email || order.customer_email.trim() === '') {
-    errors.push('Customer email is required');
+  if (!order.customer_email || order.customer_email.trim() === "") {
+    errors.push("Customer email is required");
   }
 
   if (!order.items || order.items.length === 0) {
-    errors.push('Order must have at least one item');
+    errors.push("Order must have at least one item");
   }
 
   if (!order.transaction_amount || order.transaction_amount <= 0) {
-    errors.push('Transaction amount must be greater than 0');
+    errors.push("Transaction amount must be greater than 0");
   }
 
-  if (!order.external_reference || order.external_reference.trim() === '') {
-    errors.push('External reference is required');
+  if (!order.external_reference || order.external_reference.trim() === "") {
+    errors.push("External reference is required");
   }
 
   return {
