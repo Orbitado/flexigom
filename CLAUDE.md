@@ -243,6 +243,26 @@ Feature-based organization follows this pattern:
   - Success/failure/pending redirect URLs
 - **Flow**: Cart → Checkout → MercadoPago → Success/Failure/Pending pages
 
+### Invoice Integration (Dux Software)
+
+- **Backend**: Custom Dux Software API in `backend/src/api/dux-software/`
+- **Purpose**: Automatic invoice generation after payment approval
+- **Trigger**: MercadoPago webhook when `payment_status === 'approved'`
+- **Environment variables required**:
+  - `DUX_API_BASE_URL` - Dux API endpoint (default: https://erp.duxsoftware.com.ar/WSERP/rest/services)
+  - `DUX_API_TOKEN` - API authentication token
+  - `DUX_ENVIRONMENT` - production or test
+  - `DUX_RETRY_ATTEMPTS` - Number of retry attempts (default: 3)
+  - `DUX_TIMEOUT_MS` - Request timeout (default: 30000)
+- **Flow**: Payment Approved → Webhook → Create Invoice → Update Order
+- **Features**:
+  - Automatic retry with exponential backoff (2s, 4s, 8s)
+  - Order tracking fields: `dux_invoice_id`, `dux_invoice_number`, `dux_invoice_status`, `dux_invoice_attempts`
+  - Error logging and failure tracking
+  - Non-blocking (payment succeeds even if invoicing fails)
+- **Testing**: Run `npx ts-node src/api/dux-software/test-api.ts` to discover API fields
+- **Documentation**: https://duxsoftware.readme.io/reference/crear-factura
+
 ### TypeScript Configuration
 
 - **Strict mode enabled** in both frontend and backend
@@ -289,6 +309,11 @@ MERCADOPAGO_WEBHOOK_SECRET=<your-secret>
 MERCADOPAGO_SUCCESS_URL=http://localhost:5173/checkout/success
 MERCADOPAGO_FAILURE_URL=http://localhost:5173/checkout/failure
 MERCADOPAGO_PENDING_URL=http://localhost:5173/checkout/pending
+DUX_API_BASE_URL=https://erp.duxsoftware.com.ar/WSERP/rest/services
+DUX_API_TOKEN=<your-dux-api-token>
+DUX_ENVIRONMENT=production
+DUX_RETRY_ATTEMPTS=3
+DUX_TIMEOUT_MS=30000
 ```
 
 ## Git Workflow
@@ -359,4 +384,10 @@ The project has comprehensive SEO infrastructure:
 - **Type errors**: Run `pnpm tsc` in frontend directory
 - **Build errors**: Check `pnpm build` output for specific errors
 - **Payment integration**: Verify MercadoPago credentials in backend `.env`
+- **Invoice integration**:
+  - Verify Dux API token in backend `.env`
+  - Check backend logs for invoice creation attempts
+  - Run test script: `cd backend && npx ts-node src/api/dux-software/test-api.ts`
+  - Check order records for `dux_invoice_status` and `dux_invoice_error` fields
+  - Invoice failures don't block payment flow - check logs for errors
 - **CORS errors**: Backend allows `http://localhost:5173` by default

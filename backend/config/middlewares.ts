@@ -2,7 +2,13 @@ export default [
   "strapi::logger",
   "strapi::errors",
   "strapi::security",
-  "strapi::cors",
+  {
+    name: "strapi::cors",
+    config: {
+      headers: ["Content-Type", "Authorization", "Origin", "Accept", "ngrok-skip-browser-warning"],
+      origin: ["http://localhost:5173", "http://localhost:1337", "https://d800a4114778.ngrok-free.app"],
+    },
+  },
   "strapi::poweredBy",
   "strapi::query",
   "strapi::body",
