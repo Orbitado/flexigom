@@ -65,6 +65,35 @@
     },
     "mercadopago_data": {
       "type": "json"
+    },
+    "dux_invoice_id": {
+      "type": "string"
+    },
+    "dux_invoice_number": {
+      "type": "string"
+    },
+    "dux_invoice_status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "created",
+        "failed",
+        "retrying"
+      ],
+      "default": "pending"
+    },
+    "dux_invoice_data": {
+      "type": "json"
+    },
+    "dux_invoice_error": {
+      "type": "text"
+    },
+    "dux_invoice_created_at": {
+      "type": "datetime"
+    },
+    "dux_invoice_attempts": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

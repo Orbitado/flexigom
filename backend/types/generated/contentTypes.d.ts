@@ -468,6 +468,70 @@ export interface ApiFeaturedProductFeaturedProduct
   };
 }
 
+export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
+  collectionName: 'orders';
+  info: {
+    description: 'Customer orders and payment information';
+    displayName: 'Order';
+    pluralName: 'orders';
+    singularName: 'order';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    customer_email: Schema.Attribute.Email;
+    customer_name: Schema.Attribute.String;
+    customer_phone: Schema.Attribute.String;
+    dux_invoice_attempts: Schema.Attribute.Integer &
+      Schema.Attribute.DefaultTo<0>;
+    dux_invoice_created_at: Schema.Attribute.DateTime;
+    dux_invoice_data: Schema.Attribute.JSON;
+    dux_invoice_error: Schema.Attribute.Text;
+    dux_invoice_id: Schema.Attribute.String;
+    dux_invoice_number: Schema.Attribute.String;
+    dux_invoice_status: Schema.Attribute.Enumeration<
+      ['pending', 'created', 'failed', 'retrying']
+    > &
+      Schema.Attribute.DefaultTo<'pending'>;
+    external_reference: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    items: Schema.Attribute.JSON & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
+      Schema.Attribute.Private;
+    mercadopago_data: Schema.Attribute.JSON;
+    metadata: Schema.Attribute.JSON;
+    payment_id: Schema.Attribute.String;
+    payment_method: Schema.Attribute.String;
+    payment_status: Schema.Attribute.Enumeration<
+      [
+        'pending',
+        'approved',
+        'rejected',
+        'refunded',
+        'cancelled',
+        'in_process',
+        'in_mediation',
+        'charged_back',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'pending'>;
+    payment_type: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    transaction_amount: Schema.Attribute.Decimal;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    webhook_notifications: Schema.Attribute.JSON;
+  };
+}
+
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
@@ -1079,6 +1143,7 @@ declare module '@strapi/strapi' {
       'api::category.category': ApiCategoryCategory;
       'api::faq.faq': ApiFaqFaq;
       'api::featured-product.featured-product': ApiFeaturedProductFeaturedProduct;
+      'api::order.order': ApiOrderOrder;
       'api::product.product': ApiProductProduct;
       'api::review.review': ApiReviewReview;
       'plugin::content-releases.release': PluginContentReleasesRelease;

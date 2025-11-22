@@ -157,9 +157,13 @@ export default () => ({
   },
 
   /**
-   * Get payment details from MercadoPago API
+   * Get payment details from MercadoPago API with retry logic
+   * MercadoPago sometimes sends webhook before payment is available in API
    */
-  async getPaymentDetails(paymentId: string) {
+  async getPaymentDetails(paymentId: string, retryAttempt = 0): Promise<any> {
+    const maxRetries = 3;
+    const retryDelays = [2000, 4000, 8000]; // 2s, 4s, 8s
+
     try {
       const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
 
@@ -177,9 +181,28 @@ export default () => ({
       const payment = new Payment(client);
       const response = await payment.get({ id: paymentId });
 
+      console.log(`[MercadoPago] Successfully fetched payment ${paymentId} details`);
       return response;
-    } catch (error) {
-      console.error("Error getting payment details:", error);
+    } catch (error: any) {
+      // If payment not found and we haven't exceeded max retries, retry with delay
+      if (error.status === 404 && retryAttempt < maxRetries) {
+        const delay = retryDelays[retryAttempt];
+        console.warn(
+          `[MercadoPago] Payment ${paymentId} not found (attempt ${retryAttempt + 1}/${maxRetries}). Retrying in ${delay}ms...`
+        );
+
+        // Wait before retrying
+        await new Promise((resolve) => setTimeout(resolve, delay));
+
+        // Retry recursively using strapi.service to avoid 'this' context issues
+        return strapi
+          .service('api::mercadopago.mercadopago')
+          .getPaymentDetails(paymentId, retryAttempt + 1);
+      }
+
+      // If not a 404 or exceeded retries, throw the error
+      console.error(`[MercadoPago] Error getting payment ${paymentId} details:`, error);
+      console.error(`[MercadoPago] This might be a test payment that doesn't exist in MercadoPago's API`);
       throw error;
     }
   },
