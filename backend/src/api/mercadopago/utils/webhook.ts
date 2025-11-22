@@ -107,6 +107,7 @@ export const processPaymentNotification = async (
     payment_method: payment_method_id,
     transaction_amount,
     customer_email: payer?.email,
+    customer_name: `${payer?.first_name || ''} ${payer?.last_name || ''}`.trim() || 'CONSUMIDOR FINAL',
     mercadopago_data: paymentData,
   };
 
