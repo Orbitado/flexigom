@@ -76,37 +76,50 @@ export function PaymentForm({
           >
             {paymentMethods.map((method) => {
               const Icon = method.icon;
+              const isSelected = paymentMethod === method.id;
               return (
-                <Card
+                <Label
                   key={method.id}
-                  className={`cursor-pointer transition-colors ${
-                    paymentMethod === method.id
-                      ? "border-red-600 bg-red-50"
-                      : "hover:border-gray-400"
-                  }`}
-                  onClick={() => {
-                    setPaymentMethod(method.id);
-                    setErrors("");
-                  }}
+                  htmlFor={method.id}
+                  className="block cursor-pointer"
                 >
-                  <Label
-                    htmlFor={method.id}
-                    className="flex items-start gap-4 p-4 cursor-pointer"
+                  <Card
+                    className={`cursor-pointer transition-all duration-200 ${
+                      isSelected
+                        ? "border-red-600 bg-red-50 shadow-md"
+                        : "border-gray-200 bg-white hover:border-red-300 hover:shadow-sm"
+                    }`}
                   >
-                    <RadioGroupItem value={method.id} id={method.id} />
-                    <div className="flex flex-1 items-start gap-3">
-                      <div className="flex justify-center items-center bg-gray-100 rounded-full w-10 h-10">
-                        <Icon className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-sm">{method.name}</p>
-                        <p className="text-muted-foreground text-xs">
-                          {method.description}
-                        </p>
+                    <div className="flex items-center gap-4 p-4">
+                      <RadioGroupItem 
+                        value={method.id} 
+                        id={method.id}
+                        className={isSelected ? "border-red-600" : ""}
+                      />
+                      <div className="flex flex-1 items-center gap-3">
+                        <div className={`flex justify-center items-center rounded-full w-10 h-10 transition-colors ${
+                          isSelected ? "bg-red-100" : "bg-gray-100"
+                        }`}>
+                          <Icon className={`w-5 h-5 ${
+                            isSelected ? "text-red-600" : "text-gray-600"
+                          }`} />
+                        </div>
+                        <div className="flex-1">
+                          <p className={`font-medium text-sm ${
+                            isSelected ? "text-red-700" : "text-gray-900"
+                          }`}>
+                            {method.name}
+                          </p>
+                          <p className={`text-xs ${
+                            isSelected ? "text-red-600" : "text-muted-foreground"
+                          }`}>
+                            {method.description}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </Label>
-                </Card>
+                  </Card>
+                </Label>
               );
             })}
           </RadioGroup>
