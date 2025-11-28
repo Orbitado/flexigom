@@ -13,7 +13,7 @@ export const shippingFormSchema = z
   .object({
     firstName: z.string().min(1, "El nombre es requerido"),
     lastName: z.string().min(1, "El apellido es requerido"),
-    email: z.email("Email inválido").min(1, "El email es requerido"),
+    email: z.string().email("Email inválido").min(1, "El email es requerido"),
     phone: z
       .string()
       .min(7, "El teléfono es requerido")
@@ -30,11 +30,11 @@ export const shippingFormSchema = z
   .refine(
     (data) => {
       if (data.documentType === "DNI") {
-        const raw = data.documentNumber.replace(/\D/g, "");
+        const raw = String(data.documentNumber).replace(/\D/g, "");
         return raw.length >= 7 && raw.length <= 8;
       }
       if (data.documentType === "CUIT") {
-        const raw = data.documentNumber.replace(/\D/g, "");
+        const raw = String(data.documentNumber).replace(/\D/g, "");
         return raw.length === 11;
       }
       return true;

@@ -3,9 +3,9 @@ import { devtools } from "zustand/middleware";
 import {
   CheckoutStep,
   type CheckoutState,
-  type ShippingFormData,
   type PaymentFormData,
 } from "../types";
+import type { ShippingFormData } from "../types/shipping-types";
 import { useCartStore } from "./cart-store";
 
 /**

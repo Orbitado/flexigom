@@ -9,6 +9,7 @@ import { PaymentForm } from "../components/payment-form";
 import { OrderSummary } from "../components/order-summary";
 import { OrderConfirmation } from "../components/order-confirmation";
 import { CheckoutStep } from "../types";
+import type { ShippingFormData } from "../types/shipping-types";
 import { toast } from "sonner";
 
 export function CheckoutPage() {
@@ -55,11 +56,9 @@ export function CheckoutPage() {
     };
   }, [currentStep, resetCheckout]);
 
-  const handleShippingSubmit = (data: typeof formData.shipping) => {
-    if (data) {
-      updateShippingData(data);
-      nextStep();
-    }
+  const handleShippingSubmit = (data: ShippingFormData) => {
+    updateShippingData(data);
+    nextStep();
   };
 
   const handlePaymentSubmit = (data: typeof formData.payment) => {
