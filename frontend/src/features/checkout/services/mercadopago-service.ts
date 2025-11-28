@@ -42,7 +42,9 @@ export function buildPreferenceRequest(params: {
     surname?: string;
     email?: string;
     phone?: string;
-    dni?: string;
+    documentType?: "DNI" | "CUIT";
+    documentNumber?: string;
+    fiscalCategory?: "CONSUMIDOR_FINAL" | "RESPONSABLE_INSCRIPTO" | "EXENTO" | "MONOTRIBUTISTA";
     address?: string;
     city?: string;
     province?: string;
@@ -64,6 +66,11 @@ export function buildPreferenceRequest(params: {
     })),
     external_reference: externalReference,
     notification_url: notificationUrl,
+    metadata: payer?.fiscalCategory
+      ? {
+          customer_fiscal_category: payer.fiscalCategory,
+        }
+      : undefined,
   };
 
   // Add payer information if provided
@@ -74,11 +81,11 @@ export function buildPreferenceRequest(params: {
       email: payer.email,
     };
 
-    // Add DNI identification if provided
-    if (payer.dni) {
+    // Add document identification if provided
+    if (payer.documentNumber && payer.documentType) {
       preferenceRequest.payer.identification = {
-        type: "DNI",
-        number: payer.dni,
+        type: payer.documentType,
+        number: payer.documentNumber,
       };
     }
 

@@ -1,4 +1,5 @@
 import type { Product } from "@/types";
+import type { ShippingFormData } from "./shipping-types";
 
 /**
  * Cart item with product information and quantity
@@ -35,22 +36,6 @@ export enum CheckoutStep {
   PAYMENT = "payment",
   REVIEW = "review",
   CONFIRMATION = "confirmation",
-}
-
-/**
- * Shipping information form data
- */
-export interface ShippingFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  dni: string;
-  address: string;
-  city: string;
-  province: string;
-  postalCode: string;
-  additionalInfo?: string;
 }
 
 /**
