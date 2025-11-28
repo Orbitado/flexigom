@@ -112,6 +112,8 @@ export const processPaymentNotification = async (
       ? `${payer.phone.area_code || ''}${payer.phone.number || ''}`
       : '',
     customer_dni: payer?.identification?.number || '',
+    customer_document_type: payer?.identification?.type || 'DNI',
+    customer_fiscal_category: paymentData?.metadata?.customer_fiscal_category || 'CONSUMIDOR_FINAL',
     customer_address: payer?.address?.street_name
       ? `${payer.address.street_name} ${payer.address.street_number || ''}`.trim()
       : '',

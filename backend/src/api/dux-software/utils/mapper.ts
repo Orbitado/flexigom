@@ -16,7 +16,7 @@ export function mapOrderToDuxInvoice(order: StrapiOrder): DuxInvoiceRequest {
   const day = String(now.getDate()).padStart(2, "0");
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const year = now.getFullYear();
-  const fecha_comprobante = `${day}/${month}/${year}`;
+  const fecha_comprobante = `${day}${month}${year}`;
 
   const invoiceRequest: DuxInvoiceRequest = {
     // Company and Branch identifiers
@@ -33,14 +33,14 @@ export function mapOrderToDuxInvoice(order: StrapiOrder): DuxInvoiceRequest {
 
     // Customer information
     apellido_razon_soc: order.customer_name || "CONSUMIDOR FINAL",
-    categoria_fiscal: "CONSUMIDOR_FINAL",
-    tipo_doc: "DNI",
+    categoria_fiscal: order.customer_fiscal_category || "CONSUMIDOR_FINAL",
+    tipo_doc: order.customer_document_type || "DNI",
     nro_doc: order.customer_dni || "00000000",
     email_cliente: order.customer_email,
     telefono_cliente: order.customer_phone || "",
     direccion_cliente: order.customer_address || "",
 
-    // Products - using generic "ECOMMERCE" product (EC1) for all online sales
+    // Ecommerce Product
     productos: order.items.map((item) => ({
       cod_item: "EC1",
       ctd: item.quantity,
@@ -81,6 +81,18 @@ export function validateOrderForInvoicing(order: StrapiOrder): {
 
   if (!order.customer_email || order.customer_email.trim() === "") {
     errors.push("Customer email is required");
+  }
+
+  if (!order.customer_dni || order.customer_dni.trim() === "") {
+    errors.push("Customer document number is required");
+  }
+
+  if (!order.customer_document_type) {
+    errors.push("Customer document type is required");
+  }
+
+  if (!order.customer_fiscal_category) {
+    errors.push("Customer fiscal category is required");
   }
 
   if (!order.items || order.items.length === 0) {

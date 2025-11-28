@@ -485,7 +485,15 @@ export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     customer_address: Schema.Attribute.Text;
     customer_dni: Schema.Attribute.String;
+    customer_document_type: Schema.Attribute.Enumeration<['DNI', 'CUIT']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'DNI'>;
     customer_email: Schema.Attribute.Email;
+    customer_fiscal_category: Schema.Attribute.Enumeration<
+      ['CONSUMIDOR_FINAL', 'RESPONSABLE_INSCRIPTO', 'EXENTO', 'MONOTRIBUTISTA']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'CONSUMIDOR_FINAL'>;
     customer_name: Schema.Attribute.String;
     customer_phone: Schema.Attribute.String;
     dux_invoice_attempts: Schema.Attribute.Integer &

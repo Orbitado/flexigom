@@ -58,6 +58,47 @@ export const handleShare = (product: { name: string }) => {
   }
 };
 
+/**
+ * Format CUIT input with dashes (20-12345678-9)
+ */
+export const formatCuitInput = (value: string): string => {
+  const raw = value.replace(/\D/g, "").slice(0, 11);
+
+  if (raw.length <= 2) return raw;
+  if (raw.length <= 10) return `${raw.slice(0, 2)}-${raw.slice(2)}`;
+  return `${raw.slice(0, 2)}-${raw.slice(2, 10)}-${raw.slice(10)}`;
+};
+
+/**
+ * Format DNI input (numeric only, max 8 digits)
+ */
+export const formatDniInput = (value: string): string => {
+  return value.replace(/\D/g, "").slice(0, 8);
+};
+
+/**
+ * Get raw document number without formatting
+ */
+export const getRawDocument = (value: string): string => {
+  return value.replace(/\D/g, "");
+};
+
+/**
+ * Validate CUIT format (11 digits)
+ */
+export const isValidCuit = (value: string): boolean => {
+  const raw = getRawDocument(value);
+  return raw.length === 11;
+};
+
+/**
+ * Validate DNI format (7-8 digits)
+ */
+export const isValidDni = (value: string): boolean => {
+  const raw = getRawDocument(value);
+  return raw.length >= 7 && raw.length <= 8;
+};
+
 // Re-export utility modules for convenience
 export * from "./utils/localStorage";
 export * from "./utils/search";

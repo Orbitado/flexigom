@@ -61,6 +61,8 @@ export interface StrapiOrder {
   customer_name?: string;
   customer_phone?: string;
   customer_dni?: string;
+  customer_document_type?: 'DNI' | 'CUIT';
+  customer_fiscal_category?: 'CONSUMIDOR_FINAL' | 'RESPONSABLE_INSCRIPTO' | 'EXENTO' | 'MONOTRIBUTISTA';
   customer_address?: string;
   items: OrderItem[];
   dux_invoice_id?: string;

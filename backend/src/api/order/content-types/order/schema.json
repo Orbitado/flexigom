@@ -56,6 +56,23 @@
     "customer_dni": {
       "type": "string"
     },
+    "customer_document_type": {
+      "type": "enumeration",
+      "enum": ["DNI", "CUIT"],
+      "default": "DNI",
+      "required": true
+    },
+    "customer_fiscal_category": {
+      "type": "enumeration",
+      "enum": [
+        "CONSUMIDOR_FINAL",
+        "RESPONSABLE_INSCRIPTO",
+        "EXENTO",
+        "MONOTRIBUTISTA"
+      ],
+      "default": "CONSUMIDOR_FINAL",
+      "required": true
+    },
     "customer_address": {
       "type": "text"
     },
