@@ -124,10 +124,13 @@ export default () => {
       const client = getDuxClient();
 
       console.log('[Dux Service] Calling Dux API to create invoice...');
+      console.log('[Dux Service] Request payload:', JSON.stringify(invoiceRequest, null, 2));
 
       // Call the Dux API endpoint
       // Endpoint: POST /factura/nuevaFactura
       const response = await client.post('/factura/nuevaFactura', invoiceRequest);
+
+      console.log('[Dux Service] Dux API response:', JSON.stringify(response.data, null, 2));
 
       // Parse response (flexible schema during discovery)
       const data = response.data;
@@ -149,14 +152,12 @@ export default () => {
       }
 
       // Try to extract invoice ID from response
-      // Common field names: id, invoiceId, invoice_id, facturaId, factura_id, numeroFactura
+      // Dux API returns 'id_proceso' (process ID) on successful invoice creation
       const invoiceId =
-        data.id ||
-        data.invoiceId ||
-        data.invoice_id ||
-        data.facturaId ||
-        data.factura_id ||
-        data.idFactura ||
+        data.id_proceso ||     // Primary: Dux returns this
+        data.id ||             // Fallback: generic ID
+        data.invoiceId ||      // Fallback: camelCase variant
+        data.invoice_id ||     // Fallback: snake_case variant
         null;
 
       const invoiceNumber =
