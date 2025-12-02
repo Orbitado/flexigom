@@ -47,9 +47,6 @@ export function mapOrderToDuxInvoice(order: StrapiOrder): DuxInvoiceRequest {
       porc_desc: "0",
       precio_uni: item.unit_price,
     })),
-
-    // Order reference
-    referencia: order.external_reference,
   };
 
   return invoiceRequest;
