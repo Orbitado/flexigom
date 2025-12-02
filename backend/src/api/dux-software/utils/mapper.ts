@@ -31,7 +31,7 @@ export function mapOrderToDuxInvoice(order: StrapiOrder): DuxInvoiceRequest {
     tipo_comp: "FACTURA",
     fecha_comprobante,
 
-    // Customer information
+    // Customer information (required fields only - KISS approach)
     apellido_razon_soc: order.customer_name || "CONSUMIDOR FINAL",
     categoria_fiscal: order.customer_fiscal_category || "CONSUMIDOR_FINAL",
     tipo_doc: order.customer_document_type || "DNI",
@@ -44,12 +44,9 @@ export function mapOrderToDuxInvoice(order: StrapiOrder): DuxInvoiceRequest {
     productos: order.items.map((item) => ({
       cod_item: "EC1",
       ctd: item.quantity,
-      porc_desc: 0,
+      porc_desc: "0",
       precio_uni: item.unit_price,
     })),
-
-    // Order reference
-    referencia: order.external_reference,
   };
 
   return invoiceRequest;
