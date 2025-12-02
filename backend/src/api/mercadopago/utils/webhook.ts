@@ -5,6 +5,19 @@
 import crypto from "crypto";
 
 /**
+ * Normalize MercadoPago identification types to match Order schema enum
+ * Frontend only sends DNI/CUIT, but MercadoPago may transform them
+ */
+function normalizeDocumentType(mpType: string | undefined): 'DNI' | 'CUIT' {
+  if (!mpType) return 'DNI';
+  const normalized = mpType.toUpperCase().trim();
+  // MercadoPago should preserve DNI/CUIT from preference
+  if (normalized === 'CUIT' || normalized.includes('CUIT')) return 'CUIT';
+  // Default to DNI for all other cases
+  return 'DNI';
+}
+
+/**
  * Verify webhook signature from MercadoPago
  */
 export const verifyWebhookSignature = (
@@ -101,6 +114,10 @@ export const processPaymentNotification = async (
     customer_email: payer?.email,
   };
 
+  // Normalize document type to match Order schema enum
+  const normalizedDocType = normalizeDocumentType(payer?.identification?.type);
+  console.log(`[MercadoPago Webhook] Normalized document type: ${payer?.identification?.type} -> ${normalizedDocType}`);
+
   const orderData = {
     payment_id: paymentId,
     payment_status: status,
@@ -112,7 +129,7 @@ export const processPaymentNotification = async (
       ? `${payer.phone.area_code || ''}${payer.phone.number || ''}`
       : '',
     customer_dni: payer?.identification?.number || '',
-    customer_document_type: payer?.identification?.type || 'DNI',
+    customer_document_type: normalizedDocType,
     customer_fiscal_category: paymentData?.metadata?.customer_fiscal_category || 'CONSUMIDOR_FINAL',
     customer_address: payer?.address?.street_name
       ? `${payer.address.street_name} ${payer.address.street_number || ''}`.trim()
@@ -124,7 +141,7 @@ export const processPaymentNotification = async (
 
   if (orders && Array.isArray(orders) && orders.length > 0) {
     console.log(
-      `[MercadoPago Webhook] Updating existing order ${orders[0].id}`
+      `[MercadoPago Webhook] Found existing order ${orders[0].id} - updating (NEW FLOW)`
     );
 
     // Get existing webhook notifications and append new one
@@ -148,7 +165,7 @@ export const processPaymentNotification = async (
       `[MercadoPago Webhook] Successfully updated order ${updatedOrder?.id} with new payment status: ${status}`
     );
   } else {
-    console.log("[MercadoPago Webhook] Creating new order");
+    console.log("[MercadoPago Webhook] No existing order found - creating new order (LEGACY FALLBACK)");
 
     updatedOrder = await strapi.entityService.create(
       "api::order.order" as any,
@@ -167,14 +184,22 @@ export const processPaymentNotification = async (
     );
   }
 
+  // Log comprehensive order operation summary
+  if (updatedOrder) {
+    console.log(`[MercadoPago Webhook] Order operation successful`, {
+      orderId: updatedOrder.id,
+      externalReference: external_reference,
+      paymentStatus: status,
+      documentType: updatedOrder.customer_document_type,
+      transactionAmount: transaction_amount,
+    });
+  }
+
   // Trigger Dux invoice creation for approved payments
   if (status === "approved" && updatedOrder) {
-    console.log(
-      `[MercadoPago Webhook] Payment approved, scheduling Dux invoice creation for order ${updatedOrder.id}`
-    );
+    const duxToken = process.env.DUX_API_TOKEN;
 
-    // Run async to not block webhook response
-    setImmediate(async () => {
+    if (duxToken) {
       try {
         console.log(
           `[MercadoPago Webhook] Triggering Dux invoice for order ${updatedOrder.id}`
@@ -185,16 +210,39 @@ export const processPaymentNotification = async (
           .createInvoice(updatedOrder);
 
         console.log(
-          `[MercadoPago Webhook] Dux invoice triggered for order ${updatedOrder.id}`
+          `[MercadoPago Webhook] Dux invoice created successfully for order ${updatedOrder.id}`
         );
       } catch (error) {
         console.error(
-          `[MercadoPago Webhook] Failed to create Dux invoice for order ${updatedOrder.id}:`,
+          `[MercadoPago Webhook] Dux invoice creation failed for order ${updatedOrder.id}:`,
           error
         );
-        // Don't throw - payment already succeeded
+
+        // Store error in order record
+        try {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          await strapi.entityService.update(
+            "api::order.order" as any,
+            updatedOrder.id,
+            {
+              data: {
+                dux_invoice_status: "failed",
+                dux_invoice_error: errorMessage,
+              },
+            }
+          );
+        } catch (updateError) {
+          console.error(
+            `[MercadoPago Webhook] Failed to update order with Dux error:`,
+            updateError
+          );
+        }
       }
-    });
+    } else {
+      console.log(
+        `[MercadoPago Webhook] Dux integration disabled (no token) - skipping invoice for order ${updatedOrder.id}`
+      );
+    }
   } else {
     console.log(
       `[MercadoPago Webhook] Skipping Dux invoice creation (status: ${status}, hasOrder: ${!!updatedOrder})`
